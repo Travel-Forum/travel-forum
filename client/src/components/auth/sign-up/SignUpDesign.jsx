@@ -19,7 +19,7 @@ import logo from "../../../assets/icons/Forum logo.svg";
 
 import { Link as RouterLink } from "react-router-dom";
 
-const SignUpDesign = ({ formData, onChange, onSubmit} ) => {
+const SignUpDesign = ({ formData, onChange, onSubmit}) => {
   return (
 
     <Box

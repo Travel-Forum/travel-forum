@@ -19,7 +19,7 @@ import logo from "../../../assets/icons/Forum logo.svg";
 
 import { Link as RouterLink } from "react-router-dom";
 
-const SignInDesign = () => {
+const SignInDesign = ({ formData, onChange, onSubmit}) => {
   return (
     <Box
       minH="100vh"
@@ -64,7 +64,7 @@ const SignInDesign = () => {
                 <Stack gap="4">
                   <Field.Root>
                     <Field.Label>Email address</Field.Label>
-                    <Input name="email" type="email" />
+                    <Input name="email" type="email" value={formData.email} onChange={onChange} />
                   </Field.Root>
 
                   <Field.Root>
@@ -76,7 +76,7 @@ const SignInDesign = () => {
                         </Text>
                       </RouterLink>
                     </HStack>
-                    <PasswordInput name="password" />
+                    <PasswordInput name="password" value={formData.password} onChange={onChange} />
                   </Field.Root>
                 </Stack>
               </Fieldset.Content>
@@ -85,7 +85,7 @@ const SignInDesign = () => {
         </Card.Body>
 
         <Card.Footer justifyContent="center" flexDirection="column" gap="2">
-          <Button variant="solid" type="submit" w="full">
+          <Button variant="solid" type="submit" w="full" onClick={onSubmit}>
             Sign In
           </Button>
 
