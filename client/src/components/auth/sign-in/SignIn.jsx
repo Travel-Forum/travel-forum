@@ -1,8 +1,10 @@
+import SignInDesign from "./SIgnInDesign";
 
 const SignIn = () => {
 
     return (
         <>
+            <SignInDesign />
         </>
     )
 }
