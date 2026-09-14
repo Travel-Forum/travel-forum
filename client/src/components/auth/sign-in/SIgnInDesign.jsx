@@ -19,7 +19,6 @@ import logo from "../../../assets/icons/Forum logo.svg";
 
 import { Link as RouterLink } from "react-router-dom";
 
-
 const SignInDesign = () => {
   return (
     <Box
@@ -33,8 +32,13 @@ const SignInDesign = () => {
         <Card.Header>
           <Card.Title textAlign="center">
             <HStack justify="center" gap="2">
-              <RouterLink to="/" style={{ display: 'inline-flex' }}>
-                <img src={logo} alt="Travel Forum logo" width="24" height="24" />
+              <RouterLink to="/" style={{ display: "inline-flex" }}>
+                <img
+                  src={logo}
+                  alt="Travel Forum logo"
+                  width="24"
+                  height="24"
+                />
               </RouterLink>
               <span>Find your trip</span>
             </HStack>
@@ -49,24 +53,31 @@ const SignInDesign = () => {
 
             <HStack>
               <Separator flex="1" />
-              <Text fontSize="sm" color="fg.muted">or</Text>
+              <Text fontSize="sm" color="fg.muted">
+                or
+              </Text>
               <Separator flex="1" />
             </HStack>
 
             <Fieldset.Root size="lg">
               <Fieldset.Content>
                 <Stack gap="4">
-
                   <Field.Root>
                     <Field.Label>Email address</Field.Label>
                     <Input name="email" type="email" />
                   </Field.Root>
 
                   <Field.Root>
-                    <Field.Label>Password</Field.Label>
+                    <HStack justify="space-between" w="full">
+                      <Field.Label>Password</Field.Label>
+                      <RouterLink to="/forgot-password">
+                        <Text fontSize="sm" color="blue.500">
+                          Forgot password?
+                        </Text>
+                      </RouterLink>
+                    </HStack>
                     <PasswordInput name="password" />
                   </Field.Root>
-
                 </Stack>
               </Fieldset.Content>
             </Fieldset.Root>
@@ -80,7 +91,6 @@ const SignInDesign = () => {
 
           <Text fontSize="sm">
             Don`t have an account?{" "}
-
             <RouterLink to="/signup">
               <Text as="span" color="blue.500" fontWeight="medium">
                 Sign up
@@ -90,7 +100,7 @@ const SignInDesign = () => {
         </Card.Footer>
       </Card.Root>
     </Box>
-  )
-}
+  );
+};
 
-export default SignInDesign
+export default SignInDesign;
