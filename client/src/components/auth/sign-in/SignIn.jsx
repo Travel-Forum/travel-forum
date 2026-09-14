@@ -1,4 +1,4 @@
-import SignInDesign from "./SIgnInDesign";
+import SignInDesign from "./SignInDesign";
 
 const SignIn = () => {
 
