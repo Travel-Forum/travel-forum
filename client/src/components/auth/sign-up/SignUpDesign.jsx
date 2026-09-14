@@ -19,7 +19,7 @@ import logo from "../../../assets/icons/Forum logo.svg";
 
 import { Link as RouterLink } from "react-router-dom";
 
-const SignUpDesign = () => {
+const SignUpDesign = ({ formData, onChange, onSubmit} ) => {
   return (
 
     <Box
@@ -60,32 +60,37 @@ const SignUpDesign = () => {
                 <Stack gap="4">
                   <Field.Root>
                     <Field.Label>First Name</Field.Label>
-                    <Input name="firstName" />
+                    <Input name="firstName" value={formData.firstName} onChange={onChange} />
                   </Field.Root>
 
                   <Field.Root>
                     <Field.Label>Last Name</Field.Label>
-                    <Input name="lastName" />
+                    <Input name="lastName" value={formData.lastName} onChange={onChange} />
                   </Field.Root>
 
                   <Field.Root>
                     <Field.Label>Username</Field.Label>
-                    <Input name="username" />
+                    <Input name="username" value={formData.username} onChange={onChange} />
                   </Field.Root>
 
                   <Field.Root>
                     <Field.Label>Email address</Field.Label>
-                    <Input name="email" type="email" />
+                    <Input name="email" type="email" value={formData.email} onChange={onChange} />
+                  </Field.Root>
+
+                  <Field.Root>
+                    <Field.Label>Phone (optional)</Field.Label>
+                    <Input name="phone" value={formData.phone} onChange={onChange} />
                   </Field.Root>
 
                   <Field.Root>
                     <Field.Label>Password</Field.Label>
-                    <PasswordInput name="password" />
+                    <PasswordInput name="password" value={formData.password} onChange={onChange} />
                   </Field.Root>
 
                   <Field.Root>
                     <Field.Label>Confirm Password</Field.Label>
-                    <PasswordInput name="confirmPassword" />
+                    <PasswordInput name="confirmPassword" value={formData.confirmPassword} onChange={onChange} />
                   </Field.Root>
                 </Stack>
               </Fieldset.Content>
@@ -94,7 +99,7 @@ const SignUpDesign = () => {
         </Card.Body>
 
         <Card.Footer justifyContent="center" flexDirection="column" gap="2">
-          <Button variant="solid" type="submit" w="full">
+          <Button variant="solid" type="submit" w="full" onClick={onSubmit}>
             Sign Up
           </Button>
           <Text fontSize="sm">
