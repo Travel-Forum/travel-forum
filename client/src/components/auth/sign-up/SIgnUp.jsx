@@ -1,8 +1,10 @@
+import SignUpDesign from "./SignUpDesign";
+
 const SignUp = () => {
 
     return (
         <>
-            Hello
+            <SignUpDesign />
         </>
     )
 }
