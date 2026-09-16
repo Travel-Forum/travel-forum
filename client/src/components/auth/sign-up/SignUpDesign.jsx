@@ -11,7 +11,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema } from '../../../schemas/authSchemas';
 
-const SignUpDesign = ({ formData, onChange, onSubmit}) => {
+const SignUpDesign = ({onSubmit}) => {
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(signUpSchema)
@@ -88,6 +88,7 @@ const SignUpDesign = ({ formData, onChange, onSubmit}) => {
                     <Field.Root invalid={!!errors.phone}>
                       <Field.Label>Phone</Field.Label>
                       <Input placeholder="+359888123456" {...register("phone")} />
+                      <Field.HelperText>Include country code, no leading zero</Field.HelperText>
                       {errors.phone && (
                         <Text color="red.500" fontSize="sm">{errors.phone.message}</Text>
                       )}
@@ -96,6 +97,9 @@ const SignUpDesign = ({ formData, onChange, onSubmit}) => {
                     <Field.Root invalid={!!errors.password}>
                       <Field.Label>Password</Field.Label>
                       <PasswordInput {...register("password")} />
+                      <Field.HelperText>
+                        At least 8 characters, with uppercase, lowercase, number and special character
+                      </Field.HelperText>
                       {errors.password && (
                         <Text color="red.500" fontSize="sm">{errors.password.message}</Text>
                       )}
