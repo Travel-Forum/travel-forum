@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 import { SignInUser } from '../../../services/authService/SignInUser.js';
 
 import { toaster } from '../../ui/toaster.jsx';
-import SignInDesign from "./SignInDesign";
+import SignInDesign from "./SignInDesign.jsx";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const SignIn = () => {
 
     const result = await SignInUser(data);
 
-    if (result) {
+    if (result.error) {
       toaster.create({
         title: 'Sign in error',
         description: result.error.message,
