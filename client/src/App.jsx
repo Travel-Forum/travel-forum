@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 
-import Home from './pages/home/Home';
-import SignUp from './components/auth/sign-up/SignUp';
-import SignIn from './components/auth/sign-in/SignIn'
+import Home from "./pages/home/Home";
+import SignUp from "./components/Auth/SignUp/SignUp";
+import SignIn from "./components/Auth/SignIn/SignIn";
 import Profile from "./pages/profile/Profile";
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
       <Route path="/SignIn" element={<SignIn />} />
       <Route path="/profile" element={<Profile />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -1,23 +1,35 @@
 import { useForm } from "react-hook-form";
 
-import { Button, Card, Field, Fieldset, Input, Stack, HStack, Separator, Text, Box, } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  Field,
+  Fieldset,
+  Input,
+  Stack,
+  HStack,
+  Separator,
+  Text,
+  Box,
+} from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 import logo from "../../../assets/icons/Forum logo.svg";
 
-import { PasswordInput } from "../../ui/password-input";
+import { PasswordInput } from "../../Ui/PasswordInput";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signInSchema } from '../../../schemas/authSchemas';
-
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signInSchema } from "../../../schemas/authSchemas";
 
 import { Link as RouterLink } from "react-router-dom";
 
-const SignInDesign = ({onSubmit}) => {
-
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(signInSchema)
-  })
+const SignInDesign = ({ onSubmit }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(signInSchema),
+  });
 
   return (
     <Box

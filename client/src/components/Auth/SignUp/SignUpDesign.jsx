@@ -1,21 +1,35 @@
 import { useForm } from "react-hook-form";
 
-import { Button, Card, Field, Fieldset, Input, Stack, HStack, Separator, Text, Box } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  Field,
+  Fieldset,
+  Input,
+  Stack,
+  HStack,
+  Separator,
+  Text,
+  Box,
+} from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 import logo from "../../../assets/icons/Forum logo.svg";
 
-import { PasswordInput } from "../../ui/password-input";
+import { PasswordInput } from "../../Ui/PasswordInput";
 
 import { Link as RouterLink } from "react-router-dom";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema } from '../../../schemas/authSchemas';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "../../../schemas/authSchemas";
 
-const SignUpDesign = ({onSubmit}) => {
-
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(signUpSchema)
-  })
+const SignUpDesign = ({ onSubmit }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(signUpSchema),
+  });
 
   return (
     <Box
@@ -31,7 +45,12 @@ const SignUpDesign = ({onSubmit}) => {
             <Card.Title textAlign="center">
               <HStack justify="center" gap="2">
                 <RouterLink to="/" style={{ display: "inline-flex" }}>
-                  <img src={logo} alt="Travel Forum logo" width="24" height="24" />
+                  <img
+                    src={logo}
+                    alt="Travel Forum logo"
+                    width="24"
+                    height="24"
+                  />
                 </RouterLink>
                 <span>Find your trip</span>
               </HStack>
@@ -46,7 +65,9 @@ const SignUpDesign = ({onSubmit}) => {
 
               <HStack>
                 <Separator flex="1" />
-                <Text fontSize="sm" color="fg.muted">or</Text>
+                <Text fontSize="sm" color="fg.muted">
+                  or
+                </Text>
                 <Separator flex="1" />
               </HStack>
 
@@ -57,7 +78,9 @@ const SignUpDesign = ({onSubmit}) => {
                       <Field.Label>First Name</Field.Label>
                       <Input {...register("firstName")} />
                       {errors.firstName && (
-                        <Text color="red.500" fontSize="sm">{errors.firstName.message}</Text>
+                        <Text color="red.500" fontSize="sm">
+                          {errors.firstName.message}
+                        </Text>
                       )}
                     </Field.Root>
 
@@ -65,7 +88,9 @@ const SignUpDesign = ({onSubmit}) => {
                       <Field.Label>Last Name</Field.Label>
                       <Input {...register("lastName")} />
                       {errors.lastName && (
-                        <Text color="red.500" fontSize="sm">{errors.lastName.message}</Text>
+                        <Text color="red.500" fontSize="sm">
+                          {errors.lastName.message}
+                        </Text>
                       )}
                     </Field.Root>
 
@@ -73,7 +98,9 @@ const SignUpDesign = ({onSubmit}) => {
                       <Field.Label>Username</Field.Label>
                       <Input {...register("username")} />
                       {errors.username && (
-                        <Text color="red.500" fontSize="sm">{errors.username.message}</Text>
+                        <Text color="red.500" fontSize="sm">
+                          {errors.username.message}
+                        </Text>
                       )}
                     </Field.Root>
 
@@ -81,16 +108,25 @@ const SignUpDesign = ({onSubmit}) => {
                       <Field.Label>Email address</Field.Label>
                       <Input type="email" {...register("email")} />
                       {errors.email && (
-                        <Text color="red.500" fontSize="sm">{errors.email.message}</Text>
+                        <Text color="red.500" fontSize="sm">
+                          {errors.email.message}
+                        </Text>
                       )}
                     </Field.Root>
 
                     <Field.Root invalid={!!errors.phone}>
                       <Field.Label>Phone</Field.Label>
-                      <Input placeholder="+359888123456" {...register("phone")} />
-                      <Field.HelperText>Include country code, no leading zero</Field.HelperText>
+                      <Input
+                        placeholder="+359888123456"
+                        {...register("phone")}
+                      />
+                      <Field.HelperText>
+                        Include country code, no leading zero
+                      </Field.HelperText>
                       {errors.phone && (
-                        <Text color="red.500" fontSize="sm">{errors.phone.message}</Text>
+                        <Text color="red.500" fontSize="sm">
+                          {errors.phone.message}
+                        </Text>
                       )}
                     </Field.Root>
 
@@ -98,10 +134,13 @@ const SignUpDesign = ({onSubmit}) => {
                       <Field.Label>Password</Field.Label>
                       <PasswordInput {...register("password")} />
                       <Field.HelperText>
-                        At least 8 characters, with uppercase, lowercase, number and special character
+                        At least 8 characters, with uppercase, lowercase, number
+                        and special character
                       </Field.HelperText>
                       {errors.password && (
-                        <Text color="red.500" fontSize="sm">{errors.password.message}</Text>
+                        <Text color="red.500" fontSize="sm">
+                          {errors.password.message}
+                        </Text>
                       )}
                     </Field.Root>
 
@@ -109,7 +148,9 @@ const SignUpDesign = ({onSubmit}) => {
                       <Field.Label>Confirm Password</Field.Label>
                       <PasswordInput {...register("confirmPassword")} />
                       {errors.confirmPassword && (
-                        <Text color="red.500" fontSize="sm">{errors.confirmPassword.message}</Text>
+                        <Text color="red.500" fontSize="sm">
+                          {errors.confirmPassword.message}
+                        </Text>
                       )}
                     </Field.Root>
                   </Stack>
