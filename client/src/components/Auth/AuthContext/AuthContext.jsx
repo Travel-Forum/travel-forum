@@ -22,7 +22,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const signOut = async () => {
-    await supabase.signOut();
+    await supabase.auth.signOut();
   }
 
   const value = {
