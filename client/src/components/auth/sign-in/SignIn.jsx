@@ -1,34 +1,33 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 import { SignInUser } from '../../../services/authService/SignInUser.js';
 
-import SignInDesign from "./SignInDesign";
+import { toaster } from '../../ui/toaster.jsx';
+import SignInDesign from "./SignInDesign.jsx";
 
 const SignIn = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const handleFormSubmit = async (data) => {
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    const result = await SignInUser(data);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await SignInUser(formData);
+    if (result.error) {
+      toaster.create({
+        title: 'Sign in error',
+        description: result.error.message,
+        type: "error",
+      })
+
+      return;
+    }
 
     navigate('/profile');
   };
 
-
   return (
     <>
-      <SignInDesign formData={formData} onChange={handleChange} onSubmit={handleSubmit} />
+      <SignInDesign onSubmit={handleFormSubmit} />
     </>
   );
 };
