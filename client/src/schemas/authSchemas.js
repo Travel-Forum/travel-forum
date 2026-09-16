@@ -14,8 +14,7 @@ export const signUpSchema = z.object({
     .min(4, "Minimum 4 symbols")
     .max(32, "Maximum 32 symbols"),
 
-  email: z.string()
-    .email("Email is not valid"),
+  email: z.email("Email is not valid"),
 
   phone: z.e164("Invalid phone number format"),
 
@@ -29,6 +28,6 @@ export const signUpSchema = z.object({
 })
 
 export const signInSchema = z.object({
-  email: z.string().email("Email is not valid"),
+  email: z.email("Email is not valid"),
   password: z.string().min(1, "Password is required"),
 })
