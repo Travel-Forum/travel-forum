@@ -9,9 +9,26 @@ const AuthCallback = () => {
   useEffect(() => {
     supabase.auth
       .exchangeCodeForSession(window.location.href)
-      .then((result) => {
+      .then(async (result) => {
         if (result.error) {
           setError(result.error);
+          return;
+        }
+
+        const user = result.data.user;
+        const metadata = user.user_metadata;
+
+        const { error: profileError } = await supabase.from("profiles").insert({
+          id: user.id,
+          first_name: metadata.first_name,
+          last_name: metadata.last_name,
+          username: metadata.username,
+          email: user.email,
+          phone: metadata.phone,
+        });
+
+        if (profileError) {
+          setError(profileError);
           return;
         }
 
@@ -22,9 +39,13 @@ const AuthCallback = () => {
 
   return (
     <>
-      {error ? <div>Error: {error.message}</div> : <div>Confirming email...</div>}
+      {error ? (
+        <div>Error: {error.message}</div>
+      ) : (
+        <div>Confirming email...</div>
+      )}
     </>
-  )
+  );
 };
 
 export default AuthCallback;
