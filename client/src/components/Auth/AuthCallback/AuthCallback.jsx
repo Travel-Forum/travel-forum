@@ -7,13 +7,16 @@ const AuthCallback = () => {
   const [error, setError] = useState(null);
   const hasRun = useRef(false);
 
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+
   useEffect(() => {
 
     if (hasRun.current) return;
     hasRun.current = true;
 
     supabase.auth
-      .exchangeCodeForSession(window.location.href)
+      .exchangeCodeForSession(code)
       .then(async (result) => {
         if (result.error) {
           setError(result.error);
