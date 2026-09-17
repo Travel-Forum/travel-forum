@@ -22,6 +22,8 @@ import { signInSchema } from "../../../schemas/authSchemas";
 
 import { Link as RouterLink } from "react-router-dom";
 
+import { GoogleAuth } from "../../../services/authService/GoogleAuth.js";
+
 const SignInDesign = ({ onSubmit }) => {
   const {
     register,
@@ -59,8 +61,8 @@ const SignInDesign = ({ onSubmit }) => {
 
           <Card.Body>
             <Stack gap="6">
-              <Button variant="outline" w="full">
-                <FcGoogle /> Sign in with Google
+              <Button variant="outline" w="full" onClick={GoogleAuth}>
+                <FcGoogle /> Continue with Google
               </Button>
 
               <HStack>
