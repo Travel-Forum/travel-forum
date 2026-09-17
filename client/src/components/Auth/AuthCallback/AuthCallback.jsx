@@ -43,7 +43,7 @@ const AuthCallback = () => {
         navigate("/profile");
       })
       .catch((error) => setError(error));
-  }, []);
+  }, [code, navigate]);
 
   return (
     <>
