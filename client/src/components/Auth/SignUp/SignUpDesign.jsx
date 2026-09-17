@@ -17,10 +17,12 @@ import logo from "../../../assets/icons/Forum logo.svg";
 
 import { PasswordInput } from "../../Ui/PasswordInput";
 
-import { Link as RouterLink } from "react-router-dom";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../../../schemas/authSchemas";
+
+import { Link as RouterLink } from "react-router-dom";
+
+import { GoogleAuth } from "../../../services/authService/GoogleAuth.js";
 
 const SignUpDesign = ({ onSubmit }) => {
   const {
@@ -59,8 +61,8 @@ const SignUpDesign = ({ onSubmit }) => {
 
           <Card.Body>
             <Stack gap="6">
-              <Button variant="outline" w="full">
-                <FcGoogle /> Sign up with Google
+              <Button variant="outline" w="full" onClick={GoogleAuth}>
+                <FcGoogle /> Continue with Google
               </Button>
 
               <HStack>

@@ -20,7 +20,7 @@ export const SignUpUser = async ({firstName, lastName, username, email, phone, p
         return {error};
     }
 
-    if (data.user && data.user.identities && data.user.identities.length === 0) {
+    if (data.user?.identities?.length === 0) {
         return {error: { message: 'Account with this email already exists.' }};
     } 
 

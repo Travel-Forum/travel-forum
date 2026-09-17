@@ -8,10 +8,9 @@ const AuthCallback = () => {
   const hasRun = useRef(false);
 
   const params = new URLSearchParams(window.location.search);
-  const code = params.get('code');
+  const code = params.get("code");
 
   useEffect(() => {
-
     if (hasRun.current) return;
     hasRun.current = true;
 
@@ -26,7 +25,23 @@ const AuthCallback = () => {
         const user = result.data.user;
         const metadata = user.user_metadata;
 
-        const { error: profileError } = await supabase.from("profiles").insert({
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (profileError) {
+          setError(profileError);
+          return;
+        }
+
+        if (profile) {
+          navigate("/profile");
+          return;
+        }
+
+        const { error: insertError } = await supabase.from("profiles").insert({
           id: user.id,
           first_name: metadata.first_name,
           last_name: metadata.last_name,
@@ -35,8 +50,8 @@ const AuthCallback = () => {
           phone: metadata.phone,
         });
 
-        if (profileError) {
-          setError(profileError);
+        if (insertError) {
+          setError(insertError);
           return;
         }
 
