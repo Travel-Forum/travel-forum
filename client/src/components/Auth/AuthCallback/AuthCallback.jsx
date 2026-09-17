@@ -1,12 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../config/supabaseClient";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
+
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     supabase.auth
       .exchangeCodeForSession(window.location.href)
       .then(async (result) => {
