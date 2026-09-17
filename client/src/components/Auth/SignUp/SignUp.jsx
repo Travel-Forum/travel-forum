@@ -16,6 +16,12 @@ const SignUp = () => {
 
       return;
     }
+
+    toaster.create({
+      title: "Check your email",
+      description: "Open the confirmation link to complete registration.",
+      type: "success",
+    });
   };
 
   return (
