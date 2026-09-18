@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import {
   Button,
@@ -12,6 +12,9 @@ import {
   Box,
 } from "@chakra-ui/react";
 
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+
 import logo from "../../../assets/icons/Forum logo.svg";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +26,7 @@ const CompleteProfileDesign = ({ onSubmit }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(completeProfileSchema),
@@ -92,12 +96,22 @@ const CompleteProfileDesign = ({ onSubmit }) => {
 
                     <Field.Root invalid={!!errors.phone}>
                       <Field.Label>Phone</Field.Label>
-                      <Input
-                        placeholder="+359888123456"
-                        {...register("phone")}
+                      <Controller
+                        name="phone"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <PhoneInput
+                            {...field}
+                            defaultCountry="BG"
+                            international
+                            countryCallingCodeEditable={false}
+                            inputComponent={Input}
+                          />
+                        )}
                       />
                       <Field.HelperText>
-                        Include country code, no leading zero
+                        Pick your country, the code and grouping are added automatically
                       </Field.HelperText>
                       {errors.phone && (
                         <Text color="red.500" fontSize="sm">
