@@ -21,3 +21,20 @@ export const signInSchema = z.object({
   email: z.email("Email is not valid"),
   password: z.string().min(1, "Password is required"),
 })
+
+export const completeProfileSchema = z.object({
+
+  firstName: z.string()
+    .min(4, "At least 4 symbols")
+    .max(32, "Maximum of 32 characters"),
+
+  lastName: z.string()
+    .min(4, "At least 4 symbols")
+    .max(32, "Maximum of 32 characters"),
+
+  username: z.string()
+    .min(4, "At least 4 symbols")
+    .max(32, "Maximum of 32 characters"),
+
+  phone: z.e164()
+})
