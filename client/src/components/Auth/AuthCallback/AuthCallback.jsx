@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { Box, Card, HStack, Stack, Text, Spinner, Button } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import { Stack, Text, Spinner, Button } from "@chakra-ui/react";
 import { LuCircleCheck, LuCircleX } from "react-icons/lu";
 
 import { supabase } from "../../../config/supabaseClient";
-import { checkUserExist } from "../../../utils/checkUserExist.js";
-import logo from "../../../assets/icons/Forum logo.svg";
+import { useProfileRedirect } from "../../../hooks/useProfileRedirect.js";
+import { AuthCard } from "../../Ui/AuthCard";
 
 const AuthCallback = () => {
-  const navigate = useNavigate();
+  const { redirectByProfile } = useProfileRedirect();
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
   const hasRun = useRef(false);
@@ -29,86 +29,56 @@ const AuthCallback = () => {
           return;
         }
 
-        const user = result.data.user;
+        const { error: redirectError } = await redirectByProfile(
+          result.data.user.id,
+          { delay: 1000, onResolved: () => setStatus("success") },
+        );
 
-        const { data: profile, error: profileError } = await checkUserExist(user.id);
-
-        if (profileError) {
-          setError(profileError);
+        if (redirectError) {
+          setError(redirectError);
           setStatus("error");
-          return;
         }
-
-        setStatus("success");
-
-        setTimeout(() => {
-          navigate(profile ? "/profile" : "/complete-profile");
-        }, 1000);
       })
       .catch((err) => {
         setError(err);
         setStatus("error");
       });
-  }, [code, navigate]);
+  }, [code, redirectByProfile]);
 
   return (
-    <Box
-      minH="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      p="4"
-    >
-      <Card.Root maxW="md" w="full" mx="auto">
-        <Card.Header>
-          <Card.Title textAlign="center">
-            <HStack justify="center" gap="2">
-              <img
-                src={logo}
-                alt="Travel Forum logo"
-                width="24"
-                height="24"
-              />
-              <span>Travel Forum</span>
-            </HStack>
-          </Card.Title>
-        </Card.Header>
+    <AuthCard title="Travel Forum" maxW="md">
+      <Stack gap="4" align="center" py="6">
+        {status === "loading" && (
+          <>
+            <Spinner size="lg" color="blue.solid" />
+            <Text color="fg.muted">Confirming your email...</Text>
+          </>
+        )}
 
-        <Card.Body>
-          <Stack gap="4" align="center" py="6">
-            {status === "loading" && (
-              <>
-                <Spinner size="lg" color="blue.solid" />
-                <Text color="fg.muted">Confirming your email...</Text>
-              </>
-            )}
+        {status === "success" && (
+          <>
+            <LuCircleCheck size={40} color="var(--chakra-colors-green-500)" />
+            <Text fontWeight="medium">Email confirmed!</Text>
+            <Text color="fg.muted" fontSize="sm">
+              Redirecting...
+            </Text>
+          </>
+        )}
 
-            {status === "success" && (
-              <>
-                <LuCircleCheck size={40} color="var(--chakra-colors-green-500)" />
-                <Text fontWeight="medium">Email confirmed!</Text>
-                <Text color="fg.muted" fontSize="sm">
-                  Redirecting...
-                </Text>
-              </>
-            )}
-
-            {status === "error" && (
-              <>
-                <LuCircleX size={40} color="var(--chakra-colors-red-500)" />
-                <Text fontWeight="medium">Something went wrong</Text>
-                <Text color="fg.muted" fontSize="sm" textAlign="center">
-                  {error?.message}
-                </Text>
-                <Button asChild variant="outline" mt="2">
-                  <RouterLink to="/signin">Back to Sign In</RouterLink>
-                </Button>
-              </>
-            )}
-          </Stack>
-        </Card.Body>
-      </Card.Root>
-    </Box>
+        {status === "error" && (
+          <>
+            <LuCircleX size={40} color="var(--chakra-colors-red-500)" />
+            <Text fontWeight="medium">Something went wrong</Text>
+            <Text color="fg.muted" fontSize="sm" textAlign="center">
+              {error?.message}
+            </Text>
+            <Button asChild variant="outline" mt="2">
+              <RouterLink to="/signin">Back to Sign In</RouterLink>
+            </Button>
+          </>
+        )}
+      </Stack>
+    </AuthCard>
   );
 };
 
