@@ -76,35 +76,6 @@ const SignUpDesign = ({ onSubmit }) => {
               <Fieldset.Root size="lg">
                 <Fieldset.Content>
                   <Stack gap="4">
-                    <Field.Root invalid={!!errors.firstName}>
-                      <Field.Label>First Name</Field.Label>
-                      <Input {...register("firstName")} />
-                      {errors.firstName && (
-                        <Text color="red.500" fontSize="sm">
-                          {errors.firstName.message}
-                        </Text>
-                      )}
-                    </Field.Root>
-
-                    <Field.Root invalid={!!errors.lastName}>
-                      <Field.Label>Last Name</Field.Label>
-                      <Input {...register("lastName")} />
-                      {errors.lastName && (
-                        <Text color="red.500" fontSize="sm">
-                          {errors.lastName.message}
-                        </Text>
-                      )}
-                    </Field.Root>
-
-                    <Field.Root invalid={!!errors.username}>
-                      <Field.Label>Username</Field.Label>
-                      <Input {...register("username")} />
-                      {errors.username && (
-                        <Text color="red.500" fontSize="sm">
-                          {errors.username.message}
-                        </Text>
-                      )}
-                    </Field.Root>
 
                     <Field.Root invalid={!!errors.email}>
                       <Field.Label>Email address</Field.Label>
@@ -112,22 +83,6 @@ const SignUpDesign = ({ onSubmit }) => {
                       {errors.email && (
                         <Text color="red.500" fontSize="sm">
                           {errors.email.message}
-                        </Text>
-                      )}
-                    </Field.Root>
-
-                    <Field.Root invalid={!!errors.phone}>
-                      <Field.Label>Phone</Field.Label>
-                      <Input
-                        placeholder="+359888123456"
-                        {...register("phone")}
-                      />
-                      <Field.HelperText>
-                        Include country code, no leading zero
-                      </Field.HelperText>
-                      {errors.phone && (
-                        <Text color="red.500" fontSize="sm">
-                          {errors.phone.message}
                         </Text>
                       )}
                     </Field.Root>
