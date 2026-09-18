@@ -1,12 +1,11 @@
-import { useNavigate } from "react-router-dom";
-
 import { SignInUser } from "../../../services/authService/SignInUser.js";
+import { useProfileRedirect } from "../../../hooks/useProfileRedirect.js";
 
 import { toaster } from "../../Ui/Toaster.jsx";
 import SignInDesign from "./SignInDesign.jsx";
 
 const SignIn = () => {
-  const navigate = useNavigate();
+  const { redirectByProfile } = useProfileRedirect();
 
   const handleFormSubmit = async (data) => {
     const result = await SignInUser(data);
@@ -21,7 +20,15 @@ const SignIn = () => {
       return;
     }
 
-    navigate("/profile");
+    const { error } = await redirectByProfile(result.data.user.id);
+
+    if (error) {
+      toaster.create({
+        title: "Sign in error",
+        description: error.message,
+        type: "error",
+      });
+    }
   };
 
   return (

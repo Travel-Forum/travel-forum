@@ -1,9 +1,15 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import { Stack, Text, Spinner, Button } from "@chakra-ui/react";
+import { LuCircleCheck, LuCircleX } from "react-icons/lu";
+
 import { supabase } from "../../../config/supabaseClient";
+import { useProfileRedirect } from "../../../hooks/useProfileRedirect.js";
+import { AuthCard } from "../../Ui/AuthCard";
 
 const AuthCallback = () => {
-  const navigate = useNavigate();
+  const { redirectByProfile } = useProfileRedirect();
+  const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
   const hasRun = useRef(false);
 
@@ -19,55 +25,60 @@ const AuthCallback = () => {
       .then(async (result) => {
         if (result.error) {
           setError(result.error);
+          setStatus("error");
           return;
         }
 
-        const user = result.data.user;
-        const metadata = user.user_metadata;
+        const { error: redirectError } = await redirectByProfile(
+          result.data.user.id,
+          { delay: 1000, onResolved: () => setStatus("success") },
+        );
 
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        if (profileError) {
-          setError(profileError);
-          return;
+        if (redirectError) {
+          setError(redirectError);
+          setStatus("error");
         }
-
-        if (profile) {
-          navigate("/profile");
-          return;
-        }
-
-        const { error: insertError } = await supabase.from("profiles").insert({
-          id: user.id,
-          first_name: metadata.first_name,
-          last_name: metadata.last_name,
-          username: metadata.username,
-          email: user.email,
-          phone: metadata.phone,
-        });
-
-        if (insertError) {
-          setError(insertError);
-          return;
-        }
-
-        navigate("/profile");
       })
-      .catch((error) => setError(error));
-  }, [code, navigate]);
+      .catch((err) => {
+        setError(err);
+        setStatus("error");
+      });
+  }, [code, redirectByProfile]);
 
   return (
-    <>
-      {error ? (
-        <div>Error: {error.message}</div>
-      ) : (
-        <div>Confirming email...</div>
-      )}
-    </>
+    <AuthCard title="Travel Forum" maxW="md">
+      <Stack gap="4" align="center" py="6">
+        {status === "loading" && (
+          <>
+            <Spinner size="lg" color="blue.solid" />
+            <Text color="fg.muted">Confirming your email...</Text>
+          </>
+        )}
+
+        {status === "success" && (
+          <>
+            <LuCircleCheck size={40} color="var(--chakra-colors-green-500)" />
+            <Text fontWeight="medium">Email confirmed!</Text>
+            <Text color="fg.muted" fontSize="sm">
+              Redirecting...
+            </Text>
+          </>
+        )}
+
+        {status === "error" && (
+          <>
+            <LuCircleX size={40} color="var(--chakra-colors-red-500)" />
+            <Text fontWeight="medium">Something went wrong</Text>
+            <Text color="fg.muted" fontSize="sm" textAlign="center">
+              {error?.message}
+            </Text>
+            <Button asChild variant="outline" mt="2">
+              <RouterLink to="/signin">Back to Sign In</RouterLink>
+            </Button>
+          </>
+        )}
+      </Stack>
+    </AuthCard>
   );
 };
 
