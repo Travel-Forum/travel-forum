@@ -1,11 +1,12 @@
 import { supabase } from "../../config/supabaseClient.js";
+import { appUrl } from "../../config/environments.js";
 
 export const GoogleAuth = async () => {
     
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `http://localhost:5173/auth/callback`,
+      redirectTo: `${appUrl}/auth/callback`,
     },
   });
 

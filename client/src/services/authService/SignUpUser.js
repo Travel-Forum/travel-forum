@@ -1,4 +1,5 @@
 import { supabase } from '../../config/supabaseClient.js';
+import { appUrl } from '../../config/environments.js';
 
 export const SignUpUser = async ({email, password}) => {
     
@@ -6,7 +7,7 @@ export const SignUpUser = async ({email, password}) => {
         email: email,
         password: password,
         options: {
-            emailRedirectTo: 'http://localhost:5173/auth/callback',
+            emailRedirectTo: `${appUrl}/auth/callback`,
         },
     })
 
