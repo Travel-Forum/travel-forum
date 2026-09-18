@@ -5,6 +5,8 @@ import { SignInUser } from "../../../services/authService/SignInUser.js";
 import { toaster } from "../../Ui/Toaster.jsx";
 import SignInDesign from "./SignInDesign.jsx";
 
+import { checkUserExist } from "../../../utils/checkUserExist.js";
+
 const SignIn = () => {
   const navigate = useNavigate();
 
@@ -21,7 +23,26 @@ const SignIn = () => {
       return;
     }
 
-    navigate("/profile");
+    const { data: profile, error: profileError } = await checkUserExist(
+      result.data.user.id,
+    );
+
+    if (profileError) {
+      toaster.create({
+        title: "Sign in error",
+        description: profileError.message,
+        type: "error",
+      });
+
+      return;
+    }
+
+    if (profile) {
+      navigate("/profile");
+      return;
+    }
+
+    navigate("/complete-profile");
   };
 
   return (
