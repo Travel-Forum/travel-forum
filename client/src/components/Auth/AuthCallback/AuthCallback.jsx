@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../config/supabaseClient";
+import { checkUserExist } from "../../../utils/checkUserExist.js";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
@@ -23,13 +24,8 @@ const AuthCallback = () => {
         }
 
         const user = result.data.user;
-        const metadata = user.user_metadata;
 
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("id", user.id)
-          .maybeSingle();
+        const { data: profile, error: profileError } = await checkUserExist(user.id);
 
         if (profileError) {
           setError(profileError);
@@ -41,21 +37,7 @@ const AuthCallback = () => {
           return;
         }
 
-        const { error: insertError } = await supabase.from("profiles").insert({
-          id: user.id,
-          first_name: metadata.first_name,
-          last_name: metadata.last_name,
-          username: metadata.username,
-          email: user.email,
-          phone: metadata.phone,
-        });
-
-        if (insertError) {
-          setError(insertError);
-          return;
-        }
-
-        navigate("/profile");
+        navigate('/complete-profile');
       })
       .catch((error) => setError(error));
   }, [code, navigate]);
