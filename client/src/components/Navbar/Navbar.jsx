@@ -3,8 +3,7 @@ import NavbarDesign from './NavbarDesign';
 
 function Navbar() {
     const { pathname } = useLocation();
-    const isAuthPage = pathname === '/signin' || pathname === '/signup';
-    return <NavbarDesign isAuthPage={isAuthPage} />;
+    return <NavbarDesign pathname={pathname} />;
 }
 
 export default Navbar;
