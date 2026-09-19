@@ -2,6 +2,7 @@ import { Flex, Box, Input, HStack, IconButton, Image, Avatar } from "@chakra-ui/
 import { Link } from "react-router-dom";
 import { LuHouse, LuMapPin, LuBell } from "react-icons/lu";
 import logo from "../../assets/icons/Forum logo.svg";
+import ProfileMenu from "../Profile/ProfileMenu/ProfileMenu";
 
 const NavbarDesign = ({ pathname }) => {
   return (
@@ -38,10 +39,7 @@ const NavbarDesign = ({ pathname }) => {
           <LuBell />
         </IconButton>
 
-        <Avatar.Root>
-            <Avatar.Fallback name="Segun Adebayo" />
-            <Avatar.Image src="https://bit.ly/sage-adebayo" />
-        </Avatar.Root>
+        <ProfileMenu />
       </HStack>
     </Flex>
   );
