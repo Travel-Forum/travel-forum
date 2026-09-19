@@ -1,5 +1,7 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+
+import Navbar from '../../components/Navbar/Navbar.jsx';
 
 const Profile = () => {
   const { user, loading, signOut } = useAuth();
@@ -14,6 +16,7 @@ const Profile = () => {
 
   return (
     <div>
+      <Navbar />
       <h1>Welcome, {user?.email}</h1>
       <button onClick={HandleSignOut}>Sign Out</button>
     </div>
