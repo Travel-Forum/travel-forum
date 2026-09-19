@@ -1,7 +1,7 @@
 import { Flex, Box, Input, HStack, IconButton, Image, Avatar } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { LuHouse, LuMapPin, LuBell } from "react-icons/lu";
-import forumLogo from "../../assets/icons/Forum logo.svg";
+import logo from "../../assets/icons/Forum logo.svg";
 
 const NavbarDesign = ({ pathname }) => {
   return (
@@ -15,7 +15,7 @@ const NavbarDesign = ({ pathname }) => {
       borderBottomWidth="1px"
     >
       <Link to="/">
-        <Image src={forumLogo} alt="Travel Forum logo" h="40px" />
+        <Image src={logo} alt="Travel Forum logo" h="40px" />
       </Link>
 
       <Box flex="1" maxW="400px" >
@@ -24,18 +24,18 @@ const NavbarDesign = ({ pathname }) => {
 
       <HStack gap={2}>
         <Link to="/">
-          <IconButton aria-label="Home" variant="ghost">
-            <LuHouse size={4} />
+          <IconButton aria-label="Home" variant="ghost" padding={4}>
+            <LuHouse />
           </IconButton>
         </Link>
         <Link to="/locations">
-          <IconButton aria-label="Locations" variant="ghost">
-            <LuMapPin size={4} />
+          <IconButton aria-label="Locations" variant="ghost" padding={4}>
+            <LuMapPin />
           </IconButton>
         </Link>
 
-        <IconButton aria-label="Notifications" variant="ghost">
-          <LuBell size={4} />
+        <IconButton aria-label="Notifications" variant="ghost" padding={4}>
+          <LuBell />
         </IconButton>
 
         <Avatar.Root>
