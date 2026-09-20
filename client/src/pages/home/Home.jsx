@@ -1,22 +1,23 @@
-import { Link } from "react-router-dom";
+import { Box, Container } from "@chakra-ui/react";
 import Navigation from '../../components/Navigation/Navigation';
 
 const Home = () => {
 
     return (
-        <>
+        <Box minH="100vh">
           <Navigation />
-        <div>
-            <h1>Home</h1>
 
-            <Link to="/signin">Sign In</Link>
+          <Container maxW="6xl" py={8}>
+            <Box as="section" py={10} textAlign="center">Hero (TODO)</Box>
+            <Box as="section" py={6}>Stats (TODO)</Box>
+            <Box as="section" py={6}>Posts carousel (TODO)</Box>
+            <Box as="section" py={10}>Key features (TODO)</Box>
+            <Box as="section" py={10}>Join CTA</Box>
+          </Container>
 
-            <br />
-
-            <Link to="/signup">Sign Up</Link>
-        </div>
-        </>
-    )
+          <Box as="footer" borderTopWidth="1px" py={8} textAlign="center">Footer (TODO)</Box>
+        </Box>
+    );
 }
 
-export default Home
+export default Home;
