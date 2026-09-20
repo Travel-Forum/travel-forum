@@ -7,7 +7,7 @@ const mockMessages = [
   { id: 3, sender: "bot", text: "For most nationalities, a valid passport and a visa are required. Check your embassy for details." },
 ]
 
-const ChatbotWidget = () => {
+const ChatBotWidget = () => {
   return (
     <Card.Root w="full" h="500px" overflow="hidden">
       <Card.Header p={3}>
@@ -69,4 +69,4 @@ const ChatbotWidget = () => {
   )
 }
 
-export default ChatbotWidget
+export default ChatBotWidget

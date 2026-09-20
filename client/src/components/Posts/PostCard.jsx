@@ -5,18 +5,16 @@ const PostCard = ({ post }) => {
   return (
     <Card.Root>
       <Card.Header>
-        <HStack justify="space-between">
-          <HStack gap={3}>
-            <Avatar.Root>
-              <Avatar.Fallback name={post.authorName} />
-              <Avatar.Image src={post.authorAvatar} />
-            </Avatar.Root>
-            <VStack align="start" gap={0}>
-              <Text fontWeight="bold">{post.authorName}</Text>
-              <Text fontSize="sm" color="fg.muted">{post.authorTitle}</Text>
-              <Text fontSize="xs" color="fg.muted">{post.timeAgo}</Text>
-            </VStack>
-          </HStack>
+        <HStack gap={3}>
+          <Avatar.Root>
+            <Avatar.Fallback name={post.authorName} />
+            <Avatar.Image src={post.authorAvatar} />
+          </Avatar.Root>
+          <VStack align="start" gap={0}>
+            <Text fontWeight="bold">{post.authorName}</Text>
+            <Text fontSize="sm" color="fg.muted">{post.authorTitle}</Text>
+            <Text fontSize="xs" color="fg.muted">{post.timeAgo}</Text>
+          </VStack>
         </HStack>
       </Card.Header>
 
