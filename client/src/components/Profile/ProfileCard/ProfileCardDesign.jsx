@@ -12,7 +12,7 @@ import { LuCheck, LuX } from "react-icons/lu"
 
 const ProfileCardDesign = () => {
   return (
-    <Card.Root width="320px">
+    <Card.Root width="full">
       <Card.Body>
         <HStack mb="6" gap="3">
           <Avatar.Root>
