@@ -9,9 +9,9 @@ const mockMessages = [
 
 const ChatbotWidget = () => {
   return (
-    <Card.Root maxW="sm" h="500px" display="flex" flexDirection="column">
-      <Card.Header>
-        <HStack gap={2}>
+    <Card.Root w="full" h="500px" overflow="hidden">
+      <Card.Header p={3}>
+        <HStack gap={2} align="center">
           <Box
             bg="blue.500"
             borderRadius="full"
@@ -28,7 +28,7 @@ const ChatbotWidget = () => {
 
       <Separator />
 
-      <Card.Body flex="1" overflowY="auto">
+      <Card.Body flex="1" minH="0" overflowY="auto" p={3}>
         <VStack align="stretch" gap={3}>
           {mockMessages.map((msg) => (
             <HStack
@@ -57,10 +57,10 @@ const ChatbotWidget = () => {
 
       <Separator />
 
-      <Card.Footer>
-        <HStack w="full" gap={2}>
-          <Input placeholder="Type a message..." borderRadius="full" size="sm" />
-          <IconButton aria-label="Send message" borderRadius="full" size="sm">
+      <Card.Footer p={3}>
+        <HStack w="full" gap={2} align="center">
+          <Input placeholder="Type a message..." borderRadius="full" size="sm" flex="1" minW="0" />
+          <IconButton aria-label="Send message" borderRadius="full" size="sm" flexShrink={0}>
             <LuSend size={14} />
           </IconButton>
         </HStack>
