@@ -1,12 +1,10 @@
-import { useLocation } from 'react-router-dom';
 import NavbarDesign from './NavbarDesign';
 
-const Navbar = () => {
-    const { pathname } = useLocation();
+const Navbar = ({ activeSection, onSectionClick }) => {
 
     return (
         <>
-            <NavbarDesign pathname={pathname} />
+            <NavbarDesign activeSection={activeSection} onSectionClick={onSectionClick} />
         </>
     )
 }
