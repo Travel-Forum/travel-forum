@@ -1,51 +1,50 @@
 import { Flex, Box, Input, HStack, IconButton, Image } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 import { LuHouse, LuMapPin, LuBell } from "react-icons/lu";
 import logo from "../../assets/icons/Forum logo.svg";
 import ProfileMenu from "../Profile/ProfileMenu/ProfileMenu";
 
-const NavbarDesign = ({ pathname }) => {
+const NavbarDesign = ({ activeSection, onSectionClick }) => {
   return (
     <Flex
       as="nav"
       align="center"
-      justifyContent={"center"}
+      justifyContent="center"
       padding={4}
       gap={4}
       px={{ base: 4, md: 6 }}
       borderBottomWidth="1px"
     >
-      <Link to="/">
-        <Image src={logo} alt="Travel Forum logo" h="40px" />
-      </Link>
+      <Image onClick={() => onSectionClick("overview")} cursor={'pointer'} src={logo} alt="Travel Forum logo" h="40px" />
 
-      <Box flex="1" maxW="400px" >
-        <Input borderRadius={'full'} placeholder="Search" />
+      <Box flex="1" maxW="400px">
+        <Input borderRadius="full" placeholder="Search" />
       </Box>
 
       <HStack gap={2}>
         <IconButton
-          asChild
           aria-label="Home"
-          variant={pathname === "/" ? "subtle" : "ghost"}
+          variant={activeSection === "overview" ? "subtle" : "ghost"}
           padding={4}
+          onClick={() => onSectionClick("overview")}
         >
-          <Link to="/">
-            <LuHouse />
-          </Link>
-        </IconButton>
-        <IconButton
-          asChild
-          aria-label="Locations"
-          variant={pathname === "/locations" ? "subtle" : "ghost"}
-          padding={4}
-        >
-          <Link to="/locations">
-            <LuMapPin />
-          </Link>
+          <LuHouse />
         </IconButton>
 
-        <IconButton aria-label="Notifications" variant="ghost" padding={4}>
+        <IconButton
+          aria-label="Locations"
+          variant={activeSection === "locations" ? "subtle" : "ghost"}
+          padding={4}
+          onClick={() => onSectionClick("locations")}
+        >
+          <LuMapPin />
+        </IconButton>
+
+        <IconButton
+          aria-label="Notifications"
+          variant={activeSection === "notifications" ? "subtle" : "ghost"}
+          padding={4}
+          onClick={() => onSectionClick("notifications")}
+        >
           <LuBell />
         </IconButton>
 
@@ -54,4 +53,5 @@ const NavbarDesign = ({ pathname }) => {
     </Flex>
   );
 };
+
 export default NavbarDesign;
