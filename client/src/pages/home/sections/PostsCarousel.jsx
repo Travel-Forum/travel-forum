@@ -1,28 +1,30 @@
-import { useState } from "react";
-import { Box, Button, HStack, SimpleGrid, IconButton } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Box, Button, HStack, SimpleGrid, IconButton, Text } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import PostCard from "../components/PostCard";
+import { getLatestPosts, getMostCommentedPosts } from "../../../services/postsService/postsService";
 
-// временни данни, докато вържем Supabase на Стъпка 9
-const makePosts = (label) =>
-  Array.from({ length: 10 }).map((_, i) => ({
-    id: `${label}-${i}`,
-    title: `${label} travel post #${i + 1}`,
-    content: "Sample content for a travel discussion. This will be replaced with real data from Supabase.",
-    comment_count: (i * 7) % 40,
-    image_url: i % 3 === 0 ? `https://picsum.photos/seed/${label}${i}/600/400` : null,
-  }));
-
-const latestPosts = makePosts("Latest");
-const commentedPosts = makePosts("Commented");
 const PAGE_SIZE = 3;
 
 function PostsCarousel() {
   const [tab, setTab] = useState("latest");
   const [page, setPage] = useState(0);
+  const [latest, setLatest] = useState([]);
+  const [commented, setCommented] = useState([]);
 
-  const posts = tab === "latest" ? latestPosts : commentedPosts;
-  const pageCount = Math.ceil(posts.length / PAGE_SIZE);
+  useEffect(() => {
+    const load = async () => {
+      const latestRes = await getLatestPosts(10);
+      if (!latestRes.error) setLatest(latestRes.data);
+
+      const commentedRes = await getMostCommentedPosts(10);
+      if (!commentedRes.error) setCommented(commentedRes.data);
+    };
+    load();
+  }, []);
+
+  const posts = tab === "latest" ? latest : commented;
+  const pageCount = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
   const visible = posts.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
 
   const switchTab = (next) => {
@@ -40,7 +42,7 @@ function PostsCarousel() {
           10 most commented
         </Button>
       </HStack>
-
+       {posts.length === 0 && <Text textAlign="center" color="gray.500">No posts yet.</Text>}
       <SimpleGrid columns={{ base: 1, md: 3 }} gap={6}>
         {visible.map((post) => (
           <PostCard key={post.id} post={post} />
