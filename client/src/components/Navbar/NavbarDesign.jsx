@@ -8,6 +8,10 @@ const NavbarDesign = ({ activeSection, onSectionClick }) => {
     <Flex
       as="nav"
       align="center"
+      position="sticky"
+      top="0"
+      zIndex="sticky"
+      bg="bg"
       justifyContent="center"
       padding={4}
       gap={4}
