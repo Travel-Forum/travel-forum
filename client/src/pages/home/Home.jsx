@@ -5,6 +5,7 @@ import KeyFeatures from "./sections/KeyFeatures";
 import JoinCta from "./sections/JoinCta";
 import Footer from "./sections/Footer";
 import StatsBar from "./sections/StatsBar"
+import PostsCarousel from "./sections/PostsCarousel.jsx";
 const Home = () => {
 
     return (
@@ -14,7 +15,7 @@ const Home = () => {
           <Container maxW="6xl" py={8}>
             <Hero />
             <StatsBar />
-            <Box as="section" py={6}>Posts carousel (TODO)</Box>
+            <PostsCarousel />
             <KeyFeatures />
             <JoinCta/>
           </Container>
