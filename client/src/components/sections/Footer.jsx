@@ -1,5 +1,5 @@
 import { Box, Container, Flex, HStack, Image, Text, Link } from "@chakra-ui/react";
-import forumLogo from "../../../assets/icons/Forum logo.svg";
+import forumLogo from "../../assets/icons/Forum logo.svg";
 
 function Footer() {
     return (

@@ -1,6 +1,6 @@
 import { Box, Heading, SimpleGrid } from "@chakra-ui/react";
 import { LuPenLine, LuMessageSquare, LuThumbsUp, LuSearch, LuAward} from "react-icons/lu";
-import FeatureCard from "../components/FeatureCard";
+import FeatureCard from "../cards/FeatureCard";
 
 const features = [
     { icon: <LuPenLine />, title: "Share your experience", description: "Tell others about the places you've been and help them with real, first-hand impressions."},

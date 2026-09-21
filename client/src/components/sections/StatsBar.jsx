@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text, HStack } from "@chakra-ui/react";
 import { LuFileText, LuUsers } from "react-icons/lu";
-import { getUserCount, getPostCount } from "../../../services/statsService/statsService";
+import { getPublicStats } from "../../services/statsService/statsService";
 
 function StatItem({ icon, value, label }) {
   return (
@@ -22,19 +22,18 @@ function StatsBar() {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    const load = async () => {
-      const postsRes = await getPostCount();
-      if (!postsRes.error) setPosts(postsRes.count);
-
-      const usersRes = await getUserCount();
-      if (!usersRes.error) setUsers(usersRes.count);
-    };
-    load();
-  }, []);
-
+  const load = async () => {
+    const res = await getPublicStats();
+    if (!res.error) {
+      setPosts(res.data.post_count);
+      setUsers(res.data.user_count);
+    }
+  };
+  load();
+ }, []);
   return (
     <Box as="section" py={6}>
-      <Flex direction={{ base: "column", sm: "row" }} borderWidth="1px" borderColor="gray.100" borderRadius="xl" px={4}>
+      <Flex direction={{ base: "column", sm: "row" }} bg="gray.50" borderWidth="1px" borderColor="gray.200" borderRadius="xl" px={4}>
         <StatItem icon={<LuFileText />} value={posts} label="Total posts" />
         <StatItem icon={<LuUsers />} value={users} label="Active users" />
       </Flex>

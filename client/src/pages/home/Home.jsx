@@ -1,11 +1,11 @@
 import { Box, Container } from "@chakra-ui/react";
 import Navigation from '../../components/Navigation/Navigation';
-import Hero from "./sections/Hero";
-import KeyFeatures from "./sections/KeyFeatures";
-import JoinCta from "./sections/JoinCta";
-import Footer from "./sections/Footer";
-import StatsBar from "./sections/StatsBar"
-import PostsCarousel from "./sections/PostsCarousel.jsx";
+import Hero from "../../components/sections/Hero";
+import KeyFeatures from "../../components/sections/KeyFeatures";
+import JoinCta from "../../components/sections/JoinCta";
+import Footer from "../../components/sections/Footer";
+import StatsBar from "../../components/sections/StatsBar"
+import PostsCarousel from "../../components/sections/PostsCarousel.jsx";
 const Home = () => {
 
     return (

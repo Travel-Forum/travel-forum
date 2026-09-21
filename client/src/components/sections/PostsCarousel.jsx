@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Button, HStack, SimpleGrid, IconButton, Text } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
-import PostCard from "../components/PostCard";
-import { getLatestPosts, getMostCommentedPosts } from "../../../services/postsService/postsService";
+import PostCard from "../cards/PostCard";
+import { getLatestPosts, getMostCommentedPosts } from "../../services/postsService/postsService";
 
 const PAGE_SIZE = 3;
 

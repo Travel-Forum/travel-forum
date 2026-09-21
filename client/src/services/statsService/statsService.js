@@ -1,25 +1,11 @@
 import { supabase } from "../../config/supabaseClient.js";
 
-export const getUserCount = async () => {
-  const { count, error } = await supabase
-    .from("profiles")
-    .select("*", { count: "exact", head: true });
+export const getPublicStats = async () => {
+  const { data, error } = await supabase.rpc("get_public_stats");
 
   if (error) {
-    console.log("Get user count error:", error.message);
+    console.log("Get public stats error:", error.message);
     return { error };
   }
-  return { count };
-};
-
-export const getPostCount = async () => {
-  const { count, error } = await supabase
-    .from("posts")
-    .select("*", { count: "exact", head: true });
-
-  if (error) {
-    console.log("Get post count error:", error.message);
-    return { error };
-  }
-  return { count };
+  return { data: data?.[0] ?? { post_count: 0, user_count: 0 } };
 };
