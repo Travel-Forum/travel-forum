@@ -4,6 +4,7 @@ import Hero from "./sections/Hero";
 import KeyFeatures from "./sections/KeyFeatures";
 import JoinCta from "./sections/JoinCta";
 import Footer from "./sections/Footer";
+import StatsBar from "./sections/StatsBar"
 const Home = () => {
 
     return (
@@ -12,7 +13,7 @@ const Home = () => {
 
           <Container maxW="6xl" py={8}>
             <Hero />
-            <Box as="section" py={6}>Stats (TODO)</Box>
+            <StatsBar />
             <Box as="section" py={6}>Posts carousel (TODO)</Box>
             <KeyFeatures />
             <JoinCta/>
