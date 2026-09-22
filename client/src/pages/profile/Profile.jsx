@@ -1,23 +1,16 @@
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth.js';
+import { useState } from "react"
+import Navbar from "../../components/Navbar/Navbar.jsx"
+import ProfileContent from "../../components/Profile/ProfileContent/ProfileContent.jsx"
 
 const Profile = () => {
-  const { user, loading, signOut } = useAuth();
-  const navigate = useNavigate();
-
-  const HandleSignOut = async () => {
-    await signOut();
-    navigate("/");
-  }
-
-  if (loading) return <div>Loading...</div>;
+  const [activeSection, setActiveSection] = useState('overview')
 
   return (
-    <div>
-      <h1>Welcome, {user?.email}</h1>
-      <button onClick={HandleSignOut}>Sign Out</button>
-    </div>
-  );
-};
+    <>
+      <Navbar onSectionClick={setActiveSection} />
+      <ProfileContent activeSection={activeSection} />
+    </>
+  )
+}
 
-export default Profile;
+export default Profile
