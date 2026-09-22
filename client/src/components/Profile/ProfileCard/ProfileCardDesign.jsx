@@ -1,51 +1,53 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  HStack,
-  Stack,
-  Strong,
-  Text,
-} from "@chakra-ui/react"
-import { LuCheck, LuX } from "react-icons/lu"
+import { Card, VStack, HStack, Avatar, Text, Separator, Badge, Box } from "@chakra-ui/react"
+import { useNavigate } from "react-router-dom"
 
+const ProfileCard = () => {
+  const navigate = useNavigate()
 
-const ProfileCardDesign = () => {
   return (
-    <Card.Root width="full">
-      <Card.Body>
-        <HStack mb="6" gap="3">
-          <Avatar.Root>
-            <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-            <Avatar.Fallback name="Nate Foss" />
+    <Card.Root
+      p={5}
+      cursor="pointer"
+      _hover={{ shadow: "md" }}
+      transition="box-shadow 0.2s"
+    >
+      <VStack gap={4} align="stretch">
+
+        <VStack gap={2}>
+          <Avatar.Root size="xl">
+            <Avatar.Fallback name="George Golubov" />
+            <Avatar.Image src="https://bit.ly/sage-adebayo" />
           </Avatar.Root>
-          <Stack gap="0">
-            <Text fontWeight="semibold" textStyle="sm">
-              Nate Foss
-            </Text>
-            <Text color="fg.muted" textStyle="sm">
-              @natefoss
-            </Text>
-          </Stack>
+          <VStack gap={0}>
+            <Text fontSize="lg" fontWeight="bold">George Golubov</Text>
+            <Text fontSize="sm" color="fg.muted">@George321</Text>
+          </VStack>
+        </VStack>
+
+        <HStack gap={2} justify="center" wrap="wrap">
+          <Badge colorPalette="blue">Member</Badge>
+          <Badge colorPalette="green">Active Traveler</Badge>
         </HStack>
-        <Card.Description>
-          <Strong color="fg">Nate Foss </Strong>
-          has requested to join your team. You can approve or decline their
-          request.
-        </Card.Description>
-      </Card.Body>
-      <Card.Footer>
-        <Button variant="subtle" colorPalette="red" flex="1">
-          <LuX />
-          Decline
-        </Button>
-        <Button variant="subtle" colorPalette="blue" flex="1">
-          <LuCheck />
-          Approve
-        </Button>
-      </Card.Footer>
+
+        <Separator />
+
+        <Box>
+          <Text fontSize="sm" fontWeight="semibold" mb={1}>About</Text>
+          <Text fontSize="sm" color="fg.muted">
+            Passionate traveler exploring Southeast Asia. Always happy to share visa tips.
+          </Text>
+        </Box>
+
+        <Separator />
+
+        <HStack justify="space-between">
+          <Text fontSize="sm" color="fg.muted">Posts</Text>
+          <Text fontSize="sm" fontWeight="bold">58</Text>
+        </HStack>
+
+      </VStack>
     </Card.Root>
   )
 }
 
-export default ProfileCardDesign
+export default ProfileCard
