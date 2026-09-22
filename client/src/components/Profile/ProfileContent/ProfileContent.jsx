@@ -1,6 +1,7 @@
 import ProfileSection from '../ProfileSection/ProfileSection';
-import LocationsSection from '../../Locations/LocationsSection/LocationsSection'
-import NotificationsSection from '../../Notifications/NotificationsSection/NotificationsSection'
+import LocationsSection from '../../Locations/LocationsSection/LocationsSection';
+import NotificationsSection from '../../Notifications/NotificationsSection/NotificationsSection';
+import ProfileInfo from '../ProfileInfo/ProfileInfo';
 
 
 const ProfileContent = ({ activeSection} ) => {
@@ -11,6 +12,9 @@ const ProfileContent = ({ activeSection} ) => {
         
         case 'notifications':
             return <NotificationsSection />;
+
+        case 'profileInfo':
+            return <ProfileInfo />;
 
         case 'overview':
         default:

@@ -52,7 +52,7 @@ const NavbarDesign = ({ activeSection, onSectionClick }) => {
           <LuBell />
         </IconButton>
 
-        <ProfileMenu />
+        <ProfileMenu activeSection={activeSection} onSectionClick={onSectionClick} />
       </HStack>
     </Flex>
   );
