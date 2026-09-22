@@ -9,10 +9,11 @@ import {
   IconButton,
   Grid,
   GridItem,
-  Badge,
-  SimpleGrid,
+  Badge
 } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
+import { useAuth } from "../../../hooks/useAuth.js";
+import { useProfile } from "../../../hooks/useProfile.js";
 
 const InfoField = ({ label, value, onEdit }) => (
   <Box>
@@ -36,6 +37,9 @@ const InfoField = ({ label, value, onEdit }) => (
 );
 
 const ProfileInfo = () => {
+  const { user } = useAuth();
+  const { profile } = useProfile();
+
   return (
     <Box maxW="700px" mx="auto" mt={10} mb={10} px={4}>
       <Card.Root p={8}>
@@ -43,8 +47,8 @@ const ProfileInfo = () => {
           <VStack gap={3}>
             <Box position="relative">
               <Avatar.Root size="2xl">
-                <Avatar.Fallback name="George Golubov" />
-                <Avatar.Image src="https://bit.ly/sage-adebayo" />
+                <Avatar.Fallback name={user?.email} />
+                <Avatar.Image src={profile?.avatar_url} />
               </Avatar.Root>
               <IconButton
                 aria-label="Edit avatar"
@@ -60,7 +64,7 @@ const ProfileInfo = () => {
 
             <VStack gap={0}>
               <Text fontSize="2xl" fontWeight="bold">
-                George Golubov
+                George Gulubov
               </Text>
               <Text fontSize="md" color="fg.muted">
                 @George321

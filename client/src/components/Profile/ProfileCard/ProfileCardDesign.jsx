@@ -1,8 +1,19 @@
-import { Card, VStack, HStack, Avatar, Text, Separator, Badge, Box } from "@chakra-ui/react"
-import { useNavigate } from "react-router-dom"
+import {
+  Card,
+  VStack,
+  HStack,
+  Avatar,
+  Text,
+  Separator,
+  Badge,
+  Box
+} from "@chakra-ui/react";
+import { useAuth } from "../../../hooks/useAuth.js";
+import { useProfile } from "../../../hooks/useProfile.js";
 
 const ProfileCard = () => {
-  const navigate = useNavigate()
+  const { user } = useAuth();
+  const { profile } = useProfile();
 
   return (
     <Card.Root
@@ -12,15 +23,18 @@ const ProfileCard = () => {
       transition="box-shadow 0.2s"
     >
       <VStack gap={4} align="stretch">
-
         <VStack gap={2}>
-          <Avatar.Root size="xl">
-            <Avatar.Fallback name="George Golubov" />
-            <Avatar.Image src="https://bit.ly/sage-adebayo" />
+          <Avatar.Root size="2xl">
+            <Avatar.Fallback name={user?.email} />
+            <Avatar.Image src={profile?.avatar_url} />
           </Avatar.Root>
           <VStack gap={0}>
-            <Text fontSize="lg" fontWeight="bold">George Golubov</Text>
-            <Text fontSize="sm" color="fg.muted">@George321</Text>
+            <Text fontSize="lg" fontWeight="bold">
+              George Gulubov
+            </Text>
+            <Text fontSize="sm" color="fg.muted">
+              @George321
+            </Text>
           </VStack>
         </VStack>
 
@@ -32,22 +46,28 @@ const ProfileCard = () => {
         <Separator />
 
         <Box>
-          <Text fontSize="sm" fontWeight="semibold" mb={1}>About</Text>
+          <Text fontSize="sm" fontWeight="semibold" mb={1}>
+            About
+          </Text>
           <Text fontSize="sm" color="fg.muted">
-            Passionate traveler exploring Southeast Asia. Always happy to share visa tips.
+            Passionate traveler exploring Southeast Asia. Always happy to share
+            visa tips.
           </Text>
         </Box>
 
         <Separator />
 
         <HStack justify="space-between">
-          <Text fontSize="sm" color="fg.muted">Posts</Text>
-          <Text fontSize="sm" fontWeight="bold">58</Text>
+          <Text fontSize="sm" color="fg.muted">
+            Posts
+          </Text>
+          <Text fontSize="sm" fontWeight="bold">
+            58
+          </Text>
         </HStack>
-
       </VStack>
     </Card.Root>
-  )
-}
+  );
+};
 
-export default ProfileCard
+export default ProfileCard;
