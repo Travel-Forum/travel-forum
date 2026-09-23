@@ -1,18 +1,10 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
+import Eyebrow from "../ui/Eyebrow";
 
 const Hero = () => {
   return (
     <Box as="section" textAlign="center" py={{ base: 12, md: 20 }}>
-      <Text
-        color="colorPalette.600"
-        fontWeight="semibold"
-        letterSpacing="wider"
-        textTransform="uppercase"
-        fontSize="sm"
-        mb={3}
-      >
-        Travel together
-      </Text>
+      <Eyebrow mb={3}>Travel together</Eyebrow>
 
       <Heading
         as="h1"
@@ -24,7 +16,7 @@ const Hero = () => {
       </Heading>
 
       <Text
-        color="gray.600"
+        color="fg.muted"
         fontSize={{ base: "md", md: "lg" }}
         maxW="2xl"
         mx="auto"
@@ -34,7 +26,7 @@ const Hero = () => {
         and discover amazing places around the world.
       </Text>
 
-      <Text color="colorPalette.700" fontWeight="semibold" fontSize="lg">
+      <Text color="colorPalette.fg" fontWeight="semibold" fontSize="lg">
         Find your people. Find your places.
       </Text>
     </Box>

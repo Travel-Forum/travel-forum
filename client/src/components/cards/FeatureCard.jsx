@@ -1,4 +1,5 @@
-import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
+import IconBox from "../ui/IconBox";
 
 const FeatureCard = ({ icon, title, description }) => {
   return (
@@ -6,24 +7,16 @@ const FeatureCard = ({ icon, title, description }) => {
       align="start"
       gap={3}
       p={6}
-      bg="white"
+      bg="bg.panel"
       borderWidth="1px"
-      borderColor="gray.100"
+      borderColor="border.muted"
       borderRadius="lg"
     >
-      <Box
-        p={3}
-        borderRadius="md"
-        bg="colorPalette.50"
-        color="colorPalette.600"
-        fontSize="2xl"
-      >
-        {icon}
-      </Box>
+      <IconBox>{icon}</IconBox>
       <Heading as="h3" size="md">
         {title}
       </Heading>
-      <Text color="gray.600" fontSize="sm">
+      <Text color="fg.muted" fontSize="sm">
         {description}
       </Text>
     </VStack>

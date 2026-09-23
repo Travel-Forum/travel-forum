@@ -18,11 +18,7 @@ const SignUp = () => {
     );
   };
 
-  return (
-    <>
-      <SignUpForm onSubmit={handleFormSubmit} />
-    </>
-  );
+  return <SignUpForm onSubmit={handleFormSubmit} />;
 };
 
 export default SignUp;

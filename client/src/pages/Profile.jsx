@@ -3,7 +3,6 @@ import {
   Card,
   VStack,
   HStack,
-  Avatar,
   Text,
   Separator,
   IconButton,
@@ -12,8 +11,9 @@ import {
   Badge
 } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
-import { useAuth } from "../hooks/useAuth";
 import { useProfile } from "../hooks/useProfile";
+import { getFullName } from "../utils/profile";
+import UserAvatar from "../components/profile/UserAvatar";
 
 const InfoField = ({ label, value, onEdit }) => (
   <Box>
@@ -22,7 +22,7 @@ const InfoField = ({ label, value, onEdit }) => (
         <Text fontSize="sm" color="fg.muted">
           {label}
         </Text>
-        <Text fontSize="md">{value}</Text>
+        <Text fontSize="md">{value || "—"}</Text>
       </Box>
       <IconButton
         aria-label={`Edit ${label}`}
@@ -37,19 +37,23 @@ const InfoField = ({ label, value, onEdit }) => (
 );
 
 const Profile = () => {
-  const { user } = useAuth();
   const { profile } = useProfile();
+
+  const fields = [
+    { label: "First Name", value: profile.first_name },
+    { label: "Last Name", value: profile.last_name },
+    { label: "Username", value: profile.username },
+    { label: "Email", value: profile.email },
+    { label: "Phone", value: profile.phone },
+  ];
 
   return (
     <Box maxW="700px" mx="auto" mt={10} mb={10} px={4}>
-      <Card.Root p={8}>
+      <Card.Root p={{ base: 5, md: 8 }}>
         <VStack gap={6} align="stretch">
           <VStack gap={3}>
             <Box position="relative">
-              <Avatar.Root size="2xl">
-                <Avatar.Fallback name={user?.email} />
-                <Avatar.Image src={profile?.avatar_url} />
-              </Avatar.Root>
+              <UserAvatar size="2xl" />
               <IconButton
                 aria-label="Edit avatar"
                 size="xs"
@@ -64,17 +68,15 @@ const Profile = () => {
 
             <VStack gap={0}>
               <Text fontSize="2xl" fontWeight="bold">
-                George Gulubov
+                {getFullName(profile)}
               </Text>
               <Text fontSize="md" color="fg.muted">
-                @George321
+                @{profile.username}
               </Text>
             </VStack>
 
             <HStack gap={2}>
               <Badge colorPalette="blue">Member</Badge>
-              <Badge colorPalette="green">Active Traveler</Badge>
-              <Badge colorPalette="purple">50+ Posts</Badge>
             </HStack>
           </VStack>
 
@@ -89,10 +91,7 @@ const Profile = () => {
                 <LuPencil size={14} />
               </IconButton>
             </HStack>
-            <Text color="fg.muted">
-              Passionate traveler exploring Southeast Asia. Always happy to
-              share visa tips and budget travel hacks.
-            </Text>
+            <Text color="fg.muted">No bio yet.</Text>
           </Box>
 
           <Separator />
@@ -102,38 +101,12 @@ const Profile = () => {
               Personal Information
             </Text>
 
-            <Grid templateColumns="1fr 1fr" gap={5}>
-              <GridItem>
-                <InfoField
-                  label="First Name"
-                  value="George"
-                  onEdit={() => {}}
-                />
-              </GridItem>
-
-              <GridItem>
-                <InfoField
-                  label="Last Name"
-                  value="Golubov"
-                  onEdit={() => {}}
-                />
-              </GridItem>
-
-              <GridItem>
-                <InfoField
-                  label="Email"
-                  value="george@example.com"
-                  onEdit={() => {}}
-                />
-              </GridItem>
-
-              <GridItem>
-                <InfoField
-                  label="Phone"
-                  value="+359888123456"
-                  onEdit={() => {}}
-                />
-              </GridItem>
+            <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={5}>
+              {fields.map(({ label, value }) => (
+                <GridItem key={label}>
+                  <InfoField label={label} value={value} onEdit={() => {}} />
+                </GridItem>
+              ))}
             </Grid>
           </VStack>
         </VStack>

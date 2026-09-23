@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
 import { Stack, Text, Spinner, Button } from "@chakra-ui/react";
 import { LuCircleCheck, LuCircleX } from "react-icons/lu";
 import { exchangeCodeForSession } from "../services/authService";
@@ -11,8 +11,8 @@ const AuthCallback = () => {
   const hasRun = useRef(false);
   const navigate = useNavigate();
 
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
+  const [searchParams] = useSearchParams();
+  const code = searchParams.get("code");
 
   useEffect(() => {
     if (hasRun.current) return;
@@ -45,14 +45,14 @@ const AuthCallback = () => {
         {status === "loading" && (
           <>
             <Spinner size="lg" color="blue.solid" />
-            <Text color="fg.muted">Confirming your email...</Text>
+            <Text color="fg.muted">Signing you in...</Text>
           </>
         )}
 
         {status === "success" && (
           <>
             <LuCircleCheck size={40} color="var(--chakra-colors-green-500)" />
-            <Text fontWeight="medium">Email confirmed!</Text>
+            <Text fontWeight="medium">You're signed in!</Text>
             <Text color="fg.muted" fontSize="sm">
               Redirecting...
             </Text>

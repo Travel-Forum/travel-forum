@@ -21,12 +21,12 @@ const Footer = () => {
         >
           <HStack gap={3}>
             <Image src={forumLogo} alt="TravelForum logo" h="32px" />
-            <Text color="gray.600" fontSize="sm">
+            <Text color="fg.muted" fontSize="sm">
               Real people. Real places. A more open world.
             </Text>
           </HStack>
 
-          <HStack gap={6} fontSize="sm" color="gray.600">
+          <HStack gap={6} fontSize="sm" color="fg.muted">
             <Link href="#">About</Link>
             <Link href="#">Community Guidelines</Link>
             <Link href="#">Privacy</Link>
@@ -34,7 +34,7 @@ const Footer = () => {
           </HStack>
         </Flex>
 
-        <Text color="gray.500" fontSize="xs" mt={6}>
+        <Text color="fg.subtle" fontSize="xs" mt={6}>
           © 2026 TravelForum. All rights reserved.
         </Text>
       </Container>

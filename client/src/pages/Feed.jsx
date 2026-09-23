@@ -6,9 +6,18 @@ import FeedPostCard from '../components/posts/FeedPostCard';
 import { mockPosts } from '../mocks/mockPosts';
 
 const Feed = () => {
-
   return (
-    <Grid templateColumns="1fr 2fr 1fr" gap={6} maxW="1200px" w="full" mx="auto" p={4} pt={6} flex="1" minH="0">
+    <Grid
+      templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
+      gap={6}
+      maxW="1200px"
+      w="full"
+      mx="auto"
+      p={4}
+      pt={6}
+      flex="1"
+      minH="0"
+    >
       <GridItem overflowY="auto">
         <ProfileCard />
       </GridItem>

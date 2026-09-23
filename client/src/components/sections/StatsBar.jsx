@@ -2,22 +2,15 @@ import { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text, HStack } from "@chakra-ui/react";
 import { LuFileText, LuUsers } from "react-icons/lu";
 import { getPublicStats } from "../../services/statsService";
+import IconBox from "../ui/IconBox";
 
 const StatItem = ({ icon, value, label }) => {
   return (
     <HStack gap={4} flex="1" justify="center" py={4}>
-      <Box
-        p={3}
-        borderRadius="md"
-        bg="colorPalette.50"
-        color="colorPalette.600"
-        fontSize="2xl"
-      >
-        {icon}
-      </Box>
+      <IconBox>{icon}</IconBox>
       <Box>
         <Heading size="lg">{value ?? "—"}</Heading>
-        <Text color="gray.600" fontSize="sm">
+        <Text color="fg.muted" fontSize="sm">
           {label}
         </Text>
       </Box>
@@ -43,9 +36,9 @@ const StatsBar = () => {
     <Box as="section" py={6}>
       <Flex
         direction={{ base: "column", sm: "row" }}
-        bg="gray.50"
+        bg="bg.subtle"
         borderWidth="1px"
-        borderColor="gray.200"
+        borderColor="border"
         borderRadius="xl"
         px={4}
       >
