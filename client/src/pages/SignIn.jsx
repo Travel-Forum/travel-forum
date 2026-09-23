@@ -19,7 +19,7 @@ const SignIn = () => {
       return;
     }
 
-    navigate("/profile");
+    navigate("/feed");
   };
 
   return (

@@ -30,7 +30,7 @@ const AuthCallback = () => {
         setStatus("success");
 
         setTimeout(() => {
-          navigate("/profile");
+          navigate("/feed");
         }, 1000);
 
       })

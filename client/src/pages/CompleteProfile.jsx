@@ -37,7 +37,7 @@ const CompleteProfile = () => {
       type: "success",
     });
 
-    navigate("/profile");
+    navigate("/feed");
   };
 
   return (

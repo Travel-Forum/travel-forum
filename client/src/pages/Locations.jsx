@@ -1,4 +1,4 @@
-const LocationsSection = () => {
+const Locations = () => {
 
     return (
         <>
@@ -7,4 +7,4 @@ const LocationsSection = () => {
     )
 }
 
-export default LocationsSection
+export default Locations

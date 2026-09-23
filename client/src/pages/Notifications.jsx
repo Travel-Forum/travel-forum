@@ -1,4 +1,4 @@
-const NotificationsSection = () => {
+const Notifications = () => {
 
     return (
         <>
@@ -7,4 +7,4 @@ const NotificationsSection = () => {
     )
 }
 
-export default NotificationsSection
+export default Notifications

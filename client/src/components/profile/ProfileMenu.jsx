@@ -2,7 +2,7 @@ import { Menu, Avatar, Portal, chakra } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-const ProfileMenu = ({ onSectionClick }) => {
+const ProfileMenu = () => {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
 
@@ -24,7 +24,7 @@ const ProfileMenu = ({ onSectionClick }) => {
       <Portal>
         <Menu.Positioner>
           <Menu.Content>
-            <Menu.Item value="profileInfo" onClick={() => onSectionClick("profileInfo")}>
+            <Menu.Item value="profileInfo" onClick={() => navigate('/profile')}>
               My Profile
             </Menu.Item>
             <Menu.Item value="signout" onClick={handleSignOut}>

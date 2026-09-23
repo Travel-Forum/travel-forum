@@ -10,7 +10,7 @@ const RequireNoProfile = () => {
   }
 
   if (profile) {
-    return <Navigate to="/profile" replace />
+    return <Navigate to="/feed" replace />
   }
 
   return <Outlet />

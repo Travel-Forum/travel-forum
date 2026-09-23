@@ -5,11 +5,15 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import AuthCallback from "./pages/AuthCallback";
 import CompleteProfile from "./pages/CompleteProfile";
-import Profile from "./pages/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import GuestRoute from "./routes/GuestRoute";
 import RequireProfile from "./routes/RequireProfile";
 import RequireNoProfile from "./routes/RequireNoProfile";
+import AppLayout from "./layouts/AppLayout";
+import Feed from "./pages/Feed";
+import Locations from "./pages/Locations";
+import Notifications from "./pages/Notifications";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -28,7 +32,14 @@ const App = () => {
         </Route>
 
         <Route element={<RequireProfile />}>
-          <Route path="/profile" element={<Profile />} />
+
+          <Route element={<AppLayout />}>
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/locations" element={<Locations />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+          
         </Route>
       </Route>
     </Routes>
