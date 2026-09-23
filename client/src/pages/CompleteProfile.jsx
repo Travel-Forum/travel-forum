@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
 import { toaster } from "../components/ui/Toaster";
 
 import CompleteProfileForm from "../components/auth/CompleteProfileForm";
@@ -8,6 +9,7 @@ import { createProfile } from "../services/profileService";
 
 const CompleteProfile = () => {
   const { user } = useAuth();
+  const { refreshProfile } = useProfile();
   const navigate = useNavigate();
 
   const handleFormSubmit = async (formData) => {
@@ -33,6 +35,7 @@ const CompleteProfile = () => {
       type: "success",
     });
 
+    await refreshProfile();
     navigate("/feed");
   };
 
