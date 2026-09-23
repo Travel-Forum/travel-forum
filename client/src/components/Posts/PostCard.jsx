@@ -1,5 +1,5 @@
-import { Card, HStack, VStack, Avatar, Text, IconButton, Separator, Box, Image } from "@chakra-ui/react"
-import { LuThumbsUp, LuMessageCircle, LuShare2, LuX } from "react-icons/lu"
+import { Card, HStack, VStack, Avatar, Text, IconButton, Separator, Image } from "@chakra-ui/react"
+import { LuThumbsUp, LuMessageCircle, LuShare2 } from "react-icons/lu"
 
 const PostCard = ({ post }) => {
   return (

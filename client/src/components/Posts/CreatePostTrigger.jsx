@@ -1,4 +1,4 @@
-import { Card, HStack, Avatar, Input, Button, Separator } from "@chakra-ui/react"
+import { Card, HStack, Avatar, Input, Button } from "@chakra-ui/react"
 import { LuVideo, LuImage } from "react-icons/lu"
 
 const CreatePostTrigger = ({ onOpenModal }) => {
