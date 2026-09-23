@@ -7,7 +7,7 @@ import {
   Text,
   Link,
 } from "@chakra-ui/react";
-import forumLogo from "../../assets/icons/Forum logo.svg";
+import forumLogo from "../../assets/icons/forum-logo.svg";
 
 const Footer = () => {
   return (

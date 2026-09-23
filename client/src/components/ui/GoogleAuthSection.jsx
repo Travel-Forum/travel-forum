@@ -1,11 +1,11 @@
 import { Button, HStack, Separator, Stack, Text } from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 
-import { GoogleAuth } from "../../services/authService/GoogleAuth.js";
+import { signInWithGoogle } from "../../services/authService";
 
 export const GoogleAuthSection = () => (
   <Stack gap="6">
-    <Button variant="outline" w="full" onClick={GoogleAuth}>
+    <Button variant="outline" w="full" onClick={signInWithGoogle}>
       <FcGoogle /> Continue with Google
     </Button>
 
