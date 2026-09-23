@@ -1,20 +1,20 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-
 import Loading from '../components/ui/Loading'
 
-const ProtectedRoute = () => {
-  const { user, loading } = useAuth()
+
+const GuestRoute = () => {
+  const { user, loading } = useAuth();
 
   if (loading) {
-    return <Loading /> 
+    return <Loading />;
   }
 
-  if (!user) {
-    return <Navigate to="/signin" replace />
+  if (user) {
+    return <Navigate to="/feed" replace />
   }
 
   return <Outlet />
 }
 
-export default ProtectedRoute
+export default GuestRoute

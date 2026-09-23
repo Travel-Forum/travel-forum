@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../hooks/useAuth";
-import { toaster } from "../ui/Toaster";
+import { useAuth } from "../hooks/useAuth";
+import { toaster } from "../components/ui/Toaster";
 
-import CompleteProfileForm from "./CompleteProfileForm";
+import CompleteProfileForm from "../components/auth/CompleteProfileForm";
 
-import { supabase } from "../../config/supabaseClient";
+import { supabase } from "../config/supabaseClient";
 
 const CompleteProfile = () => {
   const { user } = useAuth();
@@ -37,7 +37,7 @@ const CompleteProfile = () => {
       type: "success",
     });
 
-    navigate("/profile");
+    navigate("/feed");
   };
 
   return (

@@ -1,17 +1,15 @@
 import { useEffect, useState, useRef } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Stack, Text, Spinner, Button } from "@chakra-ui/react";
 import { LuCircleCheck, LuCircleX } from "react-icons/lu";
-
-import { supabase } from "../../config/supabaseClient";
-import { useProfileRedirect } from "../../hooks/useProfileRedirect";
-import { AuthCard } from "../ui/AuthCard";
+import { supabase } from "../config/supabaseClient";
+import { AuthCard } from "../components/ui/AuthCard";
 
 const AuthCallback = () => {
-  const { redirectByProfile } = useProfileRedirect();
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
   const hasRun = useRef(false);
+  const navigate = useNavigate();
 
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
@@ -22,28 +20,25 @@ const AuthCallback = () => {
 
     supabase.auth
       .exchangeCodeForSession(code)
-      .then(async (result) => {
+      .then((result) => {
         if (result.error) {
           setError(result.error);
           setStatus("error");
           return;
         }
 
-        const { error: redirectError } = await redirectByProfile(
-          result.data.user.id,
-          { delay: 1000, onResolved: () => setStatus("success") },
-        );
+        setStatus("success");
 
-        if (redirectError) {
-          setError(redirectError);
-          setStatus("error");
-        }
+        setTimeout(() => {
+          navigate("/feed");
+        }, 1000);
+
       })
       .catch((err) => {
         setError(err);
         setStatus("error");
       });
-  }, [code, redirectByProfile]);
+  }, [code, navigate]);
 
   return (
     <AuthCard title="Travel Forum" maxW="md">
