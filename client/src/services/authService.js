@@ -35,6 +35,11 @@ export const signUp = async ({ email, password }) => {
   return { data };
 };
 
+export const exchangeCodeForSession = (code) =>
+  supabase.auth.exchangeCodeForSession(code);
+
+export const signOut = () => supabase.auth.signOut();
+
 export const signInWithGoogle = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",

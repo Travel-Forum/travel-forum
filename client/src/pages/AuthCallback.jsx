@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Stack, Text, Spinner, Button } from "@chakra-ui/react";
 import { LuCircleCheck, LuCircleX } from "react-icons/lu";
-import { supabase } from "../config/supabaseClient";
+import { exchangeCodeForSession } from "../services/authService";
 import { AuthCard } from "../components/ui/AuthCard";
 
 const AuthCallback = () => {
@@ -18,8 +18,7 @@ const AuthCallback = () => {
     if (hasRun.current) return;
     hasRun.current = true;
 
-    supabase.auth
-      .exchangeCodeForSession(code)
+    exchangeCodeForSession(code)
       .then((result) => {
         if (result.error) {
           setError(result.error);

@@ -1,42 +1,32 @@
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
-import { toaster } from "../components/ui/Toaster";
+import { useProfile } from "../hooks/useProfile";
+import { showError, showSuccess } from "../utils/toast";
 
 import CompleteProfileForm from "../components/auth/CompleteProfileForm";
-
-import { supabase } from "../config/supabaseClient";
+import { createProfile } from "../services/profileService";
 
 const CompleteProfile = () => {
   const { user } = useAuth();
+  const { refreshProfile } = useProfile();
   const navigate = useNavigate();
 
   const handleFormSubmit = async (formData) => {
-    const { error } = await supabase.from("profiles").insert({
+    const { error } = await createProfile({
       id: user.id,
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      username: formData.username,
-      phone: formData.phone,
       email: user.email,
+      ...formData,
     });
 
     if (error) {
-      toaster.create({
-        title: "Sign up error",
-        description: error.message,
-        type: "error",
-      });
-
+      showError("Could not create profile", error);
       return;
     }
 
-    toaster.create({
-      title: "Sign up successfully",
-      description: `Welcome ${formData.username}!`,
-      type: "success",
-    });
+    showSuccess("Profile created", `Welcome ${formData.username}!`);
 
+    await refreshProfile();
     navigate("/feed");
   };
 
