@@ -1,7 +1,7 @@
-import { signUp } from "../../services/authService";
+import { signUp } from "../services/authService";
 
-import { toaster } from "../ui/Toaster";
-import SignUpForm from "./SignUpForm";
+import { toaster } from "../components/ui/Toaster";
+import SignUpForm from "../components/auth/SignUpForm";
 
 const SignUp = () => {
   const handleFormSubmit = async (data) => {

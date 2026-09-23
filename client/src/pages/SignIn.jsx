@@ -1,8 +1,8 @@
-import { signIn } from "../../services/authService";
-import { useProfileRedirect } from "../../hooks/useProfileRedirect";
+import { signIn } from "../services/authService";
+import { useProfileRedirect } from "../hooks/useProfileRedirect";
 
-import { toaster } from "../ui/Toaster";
-import SignInForm from "./SignInForm";
+import { toaster } from "../components/ui/Toaster";
+import SignInForm from "../components/auth/SignInForm";
 
 const SignIn = () => {
   const { redirectByProfile } = useProfileRedirect();

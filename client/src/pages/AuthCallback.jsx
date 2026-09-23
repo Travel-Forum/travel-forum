@@ -3,9 +3,9 @@ import { Link as RouterLink } from "react-router-dom";
 import { Stack, Text, Spinner, Button } from "@chakra-ui/react";
 import { LuCircleCheck, LuCircleX } from "react-icons/lu";
 
-import { supabase } from "../../config/supabaseClient";
-import { useProfileRedirect } from "../../hooks/useProfileRedirect";
-import { AuthCard } from "../ui/AuthCard";
+import { supabase } from "../config/supabaseClient";
+import { useProfileRedirect } from "../hooks/useProfileRedirect";
+import { AuthCard } from "../components/ui/AuthCard";
 
 const AuthCallback = () => {
   const { redirectByProfile } = useProfileRedirect();

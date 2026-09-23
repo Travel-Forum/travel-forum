@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
-import SignUp from "./components/auth/SignUp";
-import SignIn from "./components/auth/SignIn";
-import AuthCallback from "./components/auth/AuthCallback";
-import CompleteProfile from "./components/auth/CompleteProfile";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+import AuthCallback from "./pages/AuthCallback";
+import CompleteProfile from "./pages/CompleteProfile";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
