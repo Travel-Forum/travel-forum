@@ -6,7 +6,7 @@ import {
   LuSearch,
   LuAward,
 } from "react-icons/lu";
-import FeatureCard from "../Cards/FeatureCard";
+import FeatureCard from "../cards/FeatureCard";
 
 const features = [
   {

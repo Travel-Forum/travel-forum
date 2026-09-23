@@ -1,7 +1,7 @@
 import { Box, Card, HStack } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 
-import logo from "../../assets/icons/Forum logo.svg";
+import logo from "../../assets/icons/forum-logo.svg";
 
 export const AuthCard = ({ title, onSubmit, footer, maxW = "lg", children }) => {
   const content = (

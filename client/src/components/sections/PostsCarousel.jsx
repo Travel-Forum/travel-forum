@@ -8,11 +8,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
-import PostCard from "../Cards/PostCard";
+import PostPreviewCard from "../cards/PostPreviewCard";
 import {
   getLatestPosts,
   getMostCommentedPosts,
-} from "../../services/postsService/postsService";
+} from "../../services/postsService";
 
 const PAGE_SIZE = 3;
 
@@ -65,7 +65,7 @@ const PostsCarousel = () => {
       )}
       <SimpleGrid columns={{ base: 1, md: 3 }} gap={6}>
         {visible.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostPreviewCard key={post.id} post={post} />
         ))}
       </SimpleGrid>
 

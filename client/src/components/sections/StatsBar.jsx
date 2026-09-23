@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text, HStack } from "@chakra-ui/react";
 import { LuFileText, LuUsers } from "react-icons/lu";
-import { getPublicStats } from "../../services/statsService/statsService";
+import { getPublicStats } from "../../services/statsService";
 
 const StatItem = ({ icon, value, label }) => {
   return (
@@ -25,7 +25,7 @@ const StatItem = ({ icon, value, label }) => {
   );
 }
 
-function StatsBar() {
+const StatsBar = () => {
   const [posts, setPosts] = useState(null);
   const [users, setUsers] = useState(null);
 
@@ -54,6 +54,6 @@ function StatsBar() {
       </Flex>
     </Box>
   );
-}
+};
 
 export default StatsBar;

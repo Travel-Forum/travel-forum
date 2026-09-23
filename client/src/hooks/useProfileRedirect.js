@@ -1,14 +1,14 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { checkUserExist } from "../utils/checkUserExist.js";
+import { profileExists } from "../services/profileService";
 
 export const useProfileRedirect = () => {
   const navigate = useNavigate();
 
   const redirectByProfile = useCallback(
     async (userId, { delay = 0, onResolved } = {}) => {
-      const { data: profile, error } = await checkUserExist(userId);
+      const { data: profile, error } = await profileExists(userId);
 
       if (error) {
         return { error };
