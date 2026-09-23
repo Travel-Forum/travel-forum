@@ -5,10 +5,10 @@ const PostPreviewCard = ({ post }) => {
   return (
     <Box
       borderWidth="1px"
-      borderColor="gray.100"
+      borderColor="border.muted"
       borderRadius="lg"
       overflow="hidden"
-      bg="white"
+      bg="bg.panel"
     >
       {post.image_url && (
         <Image
@@ -23,10 +23,10 @@ const PostPreviewCard = ({ post }) => {
         <Heading as="h3" size="md" mb={2} lineClamp={1}>
           {post.title}
         </Heading>
-        <Text color="gray.600" fontSize="sm" mb={3} lineClamp={2}>
+        <Text color="fg.muted" fontSize="sm" mb={3} lineClamp={2}>
           {post.content}
         </Text>
-        <HStack color="gray.500" fontSize="sm" gap={2}>
+        <HStack color="fg.subtle" fontSize="sm" gap={2}>
           <LuMessageSquare />
           <Text>{post.comment_count}</Text>
         </HStack>

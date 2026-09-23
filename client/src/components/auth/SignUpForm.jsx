@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link as RouterLink } from "react-router-dom";
-import { Button, Fieldset, Input, Stack, Text } from "@chakra-ui/react";
+import { Button, Fieldset, Input, Stack } from "@chakra-ui/react";
 
 import { signUpSchema } from "../../schemas/authSchemas";
 
@@ -9,6 +8,7 @@ import { AuthCard } from "../ui/AuthCard";
 import { FormField } from "../ui/FormField";
 import { GoogleAuthSection } from "../ui/GoogleAuthSection";
 import { PasswordInput } from "../ui/PasswordInput";
+import AuthSwitchLink from "./AuthSwitchLink";
 
 const SignUpForm = ({ onSubmit }) => {
   const {
@@ -29,14 +29,11 @@ const SignUpForm = ({ onSubmit }) => {
             Sign Up
           </Button>
 
-          <Text fontSize="sm">
-            Already have an account?{" "}
-            <RouterLink to="/signin">
-              <Text as="span" color="blue.500" fontWeight="medium">
-                Sign in
-              </Text>
-            </RouterLink>
-          </Text>
+          <AuthSwitchLink
+            text="Already have an account?"
+            linkText="Sign in"
+            to="/signin"
+          />
         </>
       }
     >

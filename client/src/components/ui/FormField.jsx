@@ -16,7 +16,7 @@ export const FormField = ({ label, error, helperText, labelAction, children }) =
     {helperText && <Field.HelperText>{helperText}</Field.HelperText>}
 
     {error && (
-      <Text color="red.500" fontSize="sm">
+      <Text color="fg.error" fontSize="sm">
         {error.message}
       </Text>
     )}

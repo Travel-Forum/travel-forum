@@ -9,6 +9,7 @@ import { AuthCard } from "../ui/AuthCard";
 import { FormField } from "../ui/FormField";
 import { GoogleAuthSection } from "../ui/GoogleAuthSection";
 import { PasswordInput } from "../ui/PasswordInput";
+import AuthSwitchLink from "./AuthSwitchLink";
 
 const SignInForm = ({ onSubmit }) => {
   const {
@@ -29,14 +30,11 @@ const SignInForm = ({ onSubmit }) => {
             Sign In
           </Button>
 
-          <Text fontSize="sm">
-            Don't have an account?{" "}
-            <RouterLink to="/signup">
-              <Text as="span" color="blue.500" fontWeight="medium">
-                Sign up
-              </Text>
-            </RouterLink>
-          </Text>
+          <AuthSwitchLink
+            text="Don't have an account?"
+            linkText="Sign up"
+            to="/signup"
+          />
         </>
       }
     >
@@ -55,7 +53,7 @@ const SignInForm = ({ onSubmit }) => {
                 error={errors.password}
                 labelAction={
                   <RouterLink to="/forgot-password">
-                    <Text fontSize="sm" color="blue.500">
+                    <Text fontSize="sm" color="blue.fg">
                       Forgot password?
                     </Text>
                   </RouterLink>

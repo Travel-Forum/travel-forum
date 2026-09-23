@@ -30,10 +30,7 @@ const CompleteProfile = () => {
     navigate("/feed");
   };
 
-  return (
-    <>
-      <CompleteProfileForm onSubmit={handleFormSubmit} />
-    </>
-  );
+  return <CompleteProfileForm onSubmit={handleFormSubmit} />;
 };
+
 export default CompleteProfile;

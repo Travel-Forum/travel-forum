@@ -59,7 +59,7 @@ const PostsCarousel = () => {
         </Button>
       </HStack>
       {posts.length === 0 && (
-        <Text textAlign="center" color="gray.500">
+        <Text textAlign="center" color="fg.muted">
           No posts yet.
         </Text>
       )}
@@ -86,7 +86,7 @@ const PostsCarousel = () => {
               w={2.5}
               h={2.5}
               borderRadius="full"
-              bg={i === page ? "colorPalette.500" : "gray.300"}
+              bg={i === page ? "colorPalette.solid" : "bg.emphasized"}
             />
           ))}
         </HStack>
