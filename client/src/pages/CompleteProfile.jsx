@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
 import { useProfile } from "../hooks/useProfile";
-import { toaster } from "../components/ui/Toaster";
+import { showError, showSuccess } from "../utils/toast";
 
 import CompleteProfileForm from "../components/auth/CompleteProfileForm";
 import { createProfile } from "../services/profileService";
@@ -20,20 +20,11 @@ const CompleteProfile = () => {
     });
 
     if (error) {
-      toaster.create({
-        title: "Sign up error",
-        description: error.message,
-        type: "error",
-      });
-
+      showError("Could not create profile", error);
       return;
     }
 
-    toaster.create({
-      title: "Sign up successfully",
-      description: `Welcome ${formData.username}!`,
-      type: "success",
-    });
+    showSuccess("Profile created", `Welcome ${formData.username}!`);
 
     await refreshProfile();
     navigate("/feed");

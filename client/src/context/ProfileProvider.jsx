@@ -6,10 +6,12 @@ import { ProfileContext } from "./ProfileContext";
 const ProfileProvider = ({ children }) => {
   const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
   const [loadedForUserId, setLoadedForUserId] = useState(undefined);
 
   const currentUserId = user?.id ?? null;
   const loading = authLoading || loadedForUserId !== currentUserId;
+
   useEffect(() => {
     let isMounted = true;
 
@@ -18,6 +20,7 @@ const ProfileProvider = ({ children }) => {
 
       if (!user?.id) {
         setProfile(null);
+        setError(null);
         setLoadedForUserId(null);
         return;
       }
@@ -31,6 +34,8 @@ const ProfileProvider = ({ children }) => {
       } else {
         setProfile(data);
       }
+
+      setError(error);
       setLoadedForUserId(user.id);
     };
 
@@ -42,11 +47,15 @@ const ProfileProvider = ({ children }) => {
   }, [user?.id, authLoading]);
 
   const refreshProfile = async () => {
+    if (!user?.id) return;
+
     const { data, error } = await getProfile(user.id);
+
+    setError(error);
     if (!error) setProfile(data);
   };
 
-  const value = { profile, loading, refreshProfile };
+  const value = { profile, loading, error, refreshProfile };
 
   return (
     <ProfileContext.Provider value={value}>
