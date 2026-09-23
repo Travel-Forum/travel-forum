@@ -4,21 +4,17 @@ import { useAuth } from "../hooks/useAuth";
 import { toaster } from "../components/ui/Toaster";
 
 import CompleteProfileForm from "../components/auth/CompleteProfileForm";
-
-import { supabase } from "../config/supabaseClient";
+import { createProfile } from "../services/profileService";
 
 const CompleteProfile = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleFormSubmit = async (formData) => {
-    const { error } = await supabase.from("profiles").insert({
+    const { error } = await createProfile({
       id: user.id,
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      username: formData.username,
-      phone: formData.phone,
       email: user.email,
+      ...formData,
     });
 
     if (error) {

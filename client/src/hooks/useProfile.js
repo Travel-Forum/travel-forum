@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "./useAuth";
-import { supabase } from "../config/supabaseClient";
+import { getProfile } from "../services/profileService";
+
 export const useProfile = () => {
   const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState(null);
@@ -21,11 +22,7 @@ export const useProfile = () => {
 
       setLoading(true);
 
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .maybeSingle();
+      const { data, error } = await getProfile(user.id);
 
       if (!isMounted) return;
 

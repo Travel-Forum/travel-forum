@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../config/supabaseClient';
+import { signOut } from '../services/authService';
 import { AuthContext } from './AuthContext';
 
 const AuthProvider = ({ children }) => {
@@ -19,10 +20,6 @@ const AuthProvider = ({ children }) => {
 
     return () => subscription.unsubscribe();
   }, []);
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-  }
 
   const value = {
     session,
