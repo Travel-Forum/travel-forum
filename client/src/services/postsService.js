@@ -50,7 +50,7 @@ export const getFeedPosts = async () => {
       title,
       content,
       created_at,
-      author:profiles (
+      author:profiles!author_id (
         id,
         username,
         first_name,
