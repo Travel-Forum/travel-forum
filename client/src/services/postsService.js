@@ -27,3 +27,44 @@ export const getMostCommentedPosts = async (limit = 10) => {
   }
   return { data };
 };
+
+export const createPost = async ({ authorId, title, content }) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .insert({ author_id: authorId, title, content })
+    .select()
+    .single();
+
+  if (error) {
+    console.log("Create post error:", error.message);
+    return { error };
+  }
+  return { data };
+};
+
+export const getFeedPosts = async () => {
+  const { data, error } = await supabase
+    .from("posts")
+    .select(`
+      id,
+      title,
+      content,
+      created_at,
+      author:profiles!author_id (
+        id,
+        username,
+        first_name,
+        last_name,
+        avatar_url
+      ),
+      post_likes(count),
+      comments(count)
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.log("Get feed posts error:", error.message);
+    return { error };
+  }
+  return { data };
+};
