@@ -27,3 +27,17 @@ export const getMostCommentedPosts = async (limit = 10) => {
   }
   return { data };
 };
+
+export const createPost = async ({ authorId, title, content }) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .insert({ author_id: authorId, title, content })
+    .select()
+    .single();
+
+  if (error) {
+    console.log("Create post error:", error.message);
+    return { error };
+  }
+  return { data };
+};
