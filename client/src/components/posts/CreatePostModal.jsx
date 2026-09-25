@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -16,7 +16,7 @@ import {
   Popover,
 } from "@chakra-ui/react";
 import { LuImage, LuSmile } from "react-icons/lu";
-import EmojiPicker from "emoji-picker-react";
+import EmojiPicker, { Theme } from "emoji-picker-react";
 
 import {
   createPostSchema,
@@ -29,6 +29,7 @@ import { getLengthHint } from "../../utils/text";
 
 import { FormField } from "../ui/FormField";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
+import { useColorModeValue } from "../ui/ColorMode";
 
 const visibilityOptions = createListCollection({
   items: [
@@ -55,6 +56,11 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
   const title = useWatch({ control, name: "title" });
   const content = useWatch({ control, name: "content" });
 
+  const emojiTheme = useColorModeValue(Theme.LIGHT, Theme.DARK);
+
+  const contentRef = useRef(null);
+  const { ref: registerContentRef, ...contentField } = register("content");
+
   useEffect(() => {
     if (!open) reset();
   }, [open, reset]);
@@ -72,8 +78,18 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
     onClose();
   };
 
-  const handleEmojiClick = (emojiData) => {
-    setValue("content", content + emojiData.emoji, { shouldDirty: true });
+  const handleEmojiClick = ({ emoji }) => {
+    const textarea = contentRef.current;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    const nextContent = content.slice(0, start) + emoji + content.slice(end);
+    if (nextContent.length > CONTENT_MAX_LENGTH) return;
+
+    setValue("content", nextContent, { shouldDirty: true });
+
+    const cursor = start + emoji.length;
+    textarea.setSelectionRange(cursor, cursor);
   };
 
   return (
@@ -121,7 +137,11 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                       )}
                     >
                       <Textarea
-                        {...register("content")}
+                        {...contentField}
+                        ref={(element) => {
+                          registerContentRef(element);
+                          contentRef.current = element;
+                        }}
                         placeholder="Share your experience or ask a question..."
                         rows={8}
                         maxLength={CONTENT_MAX_LENGTH}
@@ -196,6 +216,10 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                         <Popover.Content width="auto">
                           <EmojiPicker
                             onEmojiClick={handleEmojiClick}
+                            theme={emojiTheme}
+                            height={380}
+                            previewConfig={{ showPreview: false }}
+                            lazyLoadEmojis
                           />
                         </Popover.Content>
                       </Popover.Positioner>
