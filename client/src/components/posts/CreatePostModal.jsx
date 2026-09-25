@@ -7,8 +7,10 @@ import {
   Dialog,
   Input,
   Portal,
+  Select,
   Stack,
   Textarea,
+  createListCollection,
 } from "@chakra-ui/react";
 
 import {
@@ -19,6 +21,13 @@ import {
 
 import { FormField } from "../ui/FormField";
 
+const visibilityOptions = createListCollection({
+  items: [
+    { label: "Everyone", value: "public" },
+    { label: "Only me", value: "private" },
+  ],
+});
+
 const CreatePostModal = ({ open, onClose, onSubmit }) => {
   const {
     register,
@@ -28,7 +37,7 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(createPostSchema),
-    defaultValues: { title: "", content: "" },
+    defaultValues: { title: "", content: "", visibility: "public" },
   });
 
   const title = useWatch({ control, name: "title" });
@@ -78,11 +87,38 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                       rows={8}
                     />
                   </FormField>
+
+                  <FormField label="Visibility" error={errors.visibility}>
+                    <Select.Root
+                      collection={visibilityOptions}
+                      defaultValue={["public"]}
+                    >
+                      <Select.HiddenSelect {...register("visibility")} />
+                      <Select.Control>
+                        <Select.Trigger>
+                          <Select.ValueText placeholder="Choose who can see this post" />
+                        </Select.Trigger>
+                        <Select.IndicatorGroup>
+                          <Select.Indicator />
+                        </Select.IndicatorGroup>
+                      </Select.Control>
+                      <Select.Positioner>
+                        <Select.Content>
+                          {visibilityOptions.items.map((item) => (
+                            <Select.Item item={item} key={item.value}>
+                              {item.label}
+                              <Select.ItemIndicator />
+                            </Select.Item>
+                          ))}
+                        </Select.Content>
+                      </Select.Positioner>
+                    </Select.Root>
+                  </FormField>
                 </Stack>
               </Dialog.Body>
 
               <Dialog.Footer>
-                <Button variant="outline" onClick={onClose}>
+                <Button type="button" variant="outline" onClick={onClose}>
                   Cancel
                 </Button>
                 <Button type="submit" loading={isSubmitting}>

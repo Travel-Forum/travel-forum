@@ -6,7 +6,7 @@ export const CONTENT_MIN_LENGTH = 32
 export const CONTENT_MAX_LENGTH = 8192
 
 export const createPostSchema = z.object({
-
+    visibility: z.enum(['public', 'private']),
 
     title: z.string()
     .trim()

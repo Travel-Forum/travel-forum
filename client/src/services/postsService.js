@@ -28,10 +28,10 @@ export const getMostCommentedPosts = async (limit = 10) => {
   return { data };
 };
 
-export const createPost = async ({ authorId, title, content }) => {
+export const createPost = async ({ authorId, title, content, visibility }) => {
   const { data, error } = await supabase
     .from("posts")
-    .insert({ author_id: authorId, title, content })
+    .insert({ author_id: authorId, title, content, visibility })
     .select()
     .single();
 
