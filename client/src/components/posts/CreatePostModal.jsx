@@ -13,8 +13,10 @@ import {
   Stack,
   Textarea,
   createListCollection,
+  Popover,
 } from "@chakra-ui/react";
 import { LuImage, LuSmile } from "react-icons/lu";
+import EmojiPicker from "emoji-picker-react";
 
 import {
   createPostSchema,
@@ -42,6 +44,7 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
     reset,
     control,
     formState: { errors, isSubmitting, isDirty },
+    setValue,
   } = useForm({
     resolver: zodResolver(createPostSchema),
     defaultValues: { title: "", content: "", visibility: "public" },
@@ -69,6 +72,10 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
     onClose();
   };
 
+  const handleEmojiClick = (emojiData) => {
+    setValue("content", content + emojiData.emoji, { shouldDirty: true });
+  };
+
   return (
     <>
       <Dialog.Root
@@ -91,7 +98,11 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                     <FormField
                       label="Title"
                       error={errors.title}
-                      helperText={getLengthHint(title, TITLE_MIN_LENGTH, TITLE_MAX_LENGTH)}
+                      helperText={getLengthHint(
+                        title,
+                        TITLE_MIN_LENGTH,
+                        TITLE_MAX_LENGTH,
+                      )}
                     >
                       <Input
                         {...register("title")}
@@ -103,7 +114,11 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                     <FormField
                       label="Content"
                       error={errors.content}
-                      helperText={getLengthHint(content, CONTENT_MIN_LENGTH, CONTENT_MAX_LENGTH)}
+                      helperText={getLengthHint(
+                        content,
+                        CONTENT_MIN_LENGTH,
+                        CONTENT_MAX_LENGTH,
+                      )}
                     >
                       <Textarea
                         {...register("content")}
@@ -122,7 +137,9 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                             name={field.name}
                             collection={visibilityOptions}
                             value={[field.value]}
-                            onValueChange={({ value }) => field.onChange(value[0])}
+                            onValueChange={({ value }) =>
+                              field.onChange(value[0])
+                            }
                             onInteractOutside={field.onBlur}
                           >
                             <Select.HiddenSelect />
@@ -160,17 +177,37 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                     >
                       <LuImage />
                     </IconButton>
-                    <IconButton
-                      type="button"
-                      variant="ghost"
-                      aria-label="Add emoji"
+
+                    <Popover.Root
+                      positioning={{ placement: "top-start" }}
+                      lazyMount
                     >
-                      <LuSmile />
-                    </IconButton>
+                      <Popover.Trigger asChild>
+                        <IconButton
+                          type="button"
+                          variant="ghost"
+                          aria-label="Add emoji"
+                        >
+                          <LuSmile />
+                        </IconButton>
+                      </Popover.Trigger>
+
+                      <Popover.Positioner>
+                        <Popover.Content width="auto">
+                          <EmojiPicker
+                            onEmojiClick={handleEmojiClick}
+                          />
+                        </Popover.Content>
+                      </Popover.Positioner>
+                    </Popover.Root>
                   </HStack>
 
                   <HStack gap="3">
-                    <Button type="button" variant="outline" onClick={requestClose}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={requestClose}
+                    >
                       Cancel
                     </Button>
                     <Button type="submit" loading={isSubmitting}>
