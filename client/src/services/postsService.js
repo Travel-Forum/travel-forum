@@ -1,4 +1,5 @@
 import { supabase } from "../config/supabaseClient";
+import { toFriendlyError } from "../utils/errors";
 
 export const getLatestPosts = async (limit = 10) => {
   const { data, error } = await supabase
@@ -8,8 +9,8 @@ export const getLatestPosts = async (limit = 10) => {
     .limit(limit);
 
   if (error) {
-    console.log("Get latest posts error:", error.message);
-    return { error };
+    console.error("Get latest posts error:", error.message);
+    return { error: toFriendlyError(error) };
   }
   return { data };
 };
@@ -22,22 +23,22 @@ export const getMostCommentedPosts = async (limit = 10) => {
     .limit(limit);
 
   if (error) {
-    console.log("Get most commented posts error:", error.message);
-    return { error };
+    console.error("Get most commented posts error:", error.message);
+    return { error: toFriendlyError(error) };
   }
   return { data };
 };
 
-export const createPost = async ({ authorId, title, content }) => {
+export const createPost = async ({ authorId, title, content, visibility }) => {
   const { data, error } = await supabase
     .from("posts")
-    .insert({ author_id: authorId, title, content })
+    .insert({ author_id: authorId, title, content, visibility })
     .select()
     .single();
 
   if (error) {
-    console.log("Create post error:", error.message);
-    return { error };
+    console.error("Create post error:", error.message);
+    return { error: toFriendlyError(error) };
   }
   return { data };
 };
@@ -63,8 +64,8 @@ export const getFeedPosts = async () => {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.log("Get feed posts error:", error.message);
-    return { error };
+    console.error("Get feed posts error:", error.message);
+    return { error: toFriendlyError(error) };
   }
   return { data };
 };
