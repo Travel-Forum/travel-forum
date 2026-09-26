@@ -15,8 +15,10 @@ import {
   createListCollection,
   Popover,
 } from "@chakra-ui/react";
-import { LuImage, LuSmile } from "react-icons/lu";
+import {  LuSmile } from "react-icons/lu";
 import EmojiPicker, { Theme } from "emoji-picker-react";
+import PostMediaPicker from "./PostMediaPicker";
+import PostMediaPreview from "./PostMediaPreview";
 
 import {
   createPostSchema,
@@ -48,13 +50,14 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
     setValue,
   } = useForm({
     resolver: zodResolver(createPostSchema),
-    defaultValues: { title: "", content: "", visibility: "public" },
+    defaultValues: { title: "", content: "", visibility: "public", media: [] },
   });
 
   const [isDiscardOpen, setIsDiscardOpen] = useState(false);
 
   const title = useWatch({ control, name: "title" });
   const content = useWatch({ control, name: "content" });
+  const media = useWatch({ control, name: "media" });
 
   const emojiTheme = useColorModeValue(Theme.LIGHT, Theme.DARK);
 
@@ -78,7 +81,19 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
     onClose();
   };
 
-  const handleEmojiClick = ({ emoji }) => {
+  const handleFilesSelected = (files) => {
+    setValue("media", [...media, ...files], { shouldDirty: true });
+  };
+
+  const handleRemoveFile = (fileToRemove) => {
+    setValue(
+      "media",
+      media.filter((file) => file !== fileToRemove),
+      { shouldDirty: true },
+    );
+  };
+
+  const handleEmojiClick =({ emoji }) => {
     const textarea = contentRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -148,6 +163,11 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                       />
                     </FormField>
 
+                    <PostMediaPreview
+                      mediaFiles={media}
+                      onRemove={handleRemoveFile}
+                    />
+
                     <FormField label="Visibility" error={errors.visibility}>
                       <Controller
                         control={control}
@@ -190,13 +210,8 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
 
                 <Dialog.Footer justifyContent="space-between">
                   <HStack gap="1">
-                    <IconButton
-                      type="button"
-                      variant="ghost"
-                      aria-label="Add media"
-                    >
-                      <LuImage />
-                    </IconButton>
+
+                    <PostMediaPicker onFilesSelected={handleFilesSelected} />
 
                     <Popover.Root
                       positioning={{ placement: "top-start" }}
