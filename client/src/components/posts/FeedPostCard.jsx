@@ -2,6 +2,7 @@ import { Card, HStack, VStack, Avatar, Text, IconButton, Separator } from "@chak
 import { LuThumbsUp, LuMessageCircle, LuShare2 } from "react-icons/lu"
 import { getFullName } from "../../utils/profile"
 import { formatDate } from "../../utils/date"
+import PostMediaGallery from "./PostMediaGallery"
 
 const FeedPostCard = ({ post }) => {
   const { author } = post
@@ -30,6 +31,7 @@ const FeedPostCard = ({ post }) => {
       <Card.Body>
         <Text fontSize="lg" fontWeight="semibold" mb={2}>{post.title}</Text>
         <Text whiteSpace="pre-wrap">{post.content}</Text>
+        <PostMediaGallery media={post.media} title={post.title} />
       </Card.Body>
 
       <Separator />

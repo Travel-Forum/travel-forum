@@ -1,5 +1,6 @@
 import { supabase } from "../config/supabaseClient";
 import { toFriendlyError } from "../utils/errors";
+import { getSignedMediaUrls } from "./mediaService";
 
 export const getLatestPosts = async (limit = 10) => {
   const { data, error } = await supabase
@@ -43,6 +44,16 @@ export const createPost = async ({ authorId, title, content, visibility }) => {
   return { data };
 };
 
+export const deletePost = async (postId) => {
+  const { error } = await supabase.from("posts").delete().eq("id", postId);
+
+  if (error) {
+    console.error("Delete post error:", error.message);
+    return { error: toFriendlyError(error) };
+  }
+  return {};
+};
+
 export const getFeedPosts = async () => {
   const { data, error } = await supabase
     .from("posts")
@@ -59,13 +70,40 @@ export const getFeedPosts = async () => {
         avatar_url
       ),
       post_likes(count),
-      comments(count)
+      comments(count),
+      post_media (
+        id,
+        storage_path,
+        media_type
+      )
     `)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .order("created_at", { referencedTable: "post_media", ascending: true });
 
   if (error) {
     console.error("Get feed posts error:", error.message);
     return { error: toFriendlyError(error) };
   }
-  return { data };
+
+  return { data: await withMediaUrls(data) };
+};
+
+// Replaces each post's post_media rows with { id, type, url } items.
+// If signing fails the feed still loads, just without media.
+const withMediaUrls = async (posts) => {
+  const paths = posts.flatMap((post) =>
+    post.post_media.map((media) => media.storage_path),
+  );
+  const { data: urlsByPath = {} } = await getSignedMediaUrls(paths);
+
+  return posts.map(({ post_media, ...post }) => ({
+    ...post,
+    media: post_media
+      .map((media) => ({
+        id: media.id,
+        type: media.media_type,
+        url: urlsByPath[media.storage_path],
+      }))
+      .filter((media) => media.url),
+  }));
 };
