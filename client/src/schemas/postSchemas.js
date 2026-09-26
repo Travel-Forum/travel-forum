@@ -22,4 +22,6 @@ export const createPostSchema = z.object({
      .min(1, 'Share something in your post')
      .min(CONTENT_MIN_LENGTH, `Tell us a bit more — at least ${CONTENT_MIN_LENGTH} characters`)
      .max(CONTENT_MAX_LENGTH, `Your post is too long — up to ${CONTENT_MAX_LENGTH} characters`),
+
+    media: z.array(z.instanceof(File)),
 })
