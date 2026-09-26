@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { Grid, GridItem, Spinner, Text, VStack } from '@chakra-ui/react';
 
 import { useAuth } from '../hooks/useAuth';
-import { createPost, getFeedPosts } from '../services/postsService';
+import { createPost, deletePost, getFeedPosts } from '../services/postsService';
+import { uploadPostMedia } from '../services/mediaService';
 import { showError, showSuccess } from '../utils/toast';
 
 import ProfileCard from '../components/profile/ProfileCard';
@@ -34,13 +35,26 @@ const Feed = () => {
   }, [loadPosts]);
 
   const handleCreatePost = async (formData) => {
-    const { error } = await createPost({
+    const { data: post, error } = await createPost({
       authorId: user.id,
       ...formData,
     });
 
     if (error) {
       showError('Could not create post', error);
+      return;
+    }
+
+    const { error: mediaError } = await uploadPostMedia({
+      userId: user.id,
+      postId: post.id,
+      files: formData.media,
+    });
+
+    if (mediaError) {
+      // Roll back so a retry doesn't create a duplicate post
+      await deletePost(post.id);
+      showError('Could not upload media', mediaError);
       return;
     }
 
