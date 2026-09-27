@@ -11,6 +11,7 @@ const PostDetailsModal = ({ open, post, loading, onClose }) => {
       onOpenChange={(e) => !e.open && onClose()}
       placement="center"
       size={hasMedia ? "cover" : "lg"}
+      scrollBehavior="inside"
     >
       <Portal>
         <Dialog.Backdrop />
