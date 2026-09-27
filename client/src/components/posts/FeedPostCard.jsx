@@ -1,31 +1,16 @@
-import { Card, HStack, VStack, Avatar, Text, IconButton, Separator } from "@chakra-ui/react"
+import { Card, HStack, Text, IconButton, Separator } from "@chakra-ui/react"
 import { LuThumbsUp, LuMessageCircle, LuShare2 } from "react-icons/lu"
-import { getFullName } from "../../utils/profile"
-import { formatDate } from "../../utils/date"
 import PostMediaGallery from "./PostMediaGallery"
+import PostAuthor from "./PostAuthor"
 
 const FeedPostCard = ({ post }) => {
-  const { author } = post
-  const authorName = getFullName(author) || "Unknown user"
   const likeCount = post.post_likes?.[0]?.count ?? 0
   const commentCount = post.comments?.[0]?.count ?? 0
 
   return (
     <Card.Root>
       <Card.Header>
-        <HStack gap={3}>
-          <Avatar.Root>
-            <Avatar.Fallback name={authorName} />
-            <Avatar.Image src={author?.avatar_url} />
-          </Avatar.Root>
-          <VStack align="start" gap={0}>
-            <Text fontWeight="bold">{authorName}</Text>
-            {author?.username && (
-              <Text fontSize="sm" color="fg.muted">@{author.username}</Text>
-            )}
-            <Text fontSize="xs" color="fg.muted">{formatDate(post.created_at)}</Text>
-          </VStack>
-        </HStack>
+        <PostAuthor author={post.author} date={post.created_at} />
       </Card.Header>
 
       <Card.Body>
