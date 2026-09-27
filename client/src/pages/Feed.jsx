@@ -11,9 +11,12 @@ import CreatePostTrigger from '../components/posts/CreatePostTrigger';
 import CreatePostModal from '../components/posts/CreatePostModal';
 import ChatBotWidget from '../components/chatbot/ChatBotWidget';
 import FeedPostCard from '../components/posts/FeedPostCard';
+import { usePostDetails } from '../hooks/usePostDetails';
+import PostDetailsModal from '../components/posts/PostDetailsModal';
 
 const Feed = () => {
   const { user } = useAuth();
+  const { post: openedPost, loading: postLoading, isOpen, openPost, closePost } = usePostDetails();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,6 +90,13 @@ const Feed = () => {
             onSubmit={handleCreatePost}
           />
 
+          <PostDetailsModal
+            open={isOpen}
+            post={openedPost}
+            loading={postLoading}
+            onClose={closePost}
+          />
+
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
 
           {!loading && posts.length === 0 && (
@@ -96,7 +106,7 @@ const Feed = () => {
           )}
 
           {posts.map((post) => (
-            <FeedPostCard key={post.id} post={post} />
+            <FeedPostCard key={post.id} post={post} onOpen={openPost} />
           ))}
         </VStack>
       </GridItem>
