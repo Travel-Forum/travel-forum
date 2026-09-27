@@ -1,39 +1,27 @@
-import { Card, HStack, VStack, Avatar, Text, IconButton, Separator } from "@chakra-ui/react"
+import { Card, HStack, Text, IconButton, Separator } from "@chakra-ui/react"
 import { LuThumbsUp, LuMessageCircle, LuShare2 } from "react-icons/lu"
-import { getFullName } from "../../utils/profile"
-import { formatDate } from "../../utils/date"
 import PostMediaGallery from "./PostMediaGallery"
+import PostAuthor from "./PostAuthor"
 
-const FeedPostCard = ({ post }) => {
-  const { author } = post
-  const authorName = getFullName(author) || "Unknown user"
+const FeedPostCard = ({ post, onOpen }) => {
   const likeCount = post.post_likes?.[0]?.count ?? 0
   const commentCount = post.comments?.[0]?.count ?? 0
+  const openPost = () => onOpen(post.id)
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") openPost()
+  }
 
   return (
     <Card.Root>
       <Card.Header>
-        <HStack gap={3}>
-          <Avatar.Root>
-            <Avatar.Fallback name={authorName} />
-            <Avatar.Image src={author?.avatar_url} />
-          </Avatar.Root>
-          <VStack align="start" gap={0}>
-            <Text fontWeight="bold">{authorName}</Text>
-            {author?.username && (
-              <Text fontSize="sm" color="fg.muted">@{author.username}</Text>
-            )}
-            <Text fontSize="xs" color="fg.muted">{formatDate(post.created_at)}</Text>
-          </VStack>
-        </HStack>
+        <PostAuthor author={post.author} date={post.created_at} />
       </Card.Header>
 
-      <Card.Body>
+      <Card.Body cursor="pointer" role="button" tabIndex={0} onClick={openPost} onKeyDown={handleKeyDown}>
         <Text fontSize="lg" fontWeight="semibold" mb={2}>{post.title}</Text>
         <Text whiteSpace="pre-wrap">{post.content}</Text>
         <PostMediaGallery media={post.media} title={post.title} />
       </Card.Body>
-
       <Separator />
 
       <Card.Footer justify="space-between">
@@ -45,7 +33,7 @@ const FeedPostCard = ({ post }) => {
         </HStack>
 
         <HStack gap={1}>
-          <IconButton variant="ghost" aria-label="Comment">
+          <IconButton variant="ghost" aria-label="Comment" onClick={openPost}>
             <LuMessageCircle />
           </IconButton>
           <Text fontSize="sm">{commentCount}</Text>
@@ -59,4 +47,4 @@ const FeedPostCard = ({ post }) => {
   )
 }
 
-export default FeedPostCard
+export default FeedPostCard;

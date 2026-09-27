@@ -2,6 +2,8 @@ import { supabase } from "../config/supabaseClient";
 import { toFriendlyError } from "../utils/errors";
 import { getSignedMediaUrls } from "./mediaService";
 
+const AUTHOR_FIELDS = "id, username, first_name, last_name, avatar_url";
+
 export const getLatestPosts = async (limit = 10) => {
   const { data, error } = await supabase
     .from("posts_with_comment_count")
@@ -106,4 +108,42 @@ const withMediaUrls = async (posts) => {
       }))
       .filter((media) => media.url),
   }));
+};
+
+export const getPostById = async (postId) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .select(`
+      id,
+      title,
+      content,
+      created_at,
+      author:profiles!author_id (${AUTHOR_FIELDS}),
+      post_likes(count),
+      comments (
+        id,
+        content,
+        created_at,
+        author:profiles!author_id (${AUTHOR_FIELDS})
+      ),
+      post_media (
+        id,
+        storage_path,
+        media_type
+      )
+    `)
+    .eq("id", postId)
+    .order("created_at", { referencedTable: "comments", ascending: true })
+    .order("created_at", { referencedTable: "post_media", ascending: true })
+    .maybeSingle();
+
+  if (error) {
+    console.error("Get post by id error:", error.message);
+    return { error: toFriendlyError(error) };
+  }
+
+  if (!data) return { data: null };
+
+  const [post] = await withMediaUrls([data]);
+  return { data: post };
 };
