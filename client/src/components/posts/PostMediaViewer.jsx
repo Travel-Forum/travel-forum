@@ -27,7 +27,7 @@ const PostMediaViewer = ({ media, title }) => {
       bg="black"
       borderRadius="lg"
       overflow="hidden"
-      h={{ base: "50vh", lg: "75vh" }}
+      h={{ base: "50vh", lg: "65vh" }}
       display="flex"
       alignItems="center"
       justifyContent="center"

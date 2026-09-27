@@ -9,7 +9,7 @@ const PostDetailsPanel = ({ post }) => {
   const comments = post.comments ?? [];
 
   return (
-    <Card.Root maxH={{ lg: "75vh" }} overflow="hidden">
+    <Card.Root maxH={{ lg: "65vh" }} overflow="hidden">
       <Card.Header>
         <PostAuthor author={post.author} date={post.created_at} />
       </Card.Header>
