@@ -1,41 +1,52 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Grid, GridItem, Spinner, Text, VStack } from '@chakra-ui/react';
+import { useEffect, useState } from "react";
+import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
-import { useAuth } from '../hooks/useAuth';
-import { createPost, deletePost, getFeedPosts } from '../services/postsService';
-import { uploadPostMedia } from '../services/mediaService';
-import { showError, showSuccess } from '../utils/toast';
+import { useAuth } from "../hooks/useAuth";
+import { createPost, deletePost, getFeedPosts } from "../services/postsService";
+import { uploadPostMedia } from "../services/mediaService";
+import { showError, showSuccess } from "../utils/toast";
 
-import ProfileCard from '../components/profile/ProfileCard';
-import CreatePostTrigger from '../components/posts/CreatePostTrigger';
-import CreatePostModal from '../components/posts/CreatePostModal';
-import ChatBotWidget from '../components/chatbot/ChatBotWidget';
-import FeedPostCard from '../components/posts/FeedPostCard';
-import { usePostDetails } from '../hooks/usePostDetails';
-import PostDetailsModal from '../components/posts/PostDetailsModal';
+import ProfileCard from "../components/profile/ProfileCard";
+import CreatePostTrigger from "../components/posts/CreatePostTrigger";
+import CreatePostModal from "../components/posts/CreatePostModal";
+import ChatBotWidget from "../components/chatbot/ChatBotWidget";
+import FeedPostCard from "../components/posts/FeedPostCard";
+import { usePostDetails } from "../hooks/usePostDetails";
+import PostDetailsModal from "../components/posts/PostDetailsModal";
 
 const Feed = () => {
   const { user } = useAuth();
-  const { post: openedPost, loading: postLoading, isOpen, openPost, closePost } = usePostDetails();
+  const {
+    post: openedPost,
+    loading: postLoading,
+    isOpen,
+    openPost,
+    closePost,
+  } = usePostDetails();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const loadPosts = useCallback(async () => {
-    const { data, error } = await getFeedPosts();
-
-    if (error) {
-      showError('Could not load posts', error);
-    } else {
-      setPosts(data);
-    }
-
-    setLoading(false);
-  }, []);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    loadPosts();
-  }, [loadPosts]);
+    let ignore = false;
+
+    getFeedPosts().then(({ data, error }) => {
+      if (ignore) return;
+
+      if (error) {
+        showError("Could not get posts", error);
+      } else {
+        setPosts(data)
+      }
+
+      setLoading(false);
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, [refreshKey]);
 
   const handleCreatePost = async (formData) => {
     const { data: post, error } = await createPost({
@@ -44,7 +55,7 @@ const Feed = () => {
     });
 
     if (error) {
-      showError('Could not create post', error);
+      showError("Could not create post", error);
       return;
     }
 
@@ -57,13 +68,13 @@ const Feed = () => {
     if (mediaError) {
       // Roll back so a retry doesn't create a duplicate post
       await deletePost(post.id);
-      showError('Could not upload media', mediaError);
+      showError("Could not upload media", mediaError);
       return;
     }
 
-    showSuccess('Post created', 'Your post is now live.');
+    showSuccess("Post created", "Your post is now live.");
     setIsCreateOpen(false);
-    await loadPosts();
+    setRefreshKey((previous) => previous + 1)
   };
 
   return (
