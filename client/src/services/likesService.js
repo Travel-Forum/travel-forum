@@ -26,3 +26,16 @@ export const unlikePost = async ({ postId, userId }) => {
   }
   return {};
 };
+
+export const getLikedPostIds = async (userId) => {
+  const { data, error } = await supabase
+    .from("post_likes")
+    .select("post_id")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Get liked posts error:", error.message);
+    return { error: toFriendlyError(error) };
+  }
+  return { data: data.map((like) => like.post_id) };
+};
