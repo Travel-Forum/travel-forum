@@ -130,6 +130,7 @@ const Feed = () => {
             likeCount={openedPostLikeCount}
             onToggleLike={() => toggleLike(openedPost.id, openedPostLikeCount)}
             onAddComment={addComment}
+            onReplyComment={(parentId, content) => addComment(content, parentId)}
           />
 
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
