@@ -2,7 +2,13 @@ import { Text, VStack } from "@chakra-ui/react";
 import CommentItem from "./CommentItem";
 import { buildCommentTree } from "../../utils/comments";
 
-const PostCommentList = ({ comments, onReply }) => {
+const PostCommentList = ({
+  comments,
+  currentUserId,
+  onReply,
+  onEdit,
+  onDelete,
+}) => {
   if (comments.length === 0) {
     return (
       <Text color="fg.muted" fontSize="sm">
@@ -16,7 +22,14 @@ const PostCommentList = ({ comments, onReply }) => {
   return (
     <VStack align="stretch" gap={4}>
       {commentTree.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} onReply={onReply} />
+        <CommentItem
+          key={comment.id}
+          comment={comment}
+          currentUserId={currentUserId}
+          onReply={onReply}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       ))}
     </VStack>
   );

@@ -10,8 +10,11 @@ const PostDetailsModal = ({
   liked,
   likeCount,
   onToggleLike,
+  currentUserId,
   onAddComment,
   onReplyComment,
+  onEditComment,
+  onDeleteComment,
 }) => {
   const hasMedia = post?.media?.length > 0;
 
@@ -44,8 +47,11 @@ const PostDetailsModal = ({
                     liked={liked}
                     likeCount={likeCount}
                     onToggleLike={onToggleLike}
+                    currentUserId={currentUserId}
                     onAddComment={onAddComment}
                     onReplyComment={onReplyComment}
+                    onEditComment={onEditComment}
+                    onDeleteComment={onDeleteComment}
                   />
                 </Grid>
               )}
