@@ -3,11 +3,11 @@ import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../hooks/useAuth";
 import { usePostDetails } from "../hooks/usePostDetails";
-import { usePostLikes } from "../hooks/usePostLikes"; 
+import { usePostLikes } from "../hooks/usePostLikes";
 import { createPost, deletePost, getFeedPosts } from "../services/postsService";
 import { uploadPostMedia } from "../services/mediaService";
 import { showError, showSuccess } from "../utils/toast";
-import { getPostLikeCount } from "../utils/post"; 
+import { getPostLikeCount } from "../utils/post";
 
 import ProfileCard from "../components/profile/ProfileCard";
 import CreatePostTrigger from "../components/posts/CreatePostTrigger";
@@ -25,7 +25,7 @@ const Feed = () => {
     openPost,
     closePost,
   } = usePostDetails();
-  const { isLiked, getLikeCount, toggleLike } = usePostLikes(user?.id); 
+  const { isLiked, getLikeCount, toggleLike } = usePostLikes(user?.id);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -80,6 +80,10 @@ const Feed = () => {
     setRefreshKey((previous) => previous + 1)
   };
 
+  const openedPostLikeCount = openedPost
+    ? getLikeCount(openedPost.id, getPostLikeCount(openedPost))
+    : 0;
+
   return (
     <Grid
       templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
@@ -109,6 +113,9 @@ const Feed = () => {
             post={openedPost}
             loading={postLoading}
             onClose={closePost}
+            liked={openedPost ? isLiked(openedPost.id) : false}
+            likeCount={openedPostLikeCount}
+            onToggleLike={() => toggleLike(openedPost.id, openedPostLikeCount)}
           />
 
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
