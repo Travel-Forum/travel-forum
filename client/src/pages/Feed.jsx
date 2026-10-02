@@ -37,8 +37,7 @@ const Feed = () => {
     await reloadPost();
     setRefreshKey((previous) => previous + 1);
   };
-
-  const { addComment } = usePostComments({
+  const { addComment, editComment, removeComment } = usePostComments({
     postId: openedPost?.id,
     userId: user?.id,
     onChange: handleCommentsChange,
@@ -131,6 +130,9 @@ const Feed = () => {
             onToggleLike={() => toggleLike(openedPost.id, openedPostLikeCount)}
             onAddComment={addComment}
             onReplyComment={(parentId, content) => addComment(content, parentId)}
+            currentUserId={user?.id}
+            onEditComment={editComment}
+            onDeleteComment={removeComment}
           />
 
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
