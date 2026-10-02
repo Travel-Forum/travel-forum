@@ -54,3 +54,21 @@ export const markAllNotificationsAsRead = async (userId) => {
   }
   return {};
 };
+
+export const subscribeToNotifications = (userId, onNewNotification) => {
+  const channel = supabase
+    .channel(`notifications:${userId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "notifications",
+        filter: `recipient_id=eq.${userId}`,
+      },
+      onNewNotification,
+    )
+    .subscribe();
+
+  return () => supabase.removeChannel(channel);
+};
