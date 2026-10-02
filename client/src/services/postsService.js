@@ -2,7 +2,7 @@ import { supabase } from "../config/supabaseClient";
 import { toFriendlyError } from "../utils/errors";
 import { getSignedMediaUrls } from "./mediaService";
 
-const AUTHOR_FIELDS = "id, username, first_name, last_name, avatar_url";
+export const AUTHOR_FIELDS = "id, username, first_name, last_name, avatar_url";
 
 export const getLatestPosts = async (limit = 10) => {
   const { data, error } = await supabase
