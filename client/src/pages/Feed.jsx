@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../hooks/useAuth";
+import { usePostDetails } from "../hooks/usePostDetails";
+import { usePostLikes } from "../hooks/usePostLikes";
 import { createPost, deletePost, getFeedPosts } from "../services/postsService";
 import { uploadPostMedia } from "../services/mediaService";
 import { showError, showSuccess } from "../utils/toast";
+import { getPostLikeCount } from "../utils/post";
 
 import ProfileCard from "../components/profile/ProfileCard";
 import CreatePostTrigger from "../components/posts/CreatePostTrigger";
 import CreatePostModal from "../components/posts/CreatePostModal";
 import ChatBotWidget from "../components/chatbot/ChatBotWidget";
 import FeedPostCard from "../components/posts/FeedPostCard";
-import { usePostDetails } from "../hooks/usePostDetails";
 import PostDetailsModal from "../components/posts/PostDetailsModal";
 
 const Feed = () => {
@@ -23,6 +25,7 @@ const Feed = () => {
     openPost,
     closePost,
   } = usePostDetails();
+  const { isLiked, getLikeCount, toggleLike } = usePostLikes(user?.id);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +80,10 @@ const Feed = () => {
     setRefreshKey((previous) => previous + 1)
   };
 
+  const openedPostLikeCount = openedPost
+    ? getLikeCount(openedPost.id, getPostLikeCount(openedPost))
+    : 0;
+
   return (
     <Grid
       templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
@@ -106,6 +113,9 @@ const Feed = () => {
             post={openedPost}
             loading={postLoading}
             onClose={closePost}
+            liked={openedPost ? isLiked(openedPost.id) : false}
+            likeCount={openedPostLikeCount}
+            onToggleLike={() => toggleLike(openedPost.id, openedPostLikeCount)}
           />
 
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
@@ -116,9 +126,20 @@ const Feed = () => {
             </Text>
           )}
 
-          {posts.map((post) => (
-            <FeedPostCard key={post.id} post={post} onOpen={openPost} />
-          ))}
+          {posts.map((post) => {
+            const likeCount = getLikeCount(post.id, getPostLikeCount(post));
+
+            return (
+              <FeedPostCard
+                key={post.id}
+                post={post}
+                onOpen={openPost}
+                liked={isLiked(post.id)}
+                likeCount={likeCount}
+                onToggleLike={() => toggleLike(post.id, likeCount)}
+              />
+            );
+          })}
         </VStack>
       </GridItem>
       <GridItem overflowY="auto">

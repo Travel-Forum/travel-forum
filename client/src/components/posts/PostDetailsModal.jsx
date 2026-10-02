@@ -2,7 +2,15 @@ import { Center, CloseButton, Dialog, Grid, Portal, Spinner } from "@chakra-ui/r
 import PostMediaViewer from "./PostMediaViewer";
 import PostDetailsPanel from "./PostDetailsPanel";
 
-const PostDetailsModal = ({ open, post, loading, onClose }) => {
+const PostDetailsModal = ({
+  open,
+  post,
+  loading,
+  onClose,
+  liked,
+  likeCount,
+  onToggleLike,
+}) => {
   const hasMedia = post?.media?.length > 0;
 
   return (
@@ -29,7 +37,12 @@ const PostDetailsModal = ({ open, post, loading, onClose }) => {
                   alignItems="start"
                 >
                   {hasMedia && <PostMediaViewer media={post.media} title={post.title} />}
-                  <PostDetailsPanel post={post} />
+                  <PostDetailsPanel
+                    post={post}
+                    liked={liked}
+                    likeCount={likeCount}
+                    onToggleLike={onToggleLike}
+                  />
                 </Grid>
               )}
             </Dialog.Body>

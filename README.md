@@ -30,6 +30,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
   - image and video attachments with preview and remove
   - confirmation before discarding an unsaved draft
 - Post details view with media viewer (images and videos), like count and comments
+- Like and unlike posts from the feed and from the post details (updates instantly)
 - Profile page (read-only for now)
 
 **Database and security**
@@ -82,7 +83,7 @@ client/src/
 ├── pages/        route-level screens (Feed, Home, Profile, ...)
 ├── components/   UI components, grouped by feature (posts, auth, profile, ui, ...)
 ├── services/     all Supabase calls; return { data } or { error }
-├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails)
+├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes)
 ├── context/      auth and profile providers
 ├── routes/       route guards (signed in, profile completed, guest only)
 ├── schemas/      Zod validation schemas
