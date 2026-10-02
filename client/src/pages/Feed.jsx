@@ -4,6 +4,7 @@ import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useAuth } from "../hooks/useAuth";
 import { usePostDetails } from "../hooks/usePostDetails";
 import { usePostLikes } from "../hooks/usePostLikes";
+import { usePostComments } from "../hooks/usePostComments";
 import { createPost, deletePost, getFeedPosts } from "../services/postsService";
 import { uploadPostMedia } from "../services/mediaService";
 import { showError, showSuccess } from "../utils/toast";
@@ -24,12 +25,24 @@ const Feed = () => {
     isOpen,
     openPost,
     closePost,
+    reloadPost,
   } = usePostDetails();
   const { isLiked, getLikeCount, toggleLike } = usePostLikes(user?.id);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleCommentsChange = async () => {
+    await reloadPost();
+    setRefreshKey((previous) => previous + 1);
+  };
+
+  const { addComment } = usePostComments({
+    postId: openedPost?.id,
+    userId: user?.id,
+    onChange: handleCommentsChange,
+  });
 
   useEffect(() => {
     let ignore = false;
@@ -116,6 +129,7 @@ const Feed = () => {
             liked={openedPost ? isLiked(openedPost.id) : false}
             likeCount={openedPostLikeCount}
             onToggleLike={() => toggleLike(openedPost.id, openedPostLikeCount)}
+            onAddComment={addComment}
           />
 
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
