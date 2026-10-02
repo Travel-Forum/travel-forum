@@ -28,11 +28,25 @@ export const usePostDetails = () => {
 
   const closePost = () => setPost(null);
 
+  const reloadPost = async () => {
+    if (!post) return;
+
+    const { data, error } = await getPostById(post.id);
+
+    if (error) {
+      showError("Could not refresh post", error);
+      return;
+    }
+
+    setPost((current) => current && data && { ...data, media: current.media });
+  };
+
   return {
     post,
     loading,
     isOpen: loading || post !== null,
     openPost,
     closePost,
+    reloadPost,
   };
 };
