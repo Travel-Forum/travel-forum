@@ -1,6 +1,6 @@
 # Travel Forum
 
-> 🚧 **Status: in development.** Core posting features work; comments, voting, profile editing and the admin panel are still being built. See [Roadmap](#roadmap).
+> 🚧 **Status: in development.** Core posting features work; voting, profile editing and the admin panel are still being built. See [Roadmap](#roadmap).
 
 A community forum for travellers: people share trips, tips and questions, comment on each other's posts and vote on the most useful ones.
 
@@ -31,6 +31,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
   - confirmation before discarding an unsaved draft
 - Post details view with media viewer (images and videos), like count and comments
 - Like and unlike posts from the feed and from the post details (updates instantly)
+- Comments with nested replies on any post; edit and delete own comments (deleting a comment also removes its replies)
 - Profile page (read-only for now)
 
 **Database and security**
@@ -43,7 +44,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
 
 **User features**
 - [ ] Edit and delete own posts (from the post details and from the feed)
-- [ ] Comments and replies; edit and delete own comments
+- [x] Comments and replies; edit and delete own comments
 - [ ] Upvote / downvote posts and comments
 - [ ] Edit profile information and upload a profile photo
 - [ ] Public profile of any user with their posts and comments
@@ -83,7 +84,7 @@ client/src/
 ├── pages/        route-level screens (Feed, Home, Profile, ...)
 ├── components/   UI components, grouped by feature (posts, auth, profile, ui, ...)
 ├── services/     all Supabase calls; return { data } or { error }
-├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes)
+├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes, usePostComments)
 ├── context/      auth and profile providers
 ├── routes/       route guards (signed in, profile completed, guest only)
 ├── schemas/      Zod validation schemas

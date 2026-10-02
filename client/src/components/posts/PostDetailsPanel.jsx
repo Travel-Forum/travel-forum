@@ -2,10 +2,21 @@ import { Box, Card, HStack, Separator, Text } from "@chakra-ui/react";
 import { LuMessageCircle } from "react-icons/lu";
 import PostAuthor from "./PostAuthor";
 import PostCommentList from "./PostCommentList";
+import CommentForm from "./CommentForm";
 import LikeButton from "./LikeButton";
 import ExpandableText from "../ui/ExpandableText";
 
-const PostDetailsPanel = ({ post, liked, likeCount, onToggleLike }) => {
+const PostDetailsPanel = ({
+  post,
+  liked,
+  likeCount,
+  onToggleLike,
+  currentUserId,
+  onAddComment,
+  onReplyComment,
+  onEditComment,
+  onDeleteComment,
+}) => {
   const comments = post.comments ?? [];
 
   return (
@@ -37,7 +48,15 @@ const PostDetailsPanel = ({ post, liked, likeCount, onToggleLike }) => {
 
         <Separator />
 
-        <PostCommentList comments={comments} />
+        <CommentForm onSubmit={onAddComment} />
+
+        <PostCommentList 
+          comments={comments}
+          currentUserId={currentUserId}
+          onReply={onReplyComment}
+          onEdit={onEditComment}
+          onDelete={onDeleteComment}
+        />
       </Card.Body>
     </Card.Root>
   );

@@ -122,6 +122,7 @@ export const getPostById = async (postId) => {
       post_likes(count),
       comments (
         id,
+        parent_comment_id,
         content,
         created_at,
         author:profiles!author_id (${AUTHOR_FIELDS})
