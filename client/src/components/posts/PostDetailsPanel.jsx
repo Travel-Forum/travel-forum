@@ -12,6 +12,7 @@ const PostDetailsPanel = ({
   likeCount,
   onToggleLike,
   onAddComment,
+  onReplyComment,
 }) => {
   const comments = post.comments ?? [];
 
@@ -46,7 +47,7 @@ const PostDetailsPanel = ({
 
         <CommentForm onSubmit={onAddComment} />
 
-        <PostCommentList comments={comments} />
+        <PostCommentList comments={comments} onReply={onReplyComment} />
       </Card.Body>
     </Card.Root>
   );

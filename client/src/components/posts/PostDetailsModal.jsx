@@ -11,6 +11,7 @@ const PostDetailsModal = ({
   likeCount,
   onToggleLike,
   onAddComment,
+  onReplyComment,
 }) => {
   const hasMedia = post?.media?.length > 0;
 
@@ -44,6 +45,7 @@ const PostDetailsModal = ({
                     likeCount={likeCount}
                     onToggleLike={onToggleLike}
                     onAddComment={onAddComment}
+                    onReplyComment={onReplyComment}
                   />
                 </Grid>
               )}
