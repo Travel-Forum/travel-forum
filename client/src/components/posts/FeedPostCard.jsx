@@ -2,9 +2,10 @@ import { Card, HStack, Text, IconButton, Separator } from "@chakra-ui/react"
 import { LuThumbsUp, LuMessageCircle, LuShare2 } from "react-icons/lu"
 import PostMediaGallery from "./PostMediaGallery"
 import PostAuthor from "./PostAuthor"
+import { getPostLikeCount } from "../../utils/post"
 
 const FeedPostCard = ({ post, onOpen }) => {
-  const likeCount = post.post_likes?.[0]?.count ?? 0
+  const likeCount = getPostLikeCount(post)
   const commentCount = post.comments?.[0]?.count ?? 0
   const openPost = () => onOpen(post.id)
   const handleKeyDown = (event) => {

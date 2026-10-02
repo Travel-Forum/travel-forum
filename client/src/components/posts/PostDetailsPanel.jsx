@@ -3,9 +3,10 @@ import { LuMessageCircle, LuThumbsUp } from "react-icons/lu";
 import PostAuthor from "./PostAuthor";
 import PostCommentList from "./PostCommentList";
 import ExpandableText from "../ui/ExpandableText";
+import { getPostLikeCount } from "../../utils/post";
 
 const PostDetailsPanel = ({ post }) => {
-  const likeCount = post.post_likes?.[0]?.count ?? 0;
+  const likeCount = getPostLikeCount(post);
   const comments = post.comments ?? [];
 
   return (
