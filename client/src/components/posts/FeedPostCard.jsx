@@ -1,11 +1,10 @@
 import { Card, HStack, Text, IconButton, Separator } from "@chakra-ui/react"
-import { LuThumbsUp, LuMessageCircle, LuShare2 } from "react-icons/lu"
+import { LuMessageCircle, LuShare2 } from "react-icons/lu"
 import PostMediaGallery from "./PostMediaGallery"
 import PostAuthor from "./PostAuthor"
-import { getPostLikeCount } from "../../utils/post"
+import LikeButton from "./LikeButton"
 
-const FeedPostCard = ({ post, onOpen }) => {
-  const likeCount = getPostLikeCount(post)
+const FeedPostCard = ({ post, onOpen, liked, likeCount, onToggleLike }) => {
   const commentCount = post.comments?.[0]?.count ?? 0
   const openPost = () => onOpen(post.id)
   const handleKeyDown = (event) => {
@@ -26,12 +25,7 @@ const FeedPostCard = ({ post, onOpen }) => {
       <Separator />
 
       <Card.Footer justify="space-between">
-        <HStack gap={1}>
-          <IconButton variant="ghost" aria-label="Like">
-            <LuThumbsUp />
-          </IconButton>
-          <Text fontSize="sm">{likeCount}</Text>
-        </HStack>
+        <LikeButton liked={liked} count={likeCount} onToggle={onToggleLike} />
 
         <HStack gap={1}>
           <IconButton variant="ghost" aria-label="Comment" onClick={openPost}>
@@ -48,4 +42,4 @@ const FeedPostCard = ({ post, onOpen }) => {
   )
 }
 
-export default FeedPostCard;
+export default FeedPostCard
