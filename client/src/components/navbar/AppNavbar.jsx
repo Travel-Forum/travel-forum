@@ -3,6 +3,8 @@ import { Flex, Box, Input, HStack, IconButton, Image } from "@chakra-ui/react";
 import { LuHouse, LuMapPin, LuBell } from "react-icons/lu";
 import logo from "../../assets/icons/forum-logo.svg";
 import ProfileMenu from "../profile/ProfileMenu";
+import NotificationBadge from "./NotificationBadge";
+import { useNotifications } from "../../hooks/useNotifications";
 
 const NAV_ITEMS = [
   { to: "/feed", label: "Home", icon: LuHouse },
@@ -10,6 +12,8 @@ const NAV_ITEMS = [
   { to: "/notifications", label: "Notifications", icon: LuBell },
 ];
 const AppNavbar = () => {
+  const { unreadCount } = useNotifications();
+
   return (
     <Flex
       as="nav"
@@ -39,10 +43,12 @@ const AppNavbar = () => {
             asChild
             variant="ghost"
             padding={4}
+            position="relative"
             _currentPage={{ bg: "bg.muted" }}
           >
             <NavLink to={to} aria-label={label}>
               <Icon />
+              {to === "/notifications" && <NotificationBadge count={unreadCount} />}
             </NavLink>
           </IconButton>
         ))}
