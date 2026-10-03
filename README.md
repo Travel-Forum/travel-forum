@@ -32,6 +32,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
 - Post details view with media viewer (images and videos), like count and comments
 - Like and unlike posts from the feed and from the post details (updates instantly)
 - Comments with nested replies on any post; edit and delete own comments (deleting a comment also removes its replies)
+- Notifications for likes, comments and replies, delivered in real time: unread count on the bell, mark one or all as read, open the post from a notification
 - Profile page (read-only for now)
 
 **Database and security**
@@ -74,7 +75,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
 |---|---|
 | UI | React 19, Chakra UI v3, React Router 7 |
 | Forms | React Hook Form, Zod |
-| Backend | Supabase: Postgres, Auth, Storage |
+| Backend | Supabase: Postgres, Auth, Storage, Realtime |
 | Tooling | Vite, ESLint |
 
 ## Project structure
@@ -84,8 +85,8 @@ client/src/
 ├── pages/        route-level screens (Feed, Home, Profile, ...)
 ├── components/   UI components, grouped by feature (posts, auth, profile, ui, ...)
 ├── services/     all Supabase calls; return { data } or { error }
-├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes, usePostComments)
-├── context/      auth and profile providers
+├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes, usePostComments, usePostModal, useNotifications)
+├── context/      auth, profile and notifications providers
 ├── routes/       route guards (signed in, profile completed, guest only)
 ├── schemas/      Zod validation schemas
 ├── utils/        small pure helpers (dates, names, text, errors, toasts)
@@ -141,6 +142,7 @@ Relationships:
 - `profiles` 1 → N `posts`, `comments`, `post_likes`
 - `posts` 1 → N `comments`, `post_likes`, `post_media`
 - `comments` 1 → N `comments` (replies through `parent_comment_id`)
+- `profiles` 1 → N `notifications` (as recipient and as actor)
 
 Deleting a profile or a post deletes everything that belongs to it (`ON DELETE CASCADE`).
 
@@ -195,10 +197,24 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `storage_path` | text | `{userId}/{postId}/{uuid}.{ext}` in the `post-media` bucket |
 | `created_at` | timestamptz | default `now()` |
 
+**notifications** — created by database triggers, never by the client
+| Column | Type | Rules |
+|---|---|---|
+| `id` | uuid | PK |
+| `recipient_id` | uuid | who gets the notification, references `profiles`, cascade delete |
+| `actor_id` | uuid | who liked or commented, references `profiles`, cascade delete |
+| `type` | text | `post_like`, `post_comment` or `comment_reply` |
+| `post_id` | uuid | references `posts`, cascade delete |
+| `comment_id` | uuid | optional, references `comments`, cascade delete |
+| `is_read` | boolean | default `false`; the only column users can update |
+| `created_at` | timestamptz | default `now()` |
+
 **Also:**
 - `posts_with_comment_count` — view used by the home page lists; respects RLS
 - `get_public_stats()` — returns the total number of posts and users for the home page
 - `post-media` — private Storage bucket, 50 MB per file, JPEG / PNG / WebP / GIF / MP4 / WebM
+- Notification triggers — a like notifies the post author (removed again on unlike), a comment notifies the post author, a reply notifies the author of the parent comment; nobody is notified about their own actions
+- `notifications` is published to Supabase Realtime, so new notifications reach the browser without a refresh
 
 ### Scripts
 
@@ -209,5 +225,6 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `003_indexes.sql` | indexes on foreign key columns |
 | `004_rls_policies.sql` | Row Level Security policies |
 | `005_storage.sql` | `post-media` bucket and its access policies |
+| `006_notifications.sql` | `notifications` table, its RLS policies, triggers and Realtime publication |
 
 The scripts build the database from an empty Supabase project; don't run them on a database that already has these tables. Every later change goes into a new numbered file (`006_...sql`) in the same pull request as the code that needs it.

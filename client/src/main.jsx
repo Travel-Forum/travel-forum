@@ -6,6 +6,7 @@ import App from "./App";
 import { Provider } from "./components/ui/Provider";
 import AuthProvider from "./context/AuthProvider"
 import ProfileProvider from "./context/ProfileProvider";
+import NotificationsProvider from "./context/NotificationsProvider";
 import { Toaster } from "./components/ui/Toaster";
 
 createRoot(document.getElementById("root")).render(
@@ -13,10 +14,12 @@ createRoot(document.getElementById("root")).render(
     <Provider defaultTheme="light">
       <AuthProvider>
         <ProfileProvider>
-          <BrowserRouter>
-            <App />
-            <Toaster />
-          </BrowserRouter>
+          <NotificationsProvider>
+            <BrowserRouter>
+              <App />
+              <Toaster />
+            </BrowserRouter>
+          </NotificationsProvider>
         </ProfileProvider>
       </AuthProvider>
     </Provider>

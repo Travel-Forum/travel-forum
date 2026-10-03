@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../hooks/useAuth";
-import { usePostDetails } from "../hooks/usePostDetails";
-import { usePostLikes } from "../hooks/usePostLikes";
-import { usePostComments } from "../hooks/usePostComments";
+import { usePostModal } from "../hooks/usePostModal";
 import { createPost, deletePost, getFeedPosts } from "../services/postsService";
 import { uploadPostMedia } from "../services/mediaService";
 import { showError, showSuccess } from "../utils/toast";
@@ -19,28 +17,14 @@ import PostDetailsModal from "../components/posts/PostDetailsModal";
 
 const Feed = () => {
   const { user } = useAuth();
-  const {
-    post: openedPost,
-    loading: postLoading,
-    isOpen,
-    openPost,
-    closePost,
-    reloadPost,
-  } = usePostDetails();
-  const { isLiked, getLikeCount, toggleLike } = usePostLikes(user?.id);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const handleCommentsChange = async () => {
-    await reloadPost();
-    setRefreshKey((previous) => previous + 1);
-  };
-  const { addComment, editComment, removeComment } = usePostComments({
-    postId: openedPost?.id,
+  const { openPost, modalProps, isLiked, getLikeCount, toggleLike } = usePostModal({
     userId: user?.id,
-    onChange: handleCommentsChange,
+    onCommentsChange: () => setRefreshKey((previous) => previous + 1),
   });
 
   useEffect(() => {
@@ -92,10 +76,6 @@ const Feed = () => {
     setRefreshKey((previous) => previous + 1)
   };
 
-  const openedPostLikeCount = openedPost
-    ? getLikeCount(openedPost.id, getPostLikeCount(openedPost))
-    : 0;
-
   return (
     <Grid
       templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
@@ -120,20 +100,7 @@ const Feed = () => {
             onSubmit={handleCreatePost}
           />
 
-          <PostDetailsModal
-            open={isOpen}
-            post={openedPost}
-            loading={postLoading}
-            onClose={closePost}
-            liked={openedPost ? isLiked(openedPost.id) : false}
-            likeCount={openedPostLikeCount}
-            onToggleLike={() => toggleLike(openedPost.id, openedPostLikeCount)}
-            onAddComment={addComment}
-            onReplyComment={(parentId, content) => addComment(content, parentId)}
-            currentUserId={user?.id}
-            onEditComment={editComment}
-            onDeleteComment={removeComment}
-          />
+          <PostDetailsModal {...modalProps} />
 
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
 
