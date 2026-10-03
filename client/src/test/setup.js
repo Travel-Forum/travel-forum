@@ -16,3 +16,10 @@ window.matchMedia = (query) => ({
   removeListener: () => {},
   dispatchEvent: () => false,
 });
+
+// jsdom doesn't implement ResizeObserver; Chakra's autoresizing Textarea needs it.
+window.ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
