@@ -1,13 +1,19 @@
 import { Box, Button, Card, Heading, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
+import { useAuth } from "../hooks/useAuth";
 import { useNotifications } from "../hooks/useNotifications";
+import { usePostModal } from "../hooks/usePostModal";
 import NotificationItem from "../components/notifications/NotificationItem";
+import PostDetailsModal from "../components/posts/PostDetailsModal";
 
 const Notifications = () => {
+  const { user } = useAuth();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
     useNotifications();
+  const { openPost, modalProps } = usePostModal({ userId: user?.id });
 
   const handleOpen = (notification) => {
     if (!notification.is_read) markAsRead(notification.id);
+    openPost(notification.post_id);
   };
 
   return (
@@ -47,6 +53,8 @@ const Notifications = () => {
           </VStack>
         </Card.Body>
       </Card.Root>
+
+      <PostDetailsModal {...modalProps} />
     </Box>
   );
 };
