@@ -1,12 +1,12 @@
 # Travel Forum
 
-> 🚧 **Status: in development.** Core posting features work; voting, profile editing and the admin panel are still being built. See [Roadmap](#roadmap).
+## 🌍 Live demo: [travel-forum-seven.vercel.app](https://travel-forum-seven.vercel.app)
+
+> 🚧 **Status: in development.** Posting, comments, likes and notifications work and are live. Currently being built: editing and deleting posts, search with sort and filter, profile editing, public user profiles and the admin panel. See [Roadmap](#roadmap).
 
 A community forum for travellers: people share trips, tips and questions, comment on each other's posts and vote on the most useful ones.
 
-Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
-
-**Hosted version:** not deployed yet.
+Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Every merge to `main` is tested and deployed automatically.
 
 ---
 
@@ -43,29 +43,32 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
 
 ### Roadmap
 
-**User features**
+**In development now**
 - [ ] Edit and delete own posts (from the post details and from the feed)
-- [x] Comments and replies; edit and delete own comments
-- [ ] Upvote / downvote posts and comments
-- [ ] Edit profile information and upload a profile photo
+- [ ] Search, sort and filter posts (feed, user profile)
+- [ ] Edit profile information
 - [ ] Public profile of any user with their posts and comments
-- [ ] Sort and filter posts (feed, user profile)
+- [ ] Admin panel:
+  - [ ] search users by username, email or display name
+  - [ ] block / unblock users
+  - [ ] delete any post
+  - [ ] list all posts with sort and filter
 
-**Admin panel**
-- [ ] Search users by username, email or display name
-- [ ] Block / unblock users
-- [ ] Delete any post
-- [ ] List all posts with sort and filter
-
-**Community**
+**Planned**
+- [ ] Upvote / downvote posts and comments
 - [ ] Reputation score from votes on a user's posts and comments
 - [ ] Badges for milestones (posts, comments, reputation, membership time)
+- [ ] Profile photo upload
 - [ ] Post tags with tag search (optional)
 
+**Done**
+- [x] Comments and replies; edit and delete own comments
+- [x] Likes and real-time notifications
+
 **Quality**
-- [ ] Unit tests for React components (Vitest + React Testing Library)
-- [ ] CI pipeline (lint, tests, build) on every pull request
-- [ ] Deployment
+- [x] Unit tests for React components (Vitest + React Testing Library)
+- [x] CI pipeline (lint, tests, build) on every pull request
+- [x] Automatic deployment to Vercel
 
 ---
 
@@ -76,7 +79,9 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage).
 | UI | React 19, Chakra UI v3, React Router 7 |
 | Forms | React Hook Form, Zod |
 | Backend | Supabase: Postgres, Auth, Storage, Realtime |
+| Testing | Vitest, React Testing Library |
 | Tooling | Vite, ESLint |
+| CI/CD | GitHub Actions, Vercel |
 
 ## Project structure
 
@@ -90,10 +95,15 @@ client/src/
 ├── routes/       route guards (signed in, profile completed, guest only)
 ├── schemas/      Zod validation schemas
 ├── utils/        small pure helpers (dates, names, text, errors, toasts)
-└── config/       Supabase client and environment variables
+├── config/       Supabase client and environment variables
+└── test/         test setup and the renderWithProviders helper
 supabase/
 └── migrations/   SQL scripts for the database
+.github/
+└── workflows/    CI pipeline
 ```
+
+Tests live next to the file they test (`text.js` → `text.test.js`).
 
 Pages never talk to Supabase directly: they call `services/`, which return `{ data }` or `{ error }` with a user-friendly message.
 
@@ -126,10 +136,28 @@ Both Supabase values are in the dashboard under **Project Settings → API**.
 
 ### 3. Run
 ```bash
-npm run dev      # development server on http://localhost:5173
-npm run lint     # ESLint
-npm run build    # production build
+npm run dev        # development server on http://localhost:5173
+npm test           # unit tests in watch mode
+npm run test:run   # unit tests once
+npm run lint       # ESLint
+npm run build      # production build
 ```
+
+---
+
+## CI/CD
+
+```
+pull request ──► GitHub Actions: install → lint → tests → build
+             ──► Vercel: preview deployment with its own URL
+merge to main ──► Vercel: production deployment (live demo)
+```
+
+- **CI** — [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every pull request and every push to `main`.
+- **Protected `main`** — changes reach `main` only through a pull request, and only when the CI check passes.
+- **CD** — Vercel builds `client/` and deploys `main` to production and every pull request to a preview URL. [`client/vercel.json`](client/vercel.json) sends every path to `index.html` so routes like `/feed` work on refresh.
+
+To deploy your own copy: import the repository in Vercel with **Root Directory** `client`, add the three `VITE_` environment variables (with `VITE_APP_URL` set to the deployed URL), and add `<deployed-url>/auth/callback` to the Supabase redirect URLs.
 
 ---
 
@@ -227,4 +255,4 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `005_storage.sql` | `post-media` bucket and its access policies |
 | `006_notifications.sql` | `notifications` table, its RLS policies, triggers and Realtime publication |
 
-The scripts build the database from an empty Supabase project; don't run them on a database that already has these tables. Every later change goes into a new numbered file (`006_...sql`) in the same pull request as the code that needs it.
+The scripts build the database from an empty Supabase project; don't run them on a database that already has these tables. Every later change goes into a new numbered file (`007_...sql`) in the same pull request as the code that needs it.
