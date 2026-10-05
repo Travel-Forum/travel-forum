@@ -14,14 +14,13 @@ export const createProfile = ({ id, email, firstName, lastName, username, phone 
     phone,
   });
 
-export const updateProfile = async (userId, { firstName, lastName, email, phone }) => {
+export const updateProfile = async (userId, { firstName, lastName, phone }) => {
 
   const { data, error } = await supabase
     .from("profiles")
     .update({
       first_name: firstName,
       last_name: lastName,
-      email,
       phone,
     })
     .eq("id", userId)

@@ -44,7 +44,7 @@ const Profile = () => {
     const { error } = await uploadAvatar(profile.id, file);
 
     if (error) {
-      showError("Cannot update your avatar", error.message);
+      showError("Cannot update your avatar", error);
       return;
     }
 
@@ -52,16 +52,15 @@ const Profile = () => {
     showSuccess("Your avatar was updated successfully.");
   };
 
-  const handleSubmit = async ({ firstName, lastName, email, phone }) => {
+  const handleSubmit = async ({ firstName, lastName, phone }) => {
     const { error } = await updateProfile(profile.id, {
       firstName,
       lastName,
-      email,
       phone,
     });
 
     if (error) {
-      showError("Cannot update profile information", error.message);
+      showError("Cannot update profile information", error);
       return;
     }
 
