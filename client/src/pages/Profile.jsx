@@ -82,20 +82,6 @@ const Profile = () => {
 
           <Separator />
 
-          <Box>
-            <HStack justify="space-between" align="center" mb={2}>
-              <Text fontSize="lg" fontWeight="semibold">
-                About
-              </Text>
-              <IconButton aria-label="Edit about" variant="ghost" size="sm">
-                <LuPencil size={14} />
-              </IconButton>
-            </HStack>
-            <Text color="fg.muted">No bio yet.</Text>
-          </Box>
-
-          <Separator />
-
           <VStack gap={4} align="stretch">
             <Text fontSize="lg" fontWeight="semibold">
               Personal Information

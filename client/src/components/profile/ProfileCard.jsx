@@ -4,9 +4,7 @@ import {
   VStack,
   HStack,
   Text,
-  Separator,
   Badge,
-  Box
 } from "@chakra-ui/react";
 import { useProfile } from "../../hooks/useProfile";
 import { getFullName } from "../../utils/profile";
@@ -39,17 +37,6 @@ const ProfileCard = () => {
           <HStack gap={2} justify="center" wrap="wrap">
             <Badge colorPalette="blue">Member</Badge>
           </HStack>
-
-          <Separator />
-
-          <Box>
-            <Text fontSize="sm" fontWeight="semibold" mb={1}>
-              About
-            </Text>
-            <Text fontSize="sm" color="fg.muted">
-              No bio yet.
-            </Text>
-          </Box>
         </VStack>
       </RouterLink>
     </Card.Root>
