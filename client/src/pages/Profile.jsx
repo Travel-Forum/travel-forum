@@ -15,8 +15,8 @@ import { LuPencil } from "react-icons/lu";
 import { useProfile } from "../hooks/useProfile";
 import { getFullName } from "../utils/profile";
 import ProfileEditForm from "../components/profile/ProfileEditForm";
-import UserAvatar from "../components/profile/UserAvatar";
-import { updateProfile } from "../services/profileService";
+import AvatarUpload from "../components/profile/AvatarUpload.jsx";
+import { updateProfile, uploadAvatar  } from "../services/profileService";
 import { showSuccess, showError } from "../utils/toast.js";
 
 const Profile = () => {
@@ -34,14 +34,25 @@ const Profile = () => {
 
   const handleEdit = () => {
     setIsEditing(true);
-  }
+  };
 
   const handleCancel = () => {
-    setIsEditing(false)
-  }
+    setIsEditing(false);
+  };
+
+  const handleFileSelected = async (file) => {
+    const { error } = await uploadAvatar(profile.id, file);
+
+    if (error) {
+      showError("Cannot update your avatar", error.message);
+      return;
+    }
+
+    await refreshProfile();
+    showSuccess("Your avatar was updated successfully.");
+  };
 
   const handleSubmit = async ({ firstName, lastName, email, phone }) => {
-    
     const { error } = await updateProfile(profile.id, {
       firstName,
       lastName,
@@ -55,29 +66,19 @@ const Profile = () => {
     }
 
     await refreshProfile();
-    showSuccess("Profile updated", "Your profile information was updated successfully.");
+    showSuccess(
+      "Profile updated",
+      "Your profile information was updated successfully.",
+    );
     setIsEditing(false);
   };
-
 
   return (
     <Box maxW="700px" mx="auto" mt={10} mb={10} px={4}>
       <Card.Root p={{ base: 5, md: 8 }}>
         <VStack gap={6} align="stretch">
           <VStack gap={3}>
-            <Box position="relative">
-              <UserAvatar size="2xl" />
-              <IconButton
-                aria-label="Edit avatar"
-                size="xs"
-                borderRadius="full"
-                position="absolute"
-                bottom="0"
-                right="0"
-              >
-                <LuPencil size={12} />
-              </IconButton>
-            </Box>
+            <AvatarUpload onFileSelected={handleFileSelected} />
 
             <VStack gap={0}>
               <Text fontSize="2xl" fontWeight="bold">
@@ -97,7 +98,8 @@ const Profile = () => {
 
           <VStack gap={4} align="stretch">
             <Text fontSize="lg" fontWeight="semibold">
-              Personal Information <IconButton
+              Personal Information{" "}
+              <IconButton
                 aria-label="Edit profile information"
                 size="xs"
                 onClick={handleEdit}
@@ -106,9 +108,12 @@ const Profile = () => {
               </IconButton>
             </Text>
 
-
             {isEditing ? (
-              <ProfileEditForm profile={profile} onCancel={handleCancel} onSubmit={handleSubmit} />
+              <ProfileEditForm
+                profile={profile}
+                onCancel={handleCancel}
+                onSubmit={handleSubmit}
+              />
             ) : (
               <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={5}>
                 {fields.map(({ label, value }) => (

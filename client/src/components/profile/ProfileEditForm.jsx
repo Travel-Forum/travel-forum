@@ -43,7 +43,7 @@ const ProfileEditForm = ({ profile, onSubmit, onCancel }) => {
             </FormField>
 
             <FormField label="Email" error={errors.email}>
-              <Input type="email" {...register("email")} />
+              <Input type="email" readOnly {...register("email")} />
             </FormField>
 
             <FormField label="Phone" error={errors.phone}>
