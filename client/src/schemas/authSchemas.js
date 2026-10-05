@@ -63,7 +63,5 @@ export const profileEditSchema = z.object({
     .min(4, "At least 4 symbols")
     .max(32, "Maximum of 32 characters"),
 
-  email: emailSchema,
-
   phone: phoneSchema,
 })

@@ -20,7 +20,6 @@ const ProfileEditForm = ({ profile, onSubmit, onCancel }) => {
     defaultValues: {
       firstName: profile?.first_name ?? "",
       lastName: profile?.last_name ?? "",
-      email: profile?.email ?? "",
       phone: profile?.phone ?? "",
     },
   });
@@ -39,11 +38,11 @@ const ProfileEditForm = ({ profile, onSubmit, onCancel }) => {
             </FormField>
 
             <FormField label="Username">
-              <Text>{profile?.username || "—"}</Text>
+              <Text>{profile?.username || "-"}</Text>
             </FormField>
 
-            <FormField label="Email" error={errors.email}>
-              <Input type="email" readOnly {...register("email")} />
+            <FormField label="Email">
+              <Text>{profile?.email || "-"}</Text>
             </FormField>
 
             <FormField label="Phone" error={errors.phone}>
