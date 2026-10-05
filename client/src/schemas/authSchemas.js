@@ -51,3 +51,19 @@ export const completeProfileSchema = z.object({
 
   phone: phoneSchema,
 })
+
+export const profileEditSchema = z.object({
+  firstName: z.string()
+    .min(1, "First name is required")
+    .min(4, "At least 4 symbols")
+    .max(32, "Maximum of 32 characters"),
+
+  lastName: z.string()
+    .min(1, "Last name is required")
+    .min(4, "At least 4 symbols")
+    .max(32, "Maximum of 32 characters"),
+
+  email: emailSchema,
+
+  phone: phoneSchema,
+})

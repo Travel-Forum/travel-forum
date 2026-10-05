@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Card,
@@ -8,36 +9,18 @@ import {
   IconButton,
   Grid,
   GridItem,
-  Badge
+  Badge,
 } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
 import { useProfile } from "../hooks/useProfile";
 import { getFullName } from "../utils/profile";
+import ProfileEditForm from "../components/profile/ProfileEditForm";
 import UserAvatar from "../components/profile/UserAvatar";
-
-const InfoField = ({ label, value, onEdit }) => (
-  <Box>
-    <HStack justify="space-between" align="center">
-      <Box>
-        <Text fontSize="sm" color="fg.muted">
-          {label}
-        </Text>
-        <Text fontSize="md">{value || "—"}</Text>
-      </Box>
-      <IconButton
-        aria-label={`Edit ${label}`}
-        variant="ghost"
-        size="sm"
-        onClick={onEdit}
-      >
-        <LuPencil size={14} />
-      </IconButton>
-    </HStack>
-  </Box>
-);
+import { updateProfile } from "../services/profileService";
+import { showSuccess, showError } from "../utils/toast.js";
 
 const Profile = () => {
-  const { profile } = useProfile();
+  const { profile, refreshProfile } = useProfile();
 
   const fields = [
     { label: "First Name", value: profile.first_name },
@@ -46,6 +29,36 @@ const Profile = () => {
     { label: "Email", value: profile.email },
     { label: "Phone", value: profile.phone },
   ];
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  }
+
+  const handleCancel = () => {
+    setIsEditing(false)
+  }
+
+  const handleSubmit = async ({ firstName, lastName, email, phone }) => {
+    
+    const { error } = await updateProfile(profile.id, {
+      firstName,
+      lastName,
+      email,
+      phone,
+    });
+
+    if (error) {
+      showError("Cannot update profile information", error.message);
+      return;
+    }
+
+    await refreshProfile();
+    showSuccess("Profile updated", "Your profile information was updated successfully.");
+    setIsEditing(false);
+  };
+
 
   return (
     <Box maxW="700px" mx="auto" mt={10} mb={10} px={4}>
@@ -84,16 +97,27 @@ const Profile = () => {
 
           <VStack gap={4} align="stretch">
             <Text fontSize="lg" fontWeight="semibold">
-              Personal Information
+              Personal Information <IconButton
+                aria-label="Edit profile information"
+                size="xs"
+                onClick={handleEdit}
+              >
+                <LuPencil size={12} />
+              </IconButton>
             </Text>
 
-            <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={5}>
-              {fields.map(({ label, value }) => (
-                <GridItem key={label}>
-                  <InfoField label={label} value={value} onEdit={() => {}} />
-                </GridItem>
-              ))}
-            </Grid>
+
+            {isEditing ? (
+              <ProfileEditForm profile={profile} onCancel={handleCancel} onSubmit={handleSubmit} />
+            ) : (
+              <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={5}>
+                {fields.map(({ label, value }) => (
+                  <GridItem key={label}>
+                    {label}: {value}
+                  </GridItem>
+                ))}
+              </Grid>
+            )}
           </VStack>
         </VStack>
       </Card.Root>
