@@ -10,7 +10,7 @@ const UserAvatar = ({ size = "md" }) => {
   return (
     <Avatar.Root size={size}>
       <Avatar.Fallback name={getFullName(profile) || user?.email} />
-      <Avatar.Image src={user?.user_metadata?.avatar_url} />
+      <Avatar.Image src={profile?.avatar_url} />
     </Avatar.Root>
   );
 };

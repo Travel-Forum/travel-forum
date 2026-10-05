@@ -183,7 +183,6 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `last_name` | text | 4–32 characters |
 | `email` | text | unique, valid email format |
 | `phone` | text | required |
-| `about` | text | optional |
 | `avatar_url` | text | optional |
 | `is_admin` | boolean | default `false` |
 | `is_blocked` | boolean | default `false` |
@@ -241,6 +240,7 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 - `posts_with_comment_count` — view used by the home page lists; respects RLS
 - `get_public_stats()` — returns the total number of posts and users for the home page
 - `post-media` — private Storage bucket, 50 MB per file, JPEG / PNG / WebP / GIF / MP4 / WebM
+- `avatars` — public Storage bucket for profile photos, 10 MB per file, JPEG / PNG / WebP; users may upload, update and delete only files in their own `{userId}/` folder
 - Notification triggers — a like notifies the post author (removed again on unlike), a comment notifies the post author, a reply notifies the author of the parent comment; nobody is notified about their own actions
 - `notifications` is published to Supabase Realtime, so new notifications reach the browser without a refresh
 
@@ -254,5 +254,6 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `004_rls_policies.sql` | Row Level Security policies |
 | `005_storage.sql` | `post-media` bucket and its access policies |
 | `006_notifications.sql` | `notifications` table, its RLS policies, triggers and Realtime publication |
+| `007_avatars_storage.sql` | `avatars` bucket and its access policies |
 
-The scripts build the database from an empty Supabase project; don't run them on a database that already has these tables. Every later change goes into a new numbered file (`007_...sql`) in the same pull request as the code that needs it.
+Run `001`–`006` in order on an empty Supabase project. Migration `007_avatars_storage.sql` is safe to run against the existing project because it creates or updates the `avatars` bucket and adds its policies only when they do not already exist. Every later change goes into a new numbered file (`008_...sql`, etc.) in the same pull request as the code that needs it.
