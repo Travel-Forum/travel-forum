@@ -1,8 +1,6 @@
 import { supabase } from "../config/supabaseClient";
 import { toFriendlyError } from "../utils/errors";
 
-// parentCommentId is null for a comment on the post itself,
-// or the id of the comment this one replies to.
 export const createComment = async ({
   postId,
   authorId,
@@ -23,8 +21,6 @@ export const createComment = async ({
   return {};
 };
 
-// RLS silently skips rows the user doesn't own, so we ask for the affected
-// rows back and treat "nothing changed" as a permission error.
 const NOT_OWNER_ERROR = { message: "You can only change your own comments." };
 
 export const updateComment = async ({ commentId, content }) => {
@@ -42,7 +38,6 @@ export const updateComment = async ({ commentId, content }) => {
   return {};
 };
 
-// Replies to this comment are deleted too (ON DELETE CASCADE in the database).
 export const deleteComment = async (commentId) => {
   const { data, error } = await supabase
     .from("comments")
