@@ -4,6 +4,7 @@ import PostAuthor from "./PostAuthor";
 import PostCommentList from "./PostCommentList";
 import CommentForm from "./CommentForm";
 import LikeButton from "./LikeButton";
+import PostActionsMenu from "./PostActionsMenu";
 import ExpandableText from "../ui/ExpandableText";
 
 const PostDetailsPanel = ({
@@ -16,13 +17,26 @@ const PostDetailsPanel = ({
   onReplyComment,
   onEditComment,
   onDeleteComment,
+  onEditPost,
+  onDeletePost,
 }) => {
   const comments = post.comments ?? [];
+  const canManagePost =
+    post.author?.id === currentUserId && onEditPost && onDeletePost;
 
   return (
     <Card.Root maxH={{ lg: "65vh" }} overflow="hidden">
       <Card.Header>
-        <PostAuthor author={post.author} date={post.created_at} />
+        <HStack justify="space-between" align="start">
+          <PostAuthor author={post.author} date={post.created_at} />
+          {canManagePost && (
+            <PostActionsMenu
+              portalled={false}
+              onEdit={() => onEditPost(post)}
+              onDelete={() => onDeletePost(post)}
+            />
+          )}
+        </HStack>
       </Card.Header>
 
       <Card.Body overflowY="auto" gap={4}>

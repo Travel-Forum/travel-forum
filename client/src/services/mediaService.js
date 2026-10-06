@@ -1,4 +1,5 @@
 import { supabase } from "../config/supabaseClient";
+import { toFriendlyError } from "../utils/errors";
 
 const BUCKET = "post-media";
 const SIGNED_URL_TTL_SECONDS = 60 * 60;
@@ -52,8 +53,6 @@ export const uploadPostMedia = async ({ userId, postId, files }) => {
   return { data: uploadedPaths };
 };
 
-// The bucket is private, so files are read through short-lived signed URLs.
-// Returns { data: { [storagePath]: signedUrl } }.
 export const getSignedMediaUrls = async (paths) => {
   if (paths.length === 0) return { data: {} };
 
@@ -72,4 +71,25 @@ export const getSignedMediaUrls = async (paths) => {
       .map((item) => [item.path, item.signedUrl]),
   );
   return { data: urlsByPath };
+};
+
+
+export const deletePostMedia = async (postId) => {
+
+  const { data, error } = await supabase
+    .from("post_media")
+    .select("storage_path")
+    .eq("post_id", postId);
+
+  if (error) {
+    console.error("Cannot delete a post", error.message);
+    return { error: toFriendlyError(error) };
+  };
+
+  const paths = data.map((media) => media.storage_path);
+
+  await removeUploadedFiles(paths);
+
+  return {};
+
 };

@@ -15,6 +15,8 @@ const PostDetailsModal = ({
   onReplyComment,
   onEditComment,
   onDeleteComment,
+  onEditPost,
+  onDeletePost,
 }) => {
   const hasMedia = post?.media?.length > 0;
 
@@ -52,6 +54,8 @@ const PostDetailsModal = ({
                     onReplyComment={onReplyComment}
                     onEditComment={onEditComment}
                     onDeleteComment={onDeleteComment}
+                    onEditPost={onEditPost}
+                    onDeletePost={onDeletePost}
                   />
                 </Grid>
               )}
