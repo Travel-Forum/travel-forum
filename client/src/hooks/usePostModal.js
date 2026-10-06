@@ -36,5 +36,13 @@ export const usePostModal = ({ userId, onCommentsChange }) => {
     onDeleteComment: removeComment,
   };
 
-  return { openPost, modalProps, isLiked, getLikeCount, toggleLike };
+  return {
+    openPost,
+    closePost,
+    reloadPost,
+    modalProps,
+    isLiked,
+    getLikeCount,
+    toggleLike,
+  };
 };

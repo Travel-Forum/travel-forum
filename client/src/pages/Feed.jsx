@@ -3,6 +3,7 @@ import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../hooks/useAuth";
 import { usePostModal } from "../hooks/usePostModal";
+import { usePostActions } from "../hooks/usePostActions";
 import { createPost, deletePost, getFeedPosts } from "../services/postsService";
 import { uploadPostMedia } from "../services/mediaService";
 import { showError, showSuccess } from "../utils/toast";
@@ -14,6 +15,7 @@ import CreatePostModal from "../components/posts/CreatePostModal";
 import ChatBotWidget from "../components/chatbot/ChatBotWidget";
 import FeedPostCard from "../components/posts/FeedPostCard";
 import PostDetailsModal from "../components/posts/PostDetailsModal";
+import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 
 const Feed = () => {
   const { user } = useAuth();
@@ -22,10 +24,34 @@ const Feed = () => {
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const { openPost, modalProps, isLiked, getLikeCount, toggleLike } = usePostModal({
+  const refreshFeed = () => setRefreshKey((previous) => previous + 1);
+
+  const {
+    openPost,
+    closePost,
+    reloadPost,
+    modalProps,
+    isLiked,
+    getLikeCount,
+    toggleLike,
+  } = usePostModal({
     userId: user?.id,
-    onCommentsChange: () => setRefreshKey((previous) => previous + 1),
+    onCommentsChange: refreshFeed,
   });
+
+  const isOpenInDetails = (postId) => modalProps.post?.id === postId;
+
+  const { startEdit, startDelete, editModalProps, deleteDialogProps } =
+    usePostActions({
+      onUpdated: (postId) => {
+        refreshFeed();
+        if (isOpenInDetails(postId)) reloadPost();
+      },
+      onDeleted: (postId) => {
+        refreshFeed();
+        if (isOpenInDetails(postId)) closePost();
+      },
+    });
 
   useEffect(() => {
     let ignore = false;
@@ -73,7 +99,7 @@ const Feed = () => {
 
     showSuccess("Post created", "Your post is now live.");
     setIsCreateOpen(false);
-    setRefreshKey((previous) => previous + 1)
+    refreshFeed();
   };
 
   return (
@@ -100,7 +126,13 @@ const Feed = () => {
             onSubmit={handleCreatePost}
           />
 
-          <PostDetailsModal {...modalProps} />
+          <PostDetailsModal
+            {...modalProps}
+            onEditPost={startEdit}
+            onDeletePost={startDelete}
+          />
+          <CreatePostModal {...editModalProps} />
+          <ConfirmDialog {...deleteDialogProps} />
 
           {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
 
@@ -121,6 +153,9 @@ const Feed = () => {
                 liked={isLiked(post.id)}
                 likeCount={likeCount}
                 onToggleLike={() => toggleLike(post.id, likeCount)}
+                currentUserId={user?.id}
+                onEdit={startEdit}
+                onDelete={startDelete}
               />
             );
           })}

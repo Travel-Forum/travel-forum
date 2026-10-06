@@ -40,7 +40,18 @@ const visibilityOptions = createListCollection({
   ],
 });
 
-const CreatePostModal = ({ open, onClose, onSubmit }) => {
+const toFormValues = (post) => ({
+  title: post?.title ?? "",
+  content: post?.content ?? "",
+  visibility: post?.visibility ?? "public",
+  media: [],
+});
+
+// Creates a new post, or edits `post` when one is passed.
+// Editing changes title, content and visibility; attached media stays as it is.
+const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
+  const isEditing = post !== null;
+
   const {
     register,
     handleSubmit,
@@ -50,7 +61,7 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
     setValue,
   } = useForm({
     resolver: zodResolver(createPostSchema),
-    defaultValues: { title: "", content: "", visibility: "public", media: [] },
+    defaultValues: toFormValues(post),
   });
 
   const [isDiscardOpen, setIsDiscardOpen] = useState(false);
@@ -64,9 +75,10 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
   const contentRef = useRef(null);
   const { ref: registerContentRef, ...contentField } = register("content");
 
+  // Start from the post being edited when opening, and from an empty form after closing.
   useEffect(() => {
-    if (!open) reset();
-  }, [open, reset]);
+    reset(toFormValues(open ? post : null));
+  }, [open, post, reset]);
 
   const requestClose = () => {
     if (isDirty) {
@@ -121,7 +133,9 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
             <Dialog.Content>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Dialog.Header>
-                  <Dialog.Title>Create a post</Dialog.Title>
+                  <Dialog.Title>
+                    {isEditing ? "Edit post" : "Create a post"}
+                  </Dialog.Title>
                 </Dialog.Header>
 
                 <Dialog.Body>
@@ -163,10 +177,12 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                       />
                     </FormField>
 
-                    <PostMediaPreview
-                      mediaFiles={media}
-                      onRemove={handleRemoveFile}
-                    />
+                    {!isEditing && (
+                      <PostMediaPreview
+                        mediaFiles={media}
+                        onRemove={handleRemoveFile}
+                      />
+                    )}
 
                     <FormField label="Visibility" error={errors.visibility}>
                       <Controller
@@ -211,7 +227,9 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                 <Dialog.Footer justifyContent="space-between">
                   <HStack gap="1">
 
-                    <PostMediaPicker onFilesSelected={handleFilesSelected} />
+                    {!isEditing && (
+                      <PostMediaPicker onFilesSelected={handleFilesSelected} />
+                    )}
 
                     <Popover.Root
                       positioning={{ placement: "top-start" }}
@@ -250,7 +268,7 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
                       Cancel
                     </Button>
                     <Button type="submit" loading={isSubmitting}>
-                      Post
+                      {isEditing ? "Save" : "Post"}
                     </Button>
                   </HStack>
                 </Dialog.Footer>
@@ -266,8 +284,12 @@ const CreatePostModal = ({ open, onClose, onSubmit }) => {
 
       <ConfirmDialog
         open={isDiscardOpen}
-        title="Discard this post?"
-        description="Your draft will be lost. This can't be undone."
+        title={isEditing ? "Discard your changes?" : "Discard this post?"}
+        description={
+          isEditing
+            ? "Your edits will be lost. The post stays as it was."
+            : "Your draft will be lost. This can't be undone."
+        }
         confirmLabel="Discard"
         cancelLabel="Keep editing"
         onConfirm={handleDiscard}
