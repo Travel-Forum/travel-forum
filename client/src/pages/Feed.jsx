@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../hooks/useAuth";
@@ -8,6 +9,7 @@ import { createPost, deletePost, getFeedPosts } from "../services/postsService";
 import { uploadPostMedia } from "../services/mediaService";
 import { showError, showSuccess } from "../utils/toast";
 import { getPostLikeCount } from "../utils/post";
+import { matchesSearch } from "../utils/postFilters";
 
 import ProfileCard from "../components/profile/ProfileCard";
 import CreatePostTrigger from "../components/posts/CreatePostTrigger";
@@ -23,6 +25,9 @@ const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
+  const visiblePosts = posts.filter((post) => matchesSearch(post, query));
 
   const refreshFeed = () => setRefreshKey((previous) => previous + 1);
 
@@ -142,7 +147,7 @@ const Feed = () => {
             </Text>
           )}
 
-          {posts.map((post) => {
+          {visiblePosts.map((post) => {
             const likeCount = getLikeCount(post.id, getPostLikeCount(post));
 
             return (
