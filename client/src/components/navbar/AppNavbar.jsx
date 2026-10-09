@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Flex, Box, Input, HStack, IconButton, Image } from "@chakra-ui/react";
 import { LuHouse, LuMapPin, LuBell } from "react-icons/lu";
 import logo from "../../assets/icons/forum-logo.svg";
@@ -14,8 +14,18 @@ const NAV_ITEMS = [
 ];
 const AppNavbar = () => {
   const { unreadCount } = useNotifications();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
+  const [searchText, setSearchText] = useState(query ?? "");
+  const navigate = useNavigate();
 
-  const [searchText, setSearchText] = useState("");
+  const handleSearchChange = (event) => {
+
+    const text = event.target.value;
+
+    setSearchText(text);
+    navigate(`/feed?q=${encodeURIComponent(text)}`, { replace: true });
+  }
 
   return (
     <Flex
@@ -40,7 +50,7 @@ const AppNavbar = () => {
           borderRadius="full"
           placeholder="Search"
           value={searchText}
-          onChange={(event) => setSearchText(event.target.value)}
+          onChange={handleSearchChange}
         />
       </Box>
 

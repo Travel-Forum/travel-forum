@@ -147,6 +147,12 @@ const Feed = () => {
             </Text>
           )}
 
+          {!loading && posts.length > 0 && visiblePosts.length === 0 && (
+            <Text color="fg.muted" textAlign="center" mt={4}>
+              No posts match "{query}"
+            </Text>
+          )}
+
           {visiblePosts.map((post) => {
             const likeCount = getLikeCount(post.id, getPostLikeCount(post));
 
