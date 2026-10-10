@@ -1,4 +1,5 @@
-import { NavLink, Link } from "react-router-dom";
+import { useState } from "react";
+import { NavLink, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Flex, Box, Input, HStack, IconButton, Image } from "@chakra-ui/react";
 import { LuHouse, LuMapPin, LuBell } from "react-icons/lu";
 import logo from "../../assets/icons/forum-logo.svg";
@@ -13,6 +14,18 @@ const NAV_ITEMS = [
 ];
 const AppNavbar = () => {
   const { unreadCount } = useNotifications();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
+  const [searchText, setSearchText] = useState(query ?? "");
+  const navigate = useNavigate();
+
+  const handleSearchChange = (event) => {
+
+    const text = event.target.value;
+
+    setSearchText(text);
+    navigate(`/feed?q=${encodeURIComponent(text)}`, { replace: true });
+  }
 
   return (
     <Flex
@@ -33,7 +46,12 @@ const AppNavbar = () => {
       </Link>
 
       <Box flex="1" maxW="400px">
-        <Input borderRadius="full" placeholder="Search" />
+        <Input
+          borderRadius="full"
+          placeholder="Search"
+          value={searchText}
+          onChange={handleSearchChange}
+        />
       </Box>
 
       <HStack gap={2}>
@@ -48,7 +66,9 @@ const AppNavbar = () => {
           >
             <NavLink to={to} aria-label={label}>
               <Icon />
-              {to === "/notifications" && <NotificationBadge count={unreadCount} />}
+              {to === "/notifications" && (
+                <NotificationBadge count={unreadCount} />
+              )}
             </NavLink>
           </IconButton>
         ))}

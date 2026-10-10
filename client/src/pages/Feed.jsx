@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../hooks/useAuth";
@@ -8,6 +9,7 @@ import { createPost, deletePost, getFeedPosts } from "../services/postsService";
 import { uploadPostMedia } from "../services/mediaService";
 import { showError, showSuccess } from "../utils/toast";
 import { getPostLikeCount } from "../utils/post";
+import { matchesSearch, sortPosts } from "../utils/postFilters";
 
 import ProfileCard from "../components/profile/ProfileCard";
 import CreatePostTrigger from "../components/posts/CreatePostTrigger";
@@ -16,6 +18,7 @@ import ChatBotWidget from "../components/chatbot/ChatBotWidget";
 import FeedPostCard from "../components/posts/FeedPostCard";
 import PostDetailsModal from "../components/posts/PostDetailsModal";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
+import PostSortButtons from "../components/posts/PostSortButtons";
 
 const Feed = () => {
   const { user } = useAuth();
@@ -23,6 +26,24 @@ const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("q");
+  const sort = searchParams.get("sort") ?? "newest";
+  const visiblePosts = sortPosts(
+    posts.filter((post) => matchesSearch(post, query)),
+    sort,
+  );
+
+  const handleSortChange = (nextSort) => {
+    setSearchParams(
+      (params) => {
+        params.set("sort", nextSort);
+        return params;
+      },
+      { replace: true },
+    );
+  };
+
 
   const refreshFeed = () => setRefreshKey((previous) => previous + 1);
 
@@ -120,6 +141,8 @@ const Feed = () => {
       <GridItem overflowY="auto">
         <VStack gap={4} align="stretch">
           <CreatePostTrigger onOpenModal={() => setIsCreateOpen(true)} />
+          <PostSortButtons value={sort} onChange={handleSortChange} />
+
           <CreatePostModal
             open={isCreateOpen}
             onClose={() => setIsCreateOpen(false)}
@@ -142,7 +165,13 @@ const Feed = () => {
             </Text>
           )}
 
-          {posts.map((post) => {
+          {!loading && posts.length > 0 && visiblePosts.length === 0 && (
+            <Text color="fg.muted" textAlign="center" mt={4}>
+              No posts match "{query}"
+            </Text>
+          )}
+
+          {visiblePosts.map((post) => {
             const likeCount = getLikeCount(post.id, getPostLikeCount(post));
 
             return (
