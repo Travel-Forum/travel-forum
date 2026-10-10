@@ -124,8 +124,9 @@ const Feed = () => {
   };
 
   return (
-    <Grid
+     <Grid
       templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
+      templateRows={{ lg: "minmax(0, 1fr)" }}
       gap={6}
       maxW="1200px"
       w="full"
