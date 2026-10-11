@@ -14,12 +14,18 @@ import Feed from "./pages/Feed";
 import Locations from "./pages/Locations";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
+import InfoPage from "./pages/InfoPage";
+import { INFO_PAGES } from "./content/infoPages";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
+
+      {INFO_PAGES.map((page) => (
+        <Route key={page.key} path={page.path} element={<InfoPage page={page} />} />
+      ))}
 
       <Route element={<GuestRoute />}>
         <Route path="/signup" element={<SignUp />} />
