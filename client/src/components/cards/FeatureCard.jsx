@@ -1,5 +1,6 @@
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import IconBox from "../ui/IconBox";
+import { cardHoverStyles } from "../../config/theme";
 
 const FeatureCard = ({ icon, title, description }) => {
   return (
@@ -11,6 +12,7 @@ const FeatureCard = ({ icon, title, description }) => {
       borderWidth="1px"
       borderColor="border.muted"
       borderRadius="lg"
+      {...cardHoverStyles}
     >
       <IconBox>{icon}</IconBox>
       <Heading as="h3" size="md">

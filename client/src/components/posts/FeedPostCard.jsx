@@ -1,9 +1,10 @@
-import { Card, HStack, Text, IconButton, Separator } from "@chakra-ui/react"
+import { Card, HStack, Heading, Text, IconButton, Separator } from "@chakra-ui/react"
 import { LuMessageCircle, LuShare2 } from "react-icons/lu"
 import PostMediaGallery from "./PostMediaGallery"
 import PostAuthor from "./PostAuthor"
 import LikeButton from "./LikeButton"
 import PostActionsMenu from "./PostActionsMenu"
+import { cardHoverStyles } from "../../config/theme"
 
 const FeedPostCard = ({
   post,
@@ -23,7 +24,7 @@ const FeedPostCard = ({
   }
 
   return (
-    <Card.Root>
+    <Card.Root {...cardHoverStyles}>
       <Card.Header>
         <HStack justify="space-between" align="start">
           <PostAuthor author={post.author} date={post.created_at} />
@@ -37,7 +38,7 @@ const FeedPostCard = ({
       </Card.Header>
 
       <Card.Body cursor="pointer" role="button" tabIndex={0} onClick={openPost} onKeyDown={handleKeyDown}>
-        <Text fontSize="lg" fontWeight="semibold" mb={2}>{post.title}</Text>
+        <Heading as="h3" size="lg" mb={2}>{post.title}</Heading>
         <Text whiteSpace="pre-wrap">{post.content}</Text>
         <PostMediaGallery media={post.media} title={post.title} />
       </Card.Body>

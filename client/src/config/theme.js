@@ -81,3 +81,8 @@ const config = defineConfig({
 });
 
 export const system = createSystem(defaultConfig, config);
+export const cardHoverStyles = {
+  boxShadow: "sm",
+  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+  _hover: { transform: "translateY(-4px)", boxShadow: "lg" },
+};
