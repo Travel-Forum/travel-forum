@@ -8,6 +8,8 @@ import {
   Link,
 } from "@chakra-ui/react";
 import forumLogo from "../../assets/icons/forum-logo.svg";
+import { Link as RouterLink } from "react-router-dom";
+import { INFO_PAGES } from "../../content/infoPages";
 
 const WAVE_PATH =
   "M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z";
@@ -36,11 +38,12 @@ const Footer = () => {
               </Text>
             </HStack>
 
-            <HStack gap={6} fontSize="sm" color="fg.muted">
-              <Link href="#">About</Link>
-              <Link href="#">Community Guidelines</Link>
-              <Link href="#">Privacy</Link>
-              <Link href="#">Terms</Link>
+            <HStack gap={6} fontSize="sm" color="fg.muted" wrap="wrap">
+              {INFO_PAGES.map((page) => (
+                <Link key={page.key} asChild>
+                  <RouterLink to={page.path}>{page.label}</RouterLink>
+                </Link>
+              ))}
             </HStack>
           </Flex>
 
