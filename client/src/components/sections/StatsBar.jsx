@@ -3,13 +3,16 @@ import { Box, Flex, Heading, Text, HStack } from "@chakra-ui/react";
 import { LuFileText, LuUsers } from "react-icons/lu";
 import { getPublicStats } from "../../services/statsService";
 import IconBox from "../ui/IconBox";
+import CountUp from "../ui/CountUp";
 
 const StatItem = ({ icon, value, label }) => {
   return (
     <HStack gap={4} flex="1" justify="center" py={4}>
       <IconBox>{icon}</IconBox>
       <Box>
-        <Heading size="lg">{value ?? "—"}</Heading>
+        <Heading size="lg">
+          {value === null ? "—" : <CountUp value={value} />}
+        </Heading>
         <Text color="fg.muted" fontSize="sm">
           {label}
         </Text>
