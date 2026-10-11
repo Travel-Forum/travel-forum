@@ -23,9 +23,7 @@ const Home = () => {
           <Reveal>
             <PostsCarousel />
           </Reveal>
-          <Reveal>
-            <KeyFeatures />
-          </Reveal>
+          <KeyFeatures />
           <Reveal>
             <JoinCta />
           </Reveal>

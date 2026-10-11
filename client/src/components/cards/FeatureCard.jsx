@@ -8,6 +8,7 @@ const FeatureCard = ({ icon, title, description }) => {
       align="start"
       gap={3}
       p={6}
+      h="full"
       bg="bg.panel"
       borderWidth="1px"
       borderColor="border.muted"
