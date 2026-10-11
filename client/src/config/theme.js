@@ -70,6 +70,7 @@ const config = defineConfig({
           DEFAULT: { value: { _light: "{colors.sand.50}", _dark: "#0E1A1F" } },
           subtle: { value: { _light: "{colors.sand.100}", _dark: "#15252B" } },
           muted: { value: { _light: "{colors.sand.200}", _dark: "#1D3239" } },
+          panel: { value: { _light: "white", _dark: "#132329" } },
         },
         fg: {
           DEFAULT: { value: { _light: "#1E2A32", _dark: "#F3EDE4" } },
