@@ -6,19 +6,29 @@ import JoinCta from "../components/sections/JoinCta";
 import Footer from "../components/sections/Footer";
 import StatsBar from "../components/sections/StatsBar";
 import PostsCarousel from "../components/sections/PostsCarousel";
+import { MotionConfig } from "motion/react";
+import Reveal from "../components/ui/Reveal";
 
 const Home = () => {
   return (
-    <Box minH="100vh" colorPalette="blue">
+    <Box minH="100vh">
       <PublicNavbar />
 
-      <Container maxW="6xl" py={8}>
-        <Hero />
-        <StatsBar />
-        <PostsCarousel />
-        <KeyFeatures />
-        <JoinCta />
-      </Container>
+      <MotionConfig reducedMotion="user">
+        <Container maxW="6xl" py={8}>
+          <Hero />
+          <Reveal>
+            <StatsBar />
+          </Reveal>
+          <Reveal>
+            <PostsCarousel />
+          </Reveal>
+          <KeyFeatures />
+          <Reveal>
+            <JoinCta />
+          </Reveal>
+        </Container>
+      </MotionConfig>
 
       <Footer />
     </Box>

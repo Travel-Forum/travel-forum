@@ -7,6 +7,7 @@ import {
   LuAward,
 } from "react-icons/lu";
 import FeatureCard from "../cards/FeatureCard";
+import Reveal from "../ui/Reveal";
 
 const features = [
   {
@@ -48,13 +49,14 @@ const KeyFeatures = () => {
       </Heading>
 
       <SimpleGrid columns={{ base: 1, sm: 2, lg: 5 }} gap={6}>
-        {features.map((f) => (
-          <FeatureCard
-            key={f.title}
-            icon={f.icon}
-            title={f.title}
-            description={f.description}
-          />
+        {features.map((f, index) => (
+          <Reveal key={f.title} delay={index * 0.1}>
+            <FeatureCard
+              icon={f.icon}
+              title={f.title}
+              description={f.description}
+            />
+          </Reveal>
         ))}
       </SimpleGrid>
     </Box>

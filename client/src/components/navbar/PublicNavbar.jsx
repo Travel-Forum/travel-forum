@@ -1,6 +1,7 @@
 import { Flex, HStack, Image, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import forumLogo from '../../assets/icons/forum-logo.svg';
+import { ColorModeButton } from '../ui/ColorMode';
 
 const PublicNavbar = () => {
     return (
@@ -17,11 +18,12 @@ const PublicNavbar = () => {
             </Link>
 
             <HStack gap={2}>
+                <ColorModeButton />
                 <Link to="/signin">
                 <Button variant="ghost">Sign in</Button>
                 </Link>
                 <Link to="/signup">
-                <Button colorPalette="blue">Sign up</Button>
+                <Button colorPalette="coral">Sign up</Button>
                 </Link>
             </HStack>
         </Flex>

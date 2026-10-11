@@ -1,5 +1,6 @@
 import { Box, Image, Heading, Text, HStack } from "@chakra-ui/react";
 import { LuMessageSquare } from "react-icons/lu";
+import { cardHoverStyles } from "../../config/theme";
 
 const PostPreviewCard = ({ post }) => {
   return (
@@ -9,6 +10,7 @@ const PostPreviewCard = ({ post }) => {
       borderRadius="lg"
       overflow="hidden"
       bg="bg.panel"
+      {...cardHoverStyles}
     >
       {post.image_url && (
         <Image

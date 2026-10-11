@@ -35,7 +35,7 @@ const PostDetailsModal = ({
             <Dialog.Body p={{ base: 3, lg: 4 }}>
               {loading || !post ? (
                 <Center minH="300px">
-                  <Spinner color="blue.solid" />
+                  <Spinner color="colorPalette.solid" />
                 </Center>
               ) : (
                 <Grid

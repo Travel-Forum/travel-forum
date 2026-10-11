@@ -13,7 +13,7 @@ const ChatBotWidget = () => {
       <Card.Header p={3}>
         <HStack gap={2} align="center">
           <Box
-            bg="blue.solid"
+            bg="colorPalette.solid"
             borderRadius="full"
             p={2}
             display="flex"
@@ -41,8 +41,8 @@ const ChatBotWidget = () => {
                 </Avatar.Root>
               )}
               <Box
-                bg={msg.sender === "user" ? "blue.solid" : "bg.muted"}
-                color={msg.sender === "user" ? "blue.contrast" : "fg"}
+                bg={msg.sender === "user" ? "colorPalette.solid" : "bg.muted"}
+                color={msg.sender === "user" ? "colorPalette.contrast" : "fg"}
                 px={3}
                 py={2}
                 borderRadius="lg"

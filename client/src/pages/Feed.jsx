@@ -158,7 +158,7 @@ const Feed = () => {
           <CreatePostModal {...editModalProps} />
           <ConfirmDialog {...deleteDialogProps} />
 
-          {loading && <Spinner alignSelf="center" color="blue.solid" mt={4} />}
+          {loading && <Spinner alignSelf="center" color="colorPalette.solid" mt={4} />}
 
           {!loading && posts.length === 0 && (
             <Text color="fg.muted" textAlign="center" mt={4}>

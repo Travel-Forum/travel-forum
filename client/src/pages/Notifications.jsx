@@ -34,7 +34,7 @@ const Notifications = () => {
         </Card.Header>
 
         <Card.Body>
-          {loading && <Spinner alignSelf="center" color="blue.solid" />}
+          {loading && <Spinner alignSelf="center" color="colorPalette.solid" />}
 
           {!loading && notifications.length === 0 && (
             <Text color="fg.muted" textAlign="center">
