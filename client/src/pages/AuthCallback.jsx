@@ -44,7 +44,7 @@ const AuthCallback = () => {
       <Stack gap="4" align="center" py="6">
         {status === "loading" && (
           <>
-            <Spinner size="lg" color="blue.solid" />
+            <Spinner size="lg" color="colorPalette.solid" />
             <Text color="fg.muted">Signing you in...</Text>
           </>
         )}

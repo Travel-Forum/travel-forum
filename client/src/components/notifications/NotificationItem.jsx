@@ -22,7 +22,7 @@ const NotificationItem = ({ notification, onOpen }) => {
             p={3}
             rounded="lg"
             cursor="pointer"
-            bg={isRead ? "transparent" : "blue.subtle"}
+            bg={isRead ? "transparent" : "coral.subtle"}
             _hover={{ bg: "bg.muted" }}
             role="button"
             tabIndex={0}
@@ -51,7 +51,7 @@ const NotificationItem = ({ notification, onOpen }) => {
                 </Text>
             </VStack>
 
-            {!isRead && <Circle size={2} bg="blue.solid" flexShrink={0} />}
+            {!isRead && <Circle size={2} bg="coral.solid" flexShrink={0} />}
         </HStack>
     );
 };

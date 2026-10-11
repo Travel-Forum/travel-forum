@@ -9,7 +9,7 @@ import PostsCarousel from "../components/sections/PostsCarousel";
 
 const Home = () => {
   return (
-    <Box minH="100vh" colorPalette="blue">
+    <Box minH="100vh">
       <PublicNavbar />
 
       <Container maxW="6xl" py={8}>

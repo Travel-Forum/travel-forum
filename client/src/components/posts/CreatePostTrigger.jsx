@@ -22,7 +22,7 @@ const CreatePostTrigger = ({ onOpenModal }) => {
           <LuVideo color="var(--chakra-colors-green-fg)" /> Video
         </Button>
         <Button variant="ghost" onClick={onOpenModal}>
-          <LuImage color="var(--chakra-colors-blue-fg)" /> Photo
+          <LuImage color="var(--chakra-colors-color-palette-fg)" /> Photo
         </Button>
       </HStack>
     </Card.Root>

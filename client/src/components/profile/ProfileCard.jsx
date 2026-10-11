@@ -35,7 +35,7 @@ const ProfileCard = () => {
           </VStack>
 
           <HStack gap={2} justify="center" wrap="wrap">
-            <Badge colorPalette="blue">Member</Badge>
+            <Badge>Member</Badge>
           </HStack>
         </VStack>
       </RouterLink>

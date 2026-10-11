@@ -53,7 +53,7 @@ const SignInForm = ({ onSubmit }) => {
                 error={errors.password}
                 labelAction={
                   <RouterLink to="/forgot-password">
-                    <Text fontSize="sm" color="blue.fg">
+                    <Text fontSize="sm" color="colorPalette.fg">
                       Forgot password?
                     </Text>
                   </RouterLink>

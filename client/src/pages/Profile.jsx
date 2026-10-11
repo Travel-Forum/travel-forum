@@ -89,7 +89,7 @@ const Profile = () => {
             </VStack>
 
             <HStack gap={2}>
-              <Badge colorPalette="blue">Member</Badge>
+              <Badge>Member</Badge>
             </HStack>
           </VStack>
 

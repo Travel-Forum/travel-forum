@@ -21,7 +21,7 @@ const PublicNavbar = () => {
                 <Button variant="ghost">Sign in</Button>
                 </Link>
                 <Link to="/signup">
-                <Button colorPalette="blue">Sign up</Button>
+                <Button colorPalette="coral">Sign up</Button>
                 </Link>
             </HStack>
         </Flex>

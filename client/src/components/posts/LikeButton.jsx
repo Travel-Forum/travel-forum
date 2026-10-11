@@ -8,7 +8,7 @@ const LikeButton = ({ liked, count, onToggle, size = "md" }) => (
       size={size}
       aria-label={liked ? "Unlike" : "Like"}
       aria-pressed={liked}
-      color={liked ? "blue.solid" : undefined}
+      color={liked ? "coral.solid" : undefined}
       onClick={onToggle}
     >
       <LuThumbsUp fill={liked ? "currentColor" : "none"} />
