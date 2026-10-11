@@ -19,10 +19,12 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Lists of the 10 most recent and the 10 most commented posts
 - Sign up with email and password (with email confirmation) or with Google
 - Sign in / sign out
+- About, Community Guidelines, Privacy and Terms pages, linked from the footer
 
 **Private part (signed-in users)**
 - Profile completion after sign-up: first name, last name, username, phone
 - Feed with posts from all users
+- Fixed feed layout on desktop: only the posts scroll, the profile card and the travel assistant stay in place
 - Create a post:
   - title (16–64 characters) and content (32–8192 characters) with live character hints
   - visibility: everyone or only me
@@ -34,6 +36,13 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Comments with nested replies on any post; edit and delete own comments (deleting a comment also removes its replies)
 - Notifications for likes, comments and replies, delivered in real time: unread count on the bell, mark one or all as read, open the post from a notification
 - Profile page (read-only for now)
+
+**Design**
+- Custom Chakra UI theme: ocean teal and coral palette on a warm sand background, Fraunces for headings and DM Sans for text
+- Light and dark mode with a toggle in the navbar
+- Home page with polaroid photos, count-up stats and sections that fade in on scroll
+- Cards lift on hover; the join section is styled as a boarding pass
+- Animations are turned off for users who prefer reduced motion
 
 **Database and security**
 - Row Level Security on every table: private posts are visible only to their author, users can change only their own data
@@ -64,6 +73,8 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 **Done**
 - [x] Comments and replies; edit and delete own comments
 - [x] Likes and real-time notifications
+- [x] Redesign: custom theme, dark mode and home page animations
+- [x] About, Community Guidelines, Privacy and Terms pages
 
 **Quality**
 - [x] Unit tests for React components (Vitest + React Testing Library)
@@ -76,7 +87,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 
 | Layer | Tools |
 |---|---|
-| UI | React 19, Chakra UI v3, React Router 7 |
+| UI | React 19, Chakra UI v3, React Router 7, Motion (animations), Fontsource (self-hosted fonts) |
 | Forms | React Hook Form, Zod |
 | Backend | Supabase: Postgres, Auth, Storage, Realtime |
 | Testing | Vitest, React Testing Library |
@@ -87,7 +98,8 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 
 ```
 client/src/
-├── pages/        route-level screens (Feed, Home, Profile, ...)
+├── pages/        route-level screens (Feed, Home, Profile, InfoPage, ...)
+├── layouts/      shared page layouts (app navbar + content area)
 ├── components/   UI components, grouped by feature (posts, auth, profile, ui, ...)
 ├── services/     all Supabase calls; return { data } or { error }
 ├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes, usePostComments, usePostModal, useNotifications)
@@ -95,7 +107,9 @@ client/src/
 ├── routes/       route guards (signed in, profile completed, guest only)
 ├── schemas/      Zod validation schemas
 ├── utils/        small pure helpers (dates, names, text, errors, toasts)
-├── config/       Supabase client and environment variables
+├── config/       Supabase client, environment variables and the Chakra UI theme
+├── content/      static texts for the info pages (About, Guidelines, Privacy, Terms)
+├── assets/       logo and home page photos
 └── test/         test setup and the renderWithProviders helper
 supabase/
 └── migrations/   SQL scripts for the database
@@ -106,6 +120,8 @@ supabase/
 Tests live next to the file they test (`text.js` → `text.test.js`).
 
 Pages never talk to Supabase directly: they call `services/`, which return `{ data }` or `{ error }` with a user-friendly message.
+
+Colors always come from the theme (`colorPalette.*`, `coral.*`, `bg.*`, `fg.*`), never hard-coded, so every component works in both light and dark mode.
 
 ---
 
