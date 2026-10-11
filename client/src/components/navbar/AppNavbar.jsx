@@ -5,6 +5,7 @@ import { LuMapPin, LuBell } from "react-icons/lu";
 import logo from "../../assets/icons/forum-logo.svg";
 import ProfileMenu from "../profile/ProfileMenu";
 import NotificationBadge from "./NotificationBadge";
+import { ColorModeButton } from "../ui/ColorMode";
 import { useNotifications } from "../../hooks/useNotifications";
 
 const NAV_ITEMS = [
@@ -72,6 +73,7 @@ const AppNavbar = () => {
           </IconButton>
         ))}
 
+        <ColorModeButton />
         <ProfileMenu />
       </HStack>
     </Flex>
