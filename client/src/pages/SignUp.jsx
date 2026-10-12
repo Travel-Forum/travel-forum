@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { signUp } from "../services/authService";
 
-import { showError, showSuccess } from "../utils/toast";
+import { showError } from "../utils/toast";
 import SignUpForm from "../components/auth/SignUpForm";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const handleFormSubmit = async (data) => {
     const result = await signUp(data);
 
@@ -12,10 +15,7 @@ const SignUp = () => {
       return;
     }
 
-    showSuccess(
-      "Check your email",
-      "Open the confirmation link to complete registration.",
-    );
+    navigate("/verify-email", { replace: true, state: { email: data.email } });
   };
 
   return <SignUpForm onSubmit={handleFormSubmit} />;
