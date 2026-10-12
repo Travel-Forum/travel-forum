@@ -29,6 +29,13 @@ const AppNavbar = () => {
     navigate(`/feed?q=${encodeURIComponent(text)}`, { replace: true });
   }
 
+  const scrollToTop = () => {
+    ["feed-scroll", "app-scroll"].forEach((id) => {
+      document.getElementById(id)?.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  };
+
+
   return (
     <Flex
       as="nav"
@@ -43,7 +50,7 @@ const AppNavbar = () => {
       px={{ base: 4, md: 6 }}
       borderBottomWidth="1px"
     >
-      <Link to="/feed">
+      <Link to="/feed" onClick={scrollToTop}>
         <Image src={logo} alt="Travel Forum logo" h="40px" />
       </Link>
 
