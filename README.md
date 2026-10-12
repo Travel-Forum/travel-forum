@@ -2,9 +2,9 @@
 
 ## 🌍 Live demo: [travel-forum-seven.vercel.app](https://travel-forum-seven.vercel.app)
 
-> 🚧 **Status: in development.** Posting, comments, likes and notifications work and are live. Currently being built: editing and deleting posts, search with sort and filter, profile editing, public user profiles and the admin panel. See [Roadmap](#roadmap).
+> 🚧 **Status: in development.** All core features are live: posts with media, comments, likes, real-time notifications, search with sort and filter, profile editing and the admin panel. Next up: public user profiles, voting and reputation. See [Roadmap](#roadmap).
 
-A community forum for travellers: people share trips, tips and questions, comment on each other's posts and vote on the most useful ones.
+A community forum for travellers: people share trips, tips and questions, comment on each other's posts and like the most useful ones.
 
 Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Every merge to `main` is tested and deployed automatically.
 
@@ -17,7 +17,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 **Public part (no account needed)**
 - Home page with the platform's key features and live counters of users and posts
 - Lists of the 10 most recent and the 10 most commented posts
-- Sign up with email and password (with email confirmation) or with Google
+- Sign up with email and password or with Google; after an email sign-up a "Check your email" page replaces the form, so it can't be submitted again by accident
 - Sign in / sign out
 - About, Community Guidelines, Privacy and Terms pages, linked from the footer
 
@@ -25,17 +25,25 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Profile completion after sign-up: first name, last name, username, phone
 - Feed with posts from all users
 - Fixed feed layout on desktop: only the posts scroll, the profile card and the travel assistant stay in place
+- Search posts by a word in the title or content, right from the navbar as you type
+- Sort posts by newest, most liked or most commented; search and sort are kept in the URL (`/feed?q=rila&sort=likes`), so they survive a refresh and can be shared
 - Create a post:
   - title (16–64 characters) and content (32–8192 characters) with live character hints
   - visibility: everyone or only me
   - emoji picker that inserts at the cursor
   - image and video attachments with preview and remove
   - confirmation before discarding an unsaved draft
+- Edit and delete own posts from the feed and from the post details; deleting a post also removes its media from Storage
 - Post details view with media viewer (images and videos), like count and comments
 - Like and unlike posts from the feed and from the post details (updates instantly)
 - Comments with nested replies on any post; edit and delete own comments (deleting a comment also removes its replies)
 - Notifications for likes, comments and replies, delivered in real time: unread count on the bell, mark one or all as read, open the post from a notification
-- Profile page (read-only for now)
+- Profile page: edit first name, last name and phone (username and email stay read-only), upload a profile photo, role badge (Admin or Member)
+
+**Admin panel** (`/admin`, admins only)
+- **Users:** search by username, email or name; block / unblock; give or remove admin rights (an admin can't change their own account)
+- **Posts:** every post, including private ones, with search, sort and delete
+- The navbar shows the admin link only to admins; non-admins who open `/admin` are sent back to the feed
 
 **Design**
 - Custom Chakra UI theme: ocean teal and coral palette on a warm sand background, Fraunces for headings and DM Sans for text
@@ -48,29 +56,26 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Row Level Security on every table: private posts are visible only to their author, users can change only their own data
 - Blocked users cannot create posts or comments (enforced in the database)
 - Users cannot change their username, admin or blocked status
+- Admin rights are checked in the database too (`is_admin()`), not only by hiding buttons in the UI
 - Private Storage bucket for media, served through short-lived signed URLs
 
 ### Roadmap
 
-**In development now**
-- [ ] Edit and delete own posts (from the post details and from the feed)
-- [ ] Search, sort and filter posts (feed, user profile)
-- [ ] Edit profile information
-- [ ] Public profile of any user with their posts and comments
-- [ ] Admin panel:
-  - [ ] search users by username, email or display name
-  - [ ] block / unblock users
-  - [ ] delete any post
-  - [ ] list all posts with sort and filter
-
 **Planned**
+- [ ] Public profile of any user with their posts and comments
 - [ ] Upvote / downvote posts and comments
 - [ ] Reputation score from votes on a user's posts and comments
 - [ ] Badges for milestones (posts, comments, reputation, membership time)
-- [ ] Profile photo upload
 - [ ] Post tags with tag search (optional)
+- [ ] Locations page, sharing posts, password reset and the AI travel assistant (placeholders in the UI today)
+- [ ] Adding or removing media when editing a post
 
 **Done**
+- [x] Edit and delete own posts (from the post details and from the feed)
+- [x] Search, sort and filter posts
+- [x] Edit profile information and upload a profile photo
+- [x] Admin panel: search users, block / unblock, give admin rights, list, sort and delete any post
+- [x] "Check your email" page after an email sign-up
 - [x] Comments and replies; edit and delete own comments
 - [x] Likes and real-time notifications
 - [x] Redesign: custom theme, dark mode and home page animations
@@ -100,13 +105,13 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 client/src/
 ├── pages/        route-level screens (Feed, Home, Profile, InfoPage, ...)
 ├── layouts/      shared page layouts (app navbar + content area)
-├── components/   UI components, grouped by feature (posts, auth, profile, ui, ...)
+├── components/   UI components, grouped by feature (posts, admin, auth, profile, ui, ...)
 ├── services/     all Supabase calls; return { data } or { error }
-├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes, usePostComments, usePostModal, useNotifications)
+├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes, usePostComments, usePostModal, usePostActions, useNotifications)
 ├── context/      auth, profile and notifications providers
-├── routes/       route guards (signed in, profile completed, guest only)
+├── routes/       route guards (signed in, profile completed, guest only, admin only)
 ├── schemas/      Zod validation schemas
-├── utils/        small pure helpers (dates, names, text, errors, toasts)
+├── utils/        small pure helpers (dates, names, text, errors, toasts, post counts, search and sort)
 ├── config/       Supabase client, environment variables and the Chakra UI theme
 ├── content/      static texts for the info pages (About, Guidelines, Privacy, Terms)
 ├── assets/       logo and home page photos
@@ -149,6 +154,8 @@ VITE_SUPABASE_PUBLISHABLE_KEY=<your-publishable-key>
 VITE_APP_URL=http://localhost:5173
 ```
 Both Supabase values are in the dashboard under **Project Settings → API**.
+
+To get the first admin, sign up, then set `is_admin` to `true` on your row in **Table Editor → profiles**. After that, admins can give admin rights to others from the admin panel.
 
 ### 3. Run
 ```bash
@@ -200,8 +207,8 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `email` | text | unique, valid email format |
 | `phone` | text | required |
 | `avatar_url` | text | optional |
-| `is_admin` | boolean | default `false` |
-| `is_blocked` | boolean | default `false` |
+| `is_admin` | boolean | default `false`; only admins can change it |
+| `is_blocked` | boolean | default `false`; only admins can change it |
 | `created_at` | timestamptz | default `now()` |
 
 **posts**
@@ -255,6 +262,7 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 **Also:**
 - `posts_with_comment_count` — view used by the home page lists; respects RLS
 - `get_public_stats()` — returns the total number of posts and users for the home page
+- `is_admin()` — tells whether the signed-in user is an admin; used by the admin policies, which let admins see every post and delete any post together with its media
 - `post-media` — private Storage bucket, 50 MB per file, JPEG / PNG / WebP / GIF / MP4 / WebM
 - `avatars` — public Storage bucket for profile photos, 10 MB per file, JPEG / PNG / WebP; users may upload, update and delete only files in their own `{userId}/` folder
 - Notification triggers — a like notifies the post author (removed again on unlike), a comment notifies the post author, a reply notifies the author of the parent comment; nobody is notified about their own actions
@@ -271,5 +279,6 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `005_storage.sql` | `post-media` bucket and its access policies |
 | `006_notifications.sql` | `notifications` table, its RLS policies, triggers and Realtime publication |
 | `007_avatars_storage.sql` | `avatars` bucket and its access policies |
+| `008_admin.sql` | `is_admin()` function and admin policies: view all posts and their media, delete any post and its media files |
 
-Run `001`–`006` in order on an empty Supabase project. Migration `007_avatars_storage.sql` is safe to run against the existing project because it creates or updates the `avatars` bucket and adds its policies only when they do not already exist. Every later change goes into a new numbered file (`008_...sql`, etc.) in the same pull request as the code that needs it.
+Run the files in order on an empty Supabase project. `007_avatars_storage.sql` is also safe to run again on an existing project, because it creates or updates the bucket and adds its policies only when they don't exist yet. Every later change goes into a new numbered file (`009_...sql`, etc.) in the same pull request as the code that needs it.
