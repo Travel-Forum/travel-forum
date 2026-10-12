@@ -96,3 +96,67 @@ export const uploadAvatar = async (userId, file) => {
 
   return { data };
 };
+
+export const searchProfiles = async (query) => {
+  const search = (query ?? "").trim();
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, username, first_name, last_name, email, avatar_url, is_admin, is_blocked")
+    .or(
+      `username.ilike.%${search}%,email.ilike.%${search}%,first_name.ilike.%${search}%,last_name.ilike.%${search}%`,
+    )
+    .order("username")
+    .limit(20);
+
+  if (error) {
+    console.error("Cannot find profiles:", error.message);
+    return { error: toFriendlyError(error) };
+  }
+
+  return { data};
+};
+
+export const setUserBlocked = async (userId, isBlocked) => {
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      is_blocked: isBlocked,
+    })
+    .eq("id", userId)
+    .select("id");
+
+  if (error) {
+    console.error("Update blocked status error:", error.message);
+    return { error: toFriendlyError(error) };
+  }
+
+  if (data.length === 0) {
+    return { error: { message: "Only admins can change other users." } };
+  }
+
+  return {};
+};
+
+export const setUserAdmin = async (userId, isAdmin) => {
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      is_admin: isAdmin,
+    })
+    .eq("id", userId)
+    .select("id");
+
+  if (error) {
+    console.error("Update admin status error:", error.message);
+    return { error: toFriendlyError(error) };
+  }
+
+  if (data.length === 0) {
+    return { error: { message: "Only admins can change other users." } };
+  }
+
+  return {};
+};
