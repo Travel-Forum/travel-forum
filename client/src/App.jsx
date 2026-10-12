@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import AuthCallback from "./pages/AuthCallback";
+import VerifyEmail from "./pages/VerifyEmail";
 import CompleteProfile from "./pages/CompleteProfile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import GuestRoute from "./routes/GuestRoute";
@@ -24,6 +25,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
 
       {INFO_PAGES.map((page) => (
         <Route key={page.key} path={page.path} element={<InfoPage page={page} />} />
