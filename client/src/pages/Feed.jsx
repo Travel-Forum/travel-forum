@@ -141,7 +141,7 @@ const Feed = () => {
         <ProfileCard />
         <Footer />
       </GridItem>
-      <GridItem overflowY="auto">
+      <GridItem overflowY="auto" id="feed-scroll">
         <VStack gap={4} align="stretch">
           <CreatePostTrigger onOpenModal={() => setIsCreateOpen(true)} />
           <PostSortButtons value={sort} onChange={handleSortChange} />
