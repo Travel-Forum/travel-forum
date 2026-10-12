@@ -19,6 +19,7 @@ import FeedPostCard from "../components/posts/FeedPostCard";
 import PostDetailsModal from "../components/posts/PostDetailsModal";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import PostSortButtons from "../components/posts/PostSortButtons";
+import Footer from "../components/sections/Footer";
 
 const Feed = () => {
   const { user } = useAuth();
@@ -138,6 +139,7 @@ const Feed = () => {
     >
       <GridItem overflowY="auto">
         <ProfileCard />
+        <Footer />
       </GridItem>
       <GridItem overflowY="auto">
         <VStack gap={4} align="stretch">
