@@ -16,6 +16,8 @@ import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import InfoPage from "./pages/InfoPage";
 import { INFO_PAGES } from "./content/infoPages";
+import RequireAdmin from "./routes/RequireAdmin";
+import AdminPanel from "./pages/AdminPanel";
 
 const App = () => {
   return (
@@ -44,6 +46,11 @@ const App = () => {
             <Route path="/locations" element={<Locations />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
+            
+            <Route element={<RequireAdmin />}>
+              <Route path="/admin" element={<AdminPanel />} />
+            </Route>
+
           </Route>
           
         </Route>

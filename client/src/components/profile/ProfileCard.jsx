@@ -4,11 +4,11 @@ import {
   VStack,
   HStack,
   Text,
-  Badge,
 } from "@chakra-ui/react";
 import { useProfile } from "../../hooks/useProfile";
 import { getFullName } from "../../utils/profile";
 import UserAvatar from "./UserAvatar";
+import RoleBadge from "./RoleBadge";
 
 const ProfileCard = () => {
   const { profile } = useProfile();
@@ -35,7 +35,7 @@ const ProfileCard = () => {
           </VStack>
 
           <HStack gap={2} justify="center" wrap="wrap">
-            <Badge>Member</Badge>
+            <RoleBadge profile={profile} />
           </HStack>
         </VStack>
       </RouterLink>

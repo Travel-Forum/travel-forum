@@ -9,13 +9,13 @@ import {
   IconButton,
   Grid,
   GridItem,
-  Badge,
 } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
 import { useProfile } from "../hooks/useProfile";
 import { getFullName } from "../utils/profile";
 import ProfileEditForm from "../components/profile/ProfileEditForm";
 import AvatarUpload from "../components/profile/AvatarUpload.jsx";
+import RoleBadge from "../components/profile/RoleBadge";
 import { updateProfile, uploadAvatar  } from "../services/profileService";
 import { showSuccess, showError } from "../utils/toast.js";
 
@@ -89,7 +89,7 @@ const Profile = () => {
             </VStack>
 
             <HStack gap={2}>
-              <Badge>Member</Badge>
+              <RoleBadge profile={profile} />
             </HStack>
           </VStack>
 
