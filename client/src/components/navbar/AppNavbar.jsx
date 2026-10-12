@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { NavLink, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Flex, Box, Input, HStack, IconButton, Image } from "@chakra-ui/react";
-import { LuMapPin, LuBell } from "react-icons/lu";
+import { LuMapPin, LuBell, LuShield } from "react-icons/lu";
 import logo from "../../assets/icons/forum-logo.svg";
 import ProfileMenu from "../profile/ProfileMenu";
 import NotificationBadge from "./NotificationBadge";
 import { ColorModeButton } from "../ui/ColorMode";
 import { useNotifications } from "../../hooks/useNotifications";
+import { useProfile } from "../../hooks/useProfile";
 
 const NAV_ITEMS = [
   { to: "/locations", label: "Locations", icon: LuMapPin },
@@ -14,6 +15,7 @@ const NAV_ITEMS = [
 ];
 const AppNavbar = () => {
   const { unreadCount } = useNotifications();
+  const { profile } = useProfile();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
   const [searchText, setSearchText] = useState(query ?? "");
@@ -72,6 +74,19 @@ const AppNavbar = () => {
             </NavLink>
           </IconButton>
         ))}
+
+        {profile?.is_admin && (
+          <IconButton
+            asChild
+            variant="ghost"
+            padding={4}
+            _currentPage={{ bg: "bg.muted" }}
+          >
+            <NavLink to="/admin" aria-label="Admin">
+              <LuShield />
+            </NavLink>
+          </IconButton>
+        )}
 
         <ColorModeButton />
         <ProfileMenu />

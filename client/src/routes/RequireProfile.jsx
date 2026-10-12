@@ -4,7 +4,7 @@ import Loading from '../components/ui/Loading'
 import ErrorState from '../components/ui/ErrorState'
 
 const RequireProfile = () => {
-  const { profile, loading, error, refreshProfile } = useProfile()
+  const { profile, loading, error, refreshProfile } = useProfile();
 
   if (loading) {
     return <Loading />
