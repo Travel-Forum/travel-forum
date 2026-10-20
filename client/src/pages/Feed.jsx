@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
 import { usePostModal } from "../hooks/usePostModal";
 import { usePostActions } from "../hooks/usePostActions";
 import { createPost, deletePost, getFeedPosts } from "../services/postsService";
@@ -23,6 +24,7 @@ import Footer from "../components/sections/Footer";
 
 const Feed = () => {
   const { user } = useAuth();
+  const { profile } = useProfile();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +36,7 @@ const Feed = () => {
     posts.filter((post) => matchesSearch(post, query)),
     sort,
   );
+  const isBlocked = profile?.is_blocked;
 
   const handleSortChange = (nextSort) => {
     setSearchParams(
@@ -143,7 +146,7 @@ const Feed = () => {
       </GridItem>
       <GridItem overflowY="auto" id="feed-scroll">
         <VStack gap={4} align="stretch">
-          <CreatePostTrigger onOpenModal={() => setIsCreateOpen(true)} />
+          <CreatePostTrigger onOpenModal={() => setIsCreateOpen(true)} disabled={isBlocked} />
           <PostSortButtons value={sort} onChange={handleSortChange} />
 
           <CreatePostModal
@@ -156,6 +159,7 @@ const Feed = () => {
             {...modalProps}
             onEditPost={startEdit}
             onDeletePost={startDelete}
+            disabled={isBlocked}
           />
           <CreatePostModal {...editModalProps} />
           <ConfirmDialog {...deleteDialogProps} />
@@ -188,6 +192,7 @@ const Feed = () => {
                 currentUserId={user?.id}
                 onEdit={startEdit}
                 onDelete={startDelete}
+                disabled={isBlocked}
               />
             );
           })}

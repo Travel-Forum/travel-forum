@@ -1,6 +1,6 @@
 import { IconButton, Menu, Portal } from "@chakra-ui/react";
 import { LuEllipsis } from "react-icons/lu";
-const PostActionsMenu = ({ onEdit, onDelete, portalled = true }) => {
+const PostActionsMenu = ({ onEdit, onDelete, portalled = true, disabled = false }) => {
   const positioner = (
     <Menu.Positioner>
       <Menu.Content>
@@ -17,7 +17,7 @@ const PostActionsMenu = ({ onEdit, onDelete, portalled = true }) => {
   return (
     <Menu.Root positioning={{ placement: "bottom-end" }}>
       <Menu.Trigger asChild>
-        <IconButton variant="ghost" size="sm" aria-label="Post actions">
+        <IconButton variant="ghost" size="sm" aria-label="Post actions" disabled={disabled}>
           <LuEllipsis />
         </IconButton>
       </Menu.Trigger>

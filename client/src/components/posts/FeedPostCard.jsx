@@ -15,6 +15,7 @@ const FeedPostCard = ({
   currentUserId,
   onEdit,
   onDelete,
+  disabled = false,
 }) => {
   const commentCount = post.comments?.[0]?.count ?? 0
   const isOwn = post.author?.id === currentUserId
@@ -32,6 +33,7 @@ const FeedPostCard = ({
             <PostActionsMenu
               onEdit={() => onEdit(post)}
               onDelete={() => onDelete(post)}
+              disabled={disabled}
             />
           )}
         </HStack>
@@ -45,7 +47,7 @@ const FeedPostCard = ({
       <Separator />
 
       <Card.Footer justify="space-between">
-        <LikeButton liked={liked} count={likeCount} onToggle={onToggleLike} />
+        <LikeButton liked={liked} count={likeCount} onToggle={onToggleLike} disabled={disabled} />
 
         <HStack gap={1}>
           <IconButton variant="ghost" aria-label="Comment" onClick={openPost}>
@@ -54,7 +56,8 @@ const FeedPostCard = ({
           <Text fontSize="sm">{commentCount}</Text>
         </HStack>
 
-        <IconButton variant="ghost" aria-label="Share">
+        {/* Sharing is not implemented yet */}
+        <IconButton variant="ghost" aria-label="Share" disabled>
           <LuShare2 />
         </IconButton>
       </Card.Footer>

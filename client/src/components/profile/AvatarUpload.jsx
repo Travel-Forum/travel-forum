@@ -3,7 +3,7 @@ import { Box, IconButton } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
 import UserAvatar from "./UserAvatar";
 
-const AvatarUpload = ({ onFileSelected }) => {
+const AvatarUpload = ({ onFileSelected, disabled = false }) => {
   const inputRef = useRef(null);
 
   const handleFileChange = (event) => {
@@ -27,6 +27,7 @@ const AvatarUpload = ({ onFileSelected }) => {
         bottom="0"
         right="0"
         onClick={() => inputRef.current?.click()}
+        disabled={disabled}
       >
         <LuPencil size={12} />
       </IconButton>
