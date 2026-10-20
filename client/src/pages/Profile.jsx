@@ -21,6 +21,7 @@ import { showSuccess, showError } from "../utils/toast.js";
 
 const Profile = () => {
   const { profile, refreshProfile } = useProfile();
+  const isBlocked = profile.is_blocked;
 
   const fields = [
     { label: "First Name", value: profile.first_name },
@@ -77,7 +78,7 @@ const Profile = () => {
       <Card.Root p={{ base: 5, md: 8 }}>
         <VStack gap={6} align="stretch">
           <VStack gap={3}>
-            <AvatarUpload onFileSelected={handleFileSelected} />
+            <AvatarUpload onFileSelected={handleFileSelected} disabled={isBlocked} />
 
             <VStack gap={0}>
               <Text fontSize="2xl" fontWeight="bold">
@@ -102,6 +103,7 @@ const Profile = () => {
                 aria-label="Edit profile information"
                 size="xs"
                 onClick={handleEdit}
+                disabled={isBlocked}
               >
                 <LuPencil size={12} />
               </IconButton>

@@ -10,6 +10,7 @@ const CommentForm = ({
   placeholder = "Write a comment...",
   onCancel,
   autoFocus = false,
+  disabled = false,
 }) => {
   const {
     register,
@@ -35,6 +36,7 @@ const CommentForm = ({
         autoresize
         maxLength={COMMENT_MAX_LENGTH}
         autoFocus={autoFocus}
+        disabled={disabled}
       />
 
       {errors.content && (
@@ -49,7 +51,7 @@ const CommentForm = ({
             Cancel
           </Button>
         )}
-        <Button type="submit" size="sm" loading={isSubmitting}>
+        <Button type="submit" size="sm" loading={isSubmitting} disabled={disabled}>
           {submitLabel}
         </Button>
       </HStack>

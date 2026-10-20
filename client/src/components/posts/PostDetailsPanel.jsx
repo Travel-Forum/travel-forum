@@ -19,6 +19,7 @@ const PostDetailsPanel = ({
   onDeleteComment,
   onEditPost,
   onDeletePost,
+  disabled = false,
 }) => {
   const comments = post.comments ?? [];
   const canManagePost =
@@ -34,6 +35,7 @@ const PostDetailsPanel = ({
               portalled={false}
               onEdit={() => onEditPost(post)}
               onDelete={() => onDeletePost(post)}
+              disabled={disabled}
             />
           )}
         </HStack>
@@ -53,6 +55,7 @@ const PostDetailsPanel = ({
             count={likeCount}
             onToggle={onToggleLike}
             size="sm"
+            disabled={disabled}
           />
           <HStack gap={1}>
             <LuMessageCircle />
@@ -62,14 +65,15 @@ const PostDetailsPanel = ({
 
         <Separator />
 
-        <CommentForm onSubmit={onAddComment} />
+        <CommentForm onSubmit={onAddComment} disabled={disabled} />
 
-        <PostCommentList 
+        <PostCommentList
           comments={comments}
           currentUserId={currentUserId}
           onReply={onReplyComment}
           onEdit={onEditComment}
           onDelete={onDeleteComment}
+          disabled={disabled}
         />
       </Card.Body>
     </Card.Root>

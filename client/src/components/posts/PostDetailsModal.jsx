@@ -17,6 +17,7 @@ const PostDetailsModal = ({
   onDeleteComment,
   onEditPost,
   onDeletePost,
+  disabled = false,
 }) => {
   const hasMedia = post?.media?.length > 0;
 
@@ -56,6 +57,7 @@ const PostDetailsModal = ({
                     onDeleteComment={onDeleteComment}
                     onEditPost={onEditPost}
                     onDeletePost={onDeletePost}
+                    disabled={disabled}
                   />
                 </Grid>
               )}

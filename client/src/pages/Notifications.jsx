@@ -1,5 +1,6 @@
 import { Box, Button, Card, Heading, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
 import { useNotifications } from "../hooks/useNotifications";
 import { usePostModal } from "../hooks/usePostModal";
 import NotificationItem from "../components/notifications/NotificationItem";
@@ -7,6 +8,7 @@ import PostDetailsModal from "../components/posts/PostDetailsModal";
 
 const Notifications = () => {
   const { user } = useAuth();
+  const { profile } = useProfile();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
     useNotifications();
   const { openPost, modalProps } = usePostModal({ userId: user?.id });
@@ -54,7 +56,7 @@ const Notifications = () => {
         </Card.Body>
       </Card.Root>
 
-      <PostDetailsModal {...modalProps} />
+      <PostDetailsModal {...modalProps} disabled={profile?.is_blocked} />
     </Box>
   );
 };

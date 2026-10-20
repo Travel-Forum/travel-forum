@@ -8,6 +8,7 @@ const PostCommentList = ({
   onReply,
   onEdit,
   onDelete,
+  disabled = false,
 }) => {
   if (comments.length === 0) {
     return (
@@ -29,6 +30,7 @@ const PostCommentList = ({
           onReply={onReply}
           onEdit={onEdit}
           onDelete={onDelete}
+          disabled={disabled}
         />
       ))}
     </VStack>

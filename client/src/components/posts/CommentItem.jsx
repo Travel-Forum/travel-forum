@@ -20,6 +20,7 @@ const CommentItem = ({
   onReply,
   onEdit,
   onDelete,
+  disabled = false,
 }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -70,18 +71,24 @@ const CommentItem = ({
             <Button
               {...actionButtonProps}
               onClick={() => setIsReplying((prev) => !prev)}
+              disabled={disabled}
             >
               Reply
             </Button>
             {isOwn && (
               <>
-                <Button {...actionButtonProps} onClick={() => setIsEditing(true)}>
+                <Button
+                  {...actionButtonProps}
+                  onClick={() => setIsEditing(true)}
+                  disabled={disabled}
+                >
                   Edit
                 </Button>
                 <Button
                   {...actionButtonProps}
                   color="fg.error"
                   onClick={() => setIsConfirmingDelete(true)}
+                  disabled={disabled}
                 >
                   Delete
                 </Button>
@@ -122,6 +129,7 @@ const CommentItem = ({
               onReply={onReply}
               onEdit={onEdit}
               onDelete={onDelete}
+              disabled={disabled}
             />
           ))}
         </VStack>
