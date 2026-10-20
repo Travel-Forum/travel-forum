@@ -160,3 +160,21 @@ export const setUserAdmin = async (userId, isAdmin) => {
 
   return {};
 };
+
+export const subscribeToProfile = (userId, onChange) => {
+  const channel = supabase
+    .channel(`profiles:${userId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "profiles",
+        filter: `id=eq.${userId}`,
+      },
+      onChange,
+    )
+    .subscribe();
+
+  return () => supabase.removeChannel(channel);
+};

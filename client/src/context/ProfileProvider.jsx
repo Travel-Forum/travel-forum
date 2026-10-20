@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { getProfile } from "../services/profileService";
+import { getProfile, subscribeToProfile } from "../services/profileService";
 import { ProfileContext } from "./ProfileContext";
 
 const ProfileProvider = ({ children }) => {
@@ -46,6 +46,12 @@ const ProfileProvider = ({ children }) => {
     };
   }, [user?.id, authLoading]);
 
+  useEffect(() => {
+    if (!user?.id) return;
+
+    return subscribeToProfile(user?.id, (payload) => setProfile(payload.new));
+  }, [user?.id]);
+
   const refreshProfile = async () => {
     if (!user?.id) return;
 
@@ -58,9 +64,7 @@ const ProfileProvider = ({ children }) => {
   const value = { profile, loading, error, refreshProfile };
 
   return (
-    <ProfileContext.Provider value={value}>
-      {children}
-    </ProfileContext.Provider>
+    <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>
   );
 };
 

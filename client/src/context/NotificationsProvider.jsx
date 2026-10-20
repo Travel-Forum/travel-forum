@@ -48,7 +48,9 @@ const NotificationsProvider = ({ children }) => {
   }, [userId]);
 
   const visibleNotifications = userId ? notifications : [];
-  const unreadCount = visibleNotifications.filter((item) => !item.is_read).length;
+  const unreadCount = visibleNotifications.filter(
+    (item) => !item.is_read,
+  ).length;
 
   const markAsRead = async (notificationId) => {
     setNotifications((prev) =>
@@ -62,7 +64,9 @@ const NotificationsProvider = ({ children }) => {
   };
 
   const markAllAsRead = async () => {
-    setNotifications((prev) => prev.map((item) => ({ ...item, is_read: true })));
+    setNotifications((prev) =>
+      prev.map((item) => ({ ...item, is_read: true })),
+    );
 
     const { error } = await markAllNotificationsAsRead(userId);
     if (error) {
