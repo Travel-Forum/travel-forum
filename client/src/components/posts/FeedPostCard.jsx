@@ -46,7 +46,7 @@ const FeedPostCard = ({
       </Card.Body>
       <Separator />
 
-      <Card.Footer justify="space-between">
+      <Card.Footer justify="space-between" py={2}>
         <LikeButton liked={liked} count={likeCount} onToggle={onToggleLike} disabled={disabled} />
 
         <HStack gap={1}>

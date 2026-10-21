@@ -130,16 +130,17 @@ const Feed = () => {
      <Grid
       templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
       templateRows={{ lg: "minmax(0, 1fr)" }}
-      gap={6}
+      gap={{ base: 4, lg: 6 }}
       maxW="1200px"
       w="full"
       mx="auto"
-      p={4}
-      pt={6}
+      p={{ base: 2, md: 4 }}
+      pt={{ base: 3, md: 6 }}
       flex="1"
       minH="0"
     >
-      <GridItem overflowY="auto">
+      {/* On smaller screens only the posts are shown; the info links move to the profile menu */}
+      <GridItem overflowY="auto" hideBelow="lg">
         <ProfileCard />
         <Footer />
       </GridItem>
