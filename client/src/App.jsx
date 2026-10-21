@@ -22,7 +22,6 @@ import AdminPanel from "./pages/AdminPanel";
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
 
@@ -33,6 +32,7 @@ const App = () => {
       <Route element={<GuestRoute />}>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/" element={<Home />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>
