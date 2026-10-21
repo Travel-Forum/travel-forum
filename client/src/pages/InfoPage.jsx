@@ -3,15 +3,21 @@ import { Box, Container, Heading, Text, VStack } from "@chakra-ui/react";
 import PublicNavbar from "../components/navbar/PublicNavbar";
 import Footer from "../components/sections/Footer";
 import Eyebrow from "../components/ui/Eyebrow";
+import { useProfile } from "../hooks/useProfile";
+import AppNavbar from "../components/navbar/AppNavbar";
 
 const InfoPage = ({ page }) => {
+
+  const { profile } = useProfile();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [page.key]);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column">
-      <PublicNavbar />
+
+      {profile ? <AppNavbar /> : <PublicNavbar />}
 
       <Container maxW="3xl" py={{ base: 10, md: 16 }} flex="1">
         <Eyebrow mb={3}>TravelForum</Eyebrow>
