@@ -12,7 +12,6 @@ import RequireProfile from "./routes/RequireProfile";
 import RequireNoProfile from "./routes/RequireNoProfile";
 import AppLayout from "./layouts/AppLayout";
 import Feed from "./pages/Feed";
-import Locations from "./pages/Locations";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import InfoPage from "./pages/InfoPage";
@@ -45,7 +44,6 @@ const App = () => {
 
           <Route element={<AppLayout />}>
             <Route path="/feed" element={<Feed />} />
-            <Route path="/locations" element={<Locations />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
             

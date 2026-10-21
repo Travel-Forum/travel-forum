@@ -4,7 +4,7 @@ import {
   LuMessageSquare,
   LuThumbsUp,
   LuSearch,
-  LuAward,
+  LuBell,
 } from "react-icons/lu";
 import FeatureCard from "../cards/FeatureCard";
 import Reveal from "../ui/Reveal";
@@ -24,20 +24,20 @@ const features = [
   },
   {
     icon: <LuThumbsUp />,
-    title: "Vote for what's useful",
+    title: "Like what's useful",
     description:
-      "Upvote the best advice and downvote the rest, so the most valuable answers rise to the top.",
+      "Like the best advice, so the most helpful posts are easy to find.",
   },
   {
     icon: <LuSearch />,
     title: "Find exactly what you need",
-    description: "Sort and filter posts by tags, destination, and recency.",
+    description: "Search posts and sort them by newest, most liked or most commented.",
   },
   {
-    icon: <LuAward />,
-    title: "Grow your profile",
+    icon: <LuBell />,
+    title: "Never miss a reply",
     description:
-      "Earn reputation and badges as you contribute to the community.",
+      "Get notified in real time when someone likes, comments on or replies to your posts.",
   },
 ];
 
