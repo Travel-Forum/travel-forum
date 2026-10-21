@@ -4,8 +4,8 @@ import { toFriendlyError } from "../utils/errors";
 export const getProfile = (userId) =>
   supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
 
-export const createProfile = ({ id, email, firstName, lastName, username, phone }) =>
-  supabase.from("profiles").insert({
+export const createProfile = async ({ id, email, firstName, lastName, username, phone }) => {
+  const { error } = await supabase.from("profiles").insert({
     id,
     email,
     first_name: firstName,
@@ -13,6 +13,19 @@ export const createProfile = ({ id, email, firstName, lastName, username, phone 
     username,
     phone,
   });
+
+  if (error) {
+    console.error("Failed to create profile:", error.message);
+
+    if (error.code === "23505") {
+      return { error: { message: "This username is already taken." } };
+    }
+
+    return { error: toFriendlyError(error) };
+  }
+
+  return {};
+};
 
 export const updateProfile = async (userId, { firstName, lastName, phone }) => {
 
