@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Flex, Box, Input, HStack, IconButton, Image } from "@chakra-ui/react";
-import { LuMapPin, LuBell, LuShield } from "react-icons/lu";
+import { LuBell, LuShield } from "react-icons/lu";
 import logo from "../../assets/icons/forum-logo.svg";
 import ProfileMenu from "../profile/ProfileMenu";
 import NotificationBadge from "./NotificationBadge";
@@ -10,7 +10,6 @@ import { useNotifications } from "../../hooks/useNotifications";
 import { useProfile } from "../../hooks/useProfile";
 
 const NAV_ITEMS = [
-  { to: "/locations", label: "Locations", icon: LuMapPin },
   { to: "/notifications", label: "Notifications", icon: LuBell },
 ];
 const AppNavbar = () => {

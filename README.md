@@ -24,7 +24,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 **Private part (signed-in users)**
 - Profile completion after sign-up: first name, last name, username, phone
 - Feed with posts from all users
-- Fixed feed layout on desktop: only the posts scroll, the profile card and the travel assistant stay in place
+- Fixed feed layout on desktop: only the posts scroll, the profile card and the footer links on the left stay in place
 - Search posts by a word in the title or content, right from the navbar as you type
 - Sort posts by newest, most liked or most commented; search and sort are kept in the URL (`/feed?q=rila&sort=likes`), so they survive a refresh and can be shared
 - Create a post:
@@ -53,9 +53,9 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Animations are turned off for users who prefer reduced motion
 
 **Database and security**
-- Row Level Security on every table: private posts are visible only to their author, users can change only their own data
-- Blocked users cannot create posts or comments (enforced in the database)
-- Users cannot change their username, admin or blocked status
+- Row Level Security on every table: private posts, together with their comments and likes, are visible only to their author; users can change only their own data
+- Blocked users can still read everything but cannot create, edit, delete, like or upload anything (enforced in the database); they see a banner and disabled actions, updated in real time when an admin blocks or unblocks them
+- Users cannot change their username, email, admin or blocked status, and a new profile must use the email of the signed-in account
 - Admin rights are checked in the database too (`is_admin()`), not only by hiding buttons in the UI
 - Private Storage bucket for media, served through short-lived signed URLs
 
@@ -67,7 +67,11 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - [ ] Reputation score from votes on a user's posts and comments
 - [ ] Badges for milestones (posts, comments, reputation, membership time)
 - [ ] Post tags with tag search (optional)
-- [ ] Locations page, sharing posts, password reset and the AI travel assistant (placeholders in the UI today)
+- [ ] Password reset
+- [ ] Sharing posts
+- [ ] Collapsible comments
+- [ ] Locations page with posts grouped by destination
+- [ ] AI travel assistant
 - [ ] Adding or removing media when editing a post
 
 **Done**
@@ -80,6 +84,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - [x] Likes and real-time notifications
 - [x] Redesign: custom theme, dark mode and home page animations
 - [x] About, Community Guidelines, Privacy and Terms pages
+- [x] Security fixes: hide comments and likes of private posts, block every write for blocked users, lock the profile email
 
 **Quality**
 - [x] Unit tests for React components (Vitest + React Testing Library)
@@ -263,10 +268,11 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 - `posts_with_comment_count` — view used by the home page lists; respects RLS
 - `get_public_stats()` — returns the total number of posts and users for the home page
 - `is_admin()` — tells whether the signed-in user is an admin; used by the admin policies, which let admins see every post and delete any post together with its media
+- `is_blocked()` — tells whether the signed-in user is blocked; used by restrictive policies that deny every write for blocked users
 - `post-media` — private Storage bucket, 50 MB per file, JPEG / PNG / WebP / GIF / MP4 / WebM
 - `avatars` — public Storage bucket for profile photos, 10 MB per file, JPEG / PNG / WebP; users may upload, update and delete only files in their own `{userId}/` folder
 - Notification triggers — a like notifies the post author (removed again on unlike), a comment notifies the post author, a reply notifies the author of the parent comment; nobody is notified about their own actions
-- `notifications` is published to Supabase Realtime, so new notifications reach the browser without a refresh
+- `notifications` and `profiles` are published to Supabase Realtime, so new notifications and block / unblock changes reach the browser without a refresh
 
 ### Scripts
 
@@ -280,5 +286,9 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `006_notifications.sql` | `notifications` table, its RLS policies, triggers and Realtime publication |
 | `007_avatars_storage.sql` | `avatars` bucket and its access policies |
 | `008_admin.sql` | `is_admin()` function and admin policies: view all posts and their media, delete any post and its media files |
+| `009_private_post_visibility.sql` | comments and likes follow the visibility of their post |
+| `010_block_all_writes.sql` | `is_blocked()` function and restrictive policies that deny every write for blocked users |
+| `011_profiles_realtime.sql` | publishes `profiles` to Realtime |
+| `012_profile_email_lock.sql` | the profile email must match the signed-in account and cannot be changed |
 
-Run the files in order on an empty Supabase project. `007_avatars_storage.sql` is also safe to run again on an existing project, because it creates or updates the bucket and adds its policies only when they don't exist yet. Every later change goes into a new numbered file (`009_...sql`, etc.) in the same pull request as the code that needs it.
+Run the files in order on an empty Supabase project. `007_avatars_storage.sql` is also safe to run again on an existing project, because it creates or updates the bucket and adds its policies only when they don't exist yet. Every later change goes into a new numbered file (`013_...sql`, etc.) in the same pull request as the code that needs it.

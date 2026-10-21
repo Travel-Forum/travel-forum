@@ -15,7 +15,6 @@ import { matchesSearch, sortPosts } from "../utils/postFilters";
 import ProfileCard from "../components/profile/ProfileCard";
 import CreatePostTrigger from "../components/posts/CreatePostTrigger";
 import CreatePostModal from "../components/posts/CreatePostModal";
-import ChatBotWidget from "../components/chatbot/ChatBotWidget";
 import FeedPostCard from "../components/posts/FeedPostCard";
 import PostDetailsModal from "../components/posts/PostDetailsModal";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
@@ -197,9 +196,6 @@ const Feed = () => {
             );
           })}
         </VStack>
-      </GridItem>
-      <GridItem overflowY="auto">
-        <ChatBotWidget />
       </GridItem>
     </Grid>
   );
