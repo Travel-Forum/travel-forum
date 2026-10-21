@@ -44,31 +44,33 @@ const AppNavbar = () => {
       zIndex="sticky"
       bg="bg"
       justifyContent="center"
-      padding={4}
-      gap={4}
-      px={{ base: 4, md: 6 }}
+      py={{ base: 2, md: 4 }}
+      px={{ base: 3, md: 6 }}
+      gap={{ base: 2, md: 4 }}
       borderBottomWidth="1px"
     >
       <Link to="/feed" onClick={scrollToTop}>
-        <Image src={logo} alt="Travel Forum logo" h="40px" />
+        <Image src={logo} alt="Travel Forum logo" h={{ base: "32px", md: "40px" }} flexShrink={0} />
       </Link>
 
-      <Box flex="1" maxW="400px">
+      <Box flex="1" minW="0" maxW="400px">
         <Input
           borderRadius="full"
           placeholder="Search"
+          size={{ base: "sm", md: "md" }}
           value={searchText}
           onChange={handleSearchChange}
         />
       </Box>
 
-      <HStack gap={2}>
+      <HStack gap={{ base: 0, md: 2 }} flexShrink={0}>
         {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
           <IconButton
             key={to}
             asChild
             variant="ghost"
-            padding={4}
+            size={{ base: "sm", md: "md" }}
+            padding={{ base: 2, md: 4 }}
             position="relative"
             _currentPage={{ bg: "bg.muted" }}
           >
@@ -85,7 +87,8 @@ const AppNavbar = () => {
           <IconButton
             asChild
             variant="ghost"
-            padding={4}
+            size={{ base: "sm", md: "md" }}
+            padding={{ base: 2, md: 4 }}
             _currentPage={{ bg: "bg.muted" }}
           >
             <NavLink to="/admin" aria-label="Admin">
