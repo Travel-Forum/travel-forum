@@ -5,13 +5,11 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react";
-import { useProfile } from "../../hooks/useProfile";
 import { getFullName } from "../../utils/profile";
 import UserAvatar from "./UserAvatar";
 import RoleBadge from "./RoleBadge";
 
-const ProfileCard = () => {
-  const { profile } = useProfile();
+const ProfileCard = ({ profile }) => {
 
   return (
     <Card.Root
