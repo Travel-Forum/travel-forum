@@ -2,6 +2,15 @@ import { Link as RouterLink } from "react-router-dom";
 import { Avatar, HStack, Text, VStack, Link } from "@chakra-ui/react";
 import { getFullName } from "../../utils/profile";
 import { formatDate } from "../../utils/date";
+const ProfileLink = ({ to, children }) => {
+  if (!to) return children;
+
+  return (
+    <Link asChild>
+      <RouterLink to={to}>{children}</RouterLink>
+    </Link>
+  );
+};
 const PostAuthor = ({ author, date, size = "md" }) => {
   const authorName = getFullName(author) || "Unknown user";
 
@@ -9,21 +18,17 @@ const PostAuthor = ({ author, date, size = "md" }) => {
 
   return (
     <HStack gap={3}>
-      <Link asChild>
-        <RouterLink to={userProfileUrl}>
-          <Avatar.Root size={size}>
-            <Avatar.Fallback name={authorName} />
-            <Avatar.Image src={author?.avatar_url} />
-          </Avatar.Root>
-        </RouterLink>
-      </Link>
+      <ProfileLink to={userProfileUrl}>
+        <Avatar.Root size={size}>
+          <Avatar.Fallback name={authorName} />
+          <Avatar.Image src={author?.avatar_url} />
+        </Avatar.Root>
+      </ProfileLink>
 
       <VStack align="start" gap={0}>
-        <Link asChild>
-          <RouterLink to={userProfileUrl}>
-            <Text fontWeight="bold">{authorName}</Text>
-          </RouterLink>
-        </Link>
+        <ProfileLink to={userProfileUrl}>
+          <Text fontWeight="bold">{authorName}</Text>
+        </ProfileLink>
 
         {author?.username && (
           <Text fontSize="sm" color="fg.muted">
