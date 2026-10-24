@@ -10,7 +10,6 @@ import UserAvatar from "./UserAvatar";
 import RoleBadge from "./RoleBadge";
 
 const ProfileCard = ({ profile }) => {
-
   return (
     <Card.Root
       asChild
@@ -21,7 +20,7 @@ const ProfileCard = ({ profile }) => {
       <RouterLink to="/profile">
         <VStack gap={4} align="stretch">
           <VStack gap={2}>
-            <UserAvatar size="2xl" />
+            <UserAvatar profile={profile} size="2xl" />
             <VStack gap={0}>
               <Text fontSize="lg" fontWeight="bold">
                 {getFullName(profile)}

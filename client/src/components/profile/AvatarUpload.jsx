@@ -1,9 +1,11 @@
 import { useRef } from "react";
 import { Box, IconButton } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
+import { useProfile } from "../../hooks/useProfile";
 import UserAvatar from "./UserAvatar";
 
 const AvatarUpload = ({ onFileSelected, disabled = false }) => {
+  const { profile } = useProfile();
   const inputRef = useRef(null);
 
   const handleFileChange = (event) => {
@@ -18,7 +20,7 @@ const AvatarUpload = ({ onFileSelected, disabled = false }) => {
 
   return (
     <Box position="relative">
-      <UserAvatar size="2xl" />
+      <UserAvatar profile={profile} size="2xl" />
       <IconButton
         aria-label="Edit avatar"
         size="xs"
