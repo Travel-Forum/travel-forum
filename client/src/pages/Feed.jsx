@@ -141,7 +141,7 @@ const Feed = () => {
     >
       {/* On smaller screens only the posts are shown; the info links move to the profile menu */}
       <GridItem overflowY="auto" hideBelow="lg">
-        <ProfileCard profile={profile} />
+        <ProfileCard profile={profile} to="/profile" />
         <Footer />
       </GridItem>
       <GridItem overflowY="auto" id="feed-scroll">
