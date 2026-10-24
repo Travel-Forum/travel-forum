@@ -18,6 +18,7 @@ import InfoPage from "./pages/InfoPage";
 import { INFO_PAGES } from "./content/infoPages";
 import RequireAdmin from "./routes/RequireAdmin";
 import AdminPanel from "./pages/AdminPanel";
+import UserProfile from "./pages/UserProfile";
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/feed" element={<Feed />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/users/:username" element={<UserProfile />} />
             
             <Route element={<RequireAdmin />}>
               <Route path="/admin" element={<AdminPanel />} />
