@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { getProfileByUsername } from "../services/profileService";
+import { useProfile } from "../hooks/useProfile";
 import Loading from "../components/ui/Loading";
 import ProfileCard from "../components/profile/ProfileCard";
 import { showError } from "../utils/toast";
@@ -37,6 +38,11 @@ const UserProfileContent = ({ username }) => {
 };
 const UserProfile = () => {
   const { username } = useParams();
+  const { profile } = useProfile();
+
+  if (username === profile.username) {
+    return <Navigate to="/profile" replace />;
+  }
 
   return <UserProfileContent key={username} username={username} />;
 };
