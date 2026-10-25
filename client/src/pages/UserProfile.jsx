@@ -5,8 +5,7 @@ import Loading from "../components/ui/Loading";
 import ProfileCard from "../components/profile/ProfileCard";
 import { showError } from "../utils/toast";
 import ErrorState from "../components/ui/ErrorState";
-const UserProfile = () => {
-  const { username } = useParams();
+const UserProfileContent = ({ username }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +34,11 @@ const UserProfile = () => {
   if (profile === null) return <ErrorState message="User not found" />;
 
   return <ProfileCard profile={profile} />;
+};
+const UserProfile = () => {
+  const { username } = useParams();
+
+  return <UserProfileContent key={username} username={username} />;
 };
 
 export default UserProfile;
