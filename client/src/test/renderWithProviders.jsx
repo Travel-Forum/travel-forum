@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { Provider } from "../components/ui/Provider";
+import { Provider } from "../components/ui/Provider/Provider";
 
 // Chakra components need the theme provider around them, just like in main.jsx.
 // MemoryRouter lets components with links and routes render without a browser URL.

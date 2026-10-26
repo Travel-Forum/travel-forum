@@ -1,4 +1,4 @@
-import { toaster } from "../components/ui/Toaster";
+import { toaster } from "../components/ui/Toaster/Toaster";
 
 export const showError = (title, error) =>
   toaster.create({
