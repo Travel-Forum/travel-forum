@@ -23,6 +23,7 @@ const FeedPostCard = ({
   currentUserId,
   onEdit,
   onDelete,
+  onShare,
   disabled = false,
 }) => {
   const commentCount = getPostCommentCount(post);
@@ -77,8 +78,11 @@ const FeedPostCard = ({
           <Text fontSize="sm">{commentCount}</Text>
         </HStack>
 
-        {/* Sharing is not implemented yet */}
-        <IconButton variant="ghost" aria-label="Share" disabled>
+        <IconButton
+          variant="ghost"
+          aria-label="Share"
+          onClick={() => onShare(post)}
+        >
           <LuShare2 />
         </IconButton>
       </Card.Footer>
