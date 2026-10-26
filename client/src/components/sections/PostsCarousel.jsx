@@ -102,6 +102,6 @@ const PostsCarousel = () => {
       </HStack>
     </Box>
   );
-}
+};
 
 export default PostsCarousel;

@@ -24,7 +24,9 @@ describe("SignUpForm", () => {
 
     expect(await screen.findByText("Email is required")).toBeInTheDocument();
     expect(screen.getByText("Password is required")).toBeInTheDocument();
-    expect(screen.getByText("Please confirm your password")).toBeInTheDocument();
+    expect(
+      screen.getByText("Please confirm your password"),
+    ).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -38,7 +40,9 @@ describe("SignUpForm", () => {
       confirmPassword: "Ab1!",
     });
 
-    expect(await screen.findByText("Password need to be minimum 8 symbols")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Password need to be minimum 8 symbols"),
+    ).toBeInTheDocument();
   });
 
   it("rejects a password without a special character", async () => {
@@ -52,7 +56,9 @@ describe("SignUpForm", () => {
     });
 
     expect(
-      await screen.findByText("Password must contain at least one special character"),
+      await screen.findByText(
+        "Password must contain at least one special character",
+      ),
     ).toBeInTheDocument();
   });
 
@@ -67,7 +73,9 @@ describe("SignUpForm", () => {
       confirmPassword: "Secret123?",
     });
 
-    expect(await screen.findByText("Passwords do not match")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Passwords do not match"),
+    ).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
   });
 

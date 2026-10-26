@@ -21,19 +21,17 @@ const AppNavbar = () => {
   const navigate = useNavigate();
 
   const handleSearchChange = (event) => {
-
     const text = event.target.value;
 
     setSearchText(text);
     navigate(`/feed?q=${encodeURIComponent(text)}`, { replace: true });
-  }
+  };
 
   const scrollToTop = () => {
     ["feed-scroll", "app-scroll"].forEach((id) => {
       document.getElementById(id)?.scrollTo({ top: 0, behavior: "smooth" });
     });
   };
-
 
   return (
     <Flex
@@ -50,7 +48,12 @@ const AppNavbar = () => {
       borderBottomWidth="1px"
     >
       <Link to="/feed" onClick={scrollToTop}>
-        <Image src={logo} alt="Travel Forum logo" h={{ base: "32px", md: "40px" }} flexShrink={0} />
+        <Image
+          src={logo}
+          alt="Travel Forum logo"
+          h={{ base: "32px", md: "40px" }}
+          flexShrink={0}
+        />
       </Link>
 
       <Box flex="1" minW="0" maxW="400px">

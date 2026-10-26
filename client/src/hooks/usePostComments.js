@@ -25,7 +25,10 @@ export const usePostComments = ({ postId, userId, onChange }) => {
     );
 
   const editComment = (commentId, content) =>
-    runAction(updateComment({ commentId, content }), "Could not update comment");
+    runAction(
+      updateComment({ commentId, content }),
+      "Could not update comment",
+    );
 
   const removeComment = (commentId) =>
     runAction(deleteComment(commentId), "Could not delete comment");

@@ -13,7 +13,9 @@ describe("CommentForm", () => {
     await user.type(screen.getByPlaceholderText("Write a comment..."), "   ");
     await user.click(screen.getByRole("button", { name: "Comment" }));
 
-    expect(await screen.findByText("Write something before posting")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Write something before posting"),
+    ).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -22,7 +24,10 @@ describe("CommentForm", () => {
     const onSubmit = vi.fn().mockResolvedValue(true);
     renderWithProviders(<CommentForm onSubmit={onSubmit} />);
 
-    await user.type(screen.getByPlaceholderText("Write a comment..."), "  Great trip!  ");
+    await user.type(
+      screen.getByPlaceholderText("Write a comment..."),
+      "  Great trip!  ",
+    );
     await user.click(screen.getByRole("button", { name: "Comment" }));
 
     expect(onSubmit).toHaveBeenCalledWith("Great trip!");
@@ -30,7 +35,9 @@ describe("CommentForm", () => {
 
   it("clears the field after a successful submit", async () => {
     const user = userEvent.setup();
-    renderWithProviders(<CommentForm onSubmit={vi.fn().mockResolvedValue(true)} />);
+    renderWithProviders(
+      <CommentForm onSubmit={vi.fn().mockResolvedValue(true)} />,
+    );
     const textarea = screen.getByPlaceholderText("Write a comment...");
 
     await user.type(textarea, "Great trip!");
@@ -41,7 +48,9 @@ describe("CommentForm", () => {
 
   it("keeps the text when saving fails", async () => {
     const user = userEvent.setup();
-    renderWithProviders(<CommentForm onSubmit={vi.fn().mockResolvedValue(false)} />);
+    renderWithProviders(
+      <CommentForm onSubmit={vi.fn().mockResolvedValue(false)} />,
+    );
     const textarea = screen.getByPlaceholderText("Write a comment...");
 
     await user.type(textarea, "Great trip!");
@@ -52,10 +61,16 @@ describe("CommentForm", () => {
 
   it("prefills the text when editing", () => {
     renderWithProviders(
-      <CommentForm onSubmit={vi.fn()} initialContent="Old text" submitLabel="Save" />,
+      <CommentForm
+        onSubmit={vi.fn()}
+        initialContent="Old text"
+        submitLabel="Save"
+      />,
     );
 
-    expect(screen.getByPlaceholderText("Write a comment...")).toHaveValue("Old text");
+    expect(screen.getByPlaceholderText("Write a comment...")).toHaveValue(
+      "Old text",
+    );
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 
@@ -72,6 +87,8 @@ describe("CommentForm", () => {
   it("has no cancel button by default", () => {
     renderWithProviders(<CommentForm onSubmit={vi.fn()} />);
 
-    expect(screen.queryByRole("button", { name: "Cancel" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Cancel" }),
+    ).not.toBeInTheDocument();
   });
 });

@@ -35,6 +35,6 @@ const PostPreviewCard = ({ post }) => {
       </Box>
     </Box>
   );
-}
+};
 
 export default PostPreviewCard;

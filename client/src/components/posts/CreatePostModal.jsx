@@ -15,7 +15,7 @@ import {
   createListCollection,
   Popover,
 } from "@chakra-ui/react";
-import {  LuSmile } from "react-icons/lu";
+import { LuSmile } from "react-icons/lu";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import PostMediaPicker from "./PostMediaPicker";
 import PostMediaPreview from "./PostMediaPreview";
@@ -105,7 +105,7 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
     );
   };
 
-  const handleEmojiClick =({ emoji }) => {
+  const handleEmojiClick = ({ emoji }) => {
     const textarea = contentRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -226,7 +226,6 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
 
                 <Dialog.Footer justifyContent="space-between">
                   <HStack gap="1">
-
                     {!isEditing && (
                       <PostMediaPicker onFilesSelected={handleFilesSelected} />
                     )}

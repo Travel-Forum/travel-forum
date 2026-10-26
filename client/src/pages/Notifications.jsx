@@ -1,4 +1,13 @@
-import { Box, Button, Card, Heading, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  Heading,
+  HStack,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useAuth } from "../hooks/useAuth";
 import { useProfile } from "../hooks/useProfile";
 import { useNotifications } from "../hooks/useNotifications";

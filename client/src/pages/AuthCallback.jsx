@@ -1,5 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  Link as RouterLink,
+} from "react-router-dom";
 import { Stack, Text, Spinner, Button } from "@chakra-ui/react";
 import { LuCircleCheck, LuCircleX } from "react-icons/lu";
 import { exchangeCodeForSession } from "../services/authService";
@@ -31,7 +35,6 @@ const AuthCallback = () => {
         setTimeout(() => {
           navigate("/feed");
         }, 1000);
-
       })
       .catch((err) => {
         setError(err);

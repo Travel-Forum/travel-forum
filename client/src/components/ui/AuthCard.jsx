@@ -3,7 +3,13 @@ import { Link as RouterLink } from "react-router-dom";
 
 import logo from "../../assets/icons/forum-logo.svg";
 
-export const AuthCard = ({ title, onSubmit, footer, maxW = "lg", children }) => {
+export const AuthCard = ({
+  title,
+  onSubmit,
+  footer,
+  maxW = "lg",
+  children,
+}) => {
   const content = (
     <>
       <Card.Header>

@@ -16,7 +16,7 @@ import { getFullName } from "../utils/profile";
 import ProfileEditForm from "../components/profile/ProfileEditForm";
 import AvatarUpload from "../components/profile/AvatarUpload.jsx";
 import RoleBadge from "../components/profile/RoleBadge";
-import { updateProfile, uploadAvatar  } from "../services/profileService";
+import { updateProfile, uploadAvatar } from "../services/profileService";
 import { showSuccess, showError } from "../utils/toast.js";
 
 const Profile = () => {
@@ -78,7 +78,10 @@ const Profile = () => {
       <Card.Root p={{ base: 5, md: 8 }}>
         <VStack gap={6} align="stretch">
           <VStack gap={3}>
-            <AvatarUpload onFileSelected={handleFileSelected} disabled={isBlocked} />
+            <AvatarUpload
+              onFileSelected={handleFileSelected}
+              disabled={isBlocked}
+            />
 
             <VStack gap={0}>
               <Text fontSize="2xl" fontWeight="bold">

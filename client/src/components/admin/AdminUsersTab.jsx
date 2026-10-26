@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { Input, Stack } from "@chakra-ui/react";
 import AdminUserList from "./AdminUserList";
-import { searchProfiles, setUserBlocked, setUserAdmin } from '../../services/profileService'; 
-import { showError, showSuccess } from '../../utils/toast';
-import { useAuth } from '../../hooks/useAuth';
+import {
+  searchProfiles,
+  setUserBlocked,
+  setUserAdmin,
+} from "../../services/profileService";
+import { showError, showSuccess } from "../../utils/toast";
+import { useAuth } from "../../hooks/useAuth";
 
 const AdminUsersTab = () => {
   const { user: currentUser } = useAuth();
@@ -11,29 +15,28 @@ const AdminUsersTab = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-      let ignore = false;
-  
-      searchProfiles(searchText).then(({ data, error }) => {
-        if (ignore) return;
-  
-        if (error) {
-          showError("Could not load users", error);
-        } else {
-          setUsers(data)
-        }
-      });
-  
-      return () => {
-        ignore = true;
-      };
-    }, [searchText]);
+    let ignore = false;
+
+    searchProfiles(searchText).then(({ data, error }) => {
+      if (ignore) return;
+
+      if (error) {
+        showError("Could not load users", error);
+      } else {
+        setUsers(data);
+      }
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, [searchText]);
 
   const handleToggleBlock = async (user) => {
-    
     const { error } = await setUserBlocked(user.id, !user.is_blocked);
-    
+
     if (error) {
-      showError('Failed to update user data', error);
+      showError("Failed to update user data", error);
       return;
     }
 
@@ -43,15 +46,14 @@ const AdminUsersTab = () => {
       ),
     );
 
-    showSuccess(user.is_blocked ? 'User was unblocked' : 'User was blocked');
+    showSuccess(user.is_blocked ? "User was unblocked" : "User was blocked");
   };
 
   const handleToggleAdmin = async (user) => {
-
     const { error } = await setUserAdmin(user.id, !user.is_admin);
 
     if (error) {
-      showError('Failed to update user data', error);
+      showError("Failed to update user data", error);
       return;
     }
 
@@ -61,9 +63,8 @@ const AdminUsersTab = () => {
       ),
     );
 
-    showSuccess(user.is_admin ? 'Admin rights removed' : 'Admin rights given');
-  }
-
+    showSuccess(user.is_admin ? "Admin rights removed" : "Admin rights given");
+  };
 
   return (
     <Stack gap={4}>

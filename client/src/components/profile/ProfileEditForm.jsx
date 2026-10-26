@@ -1,12 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Button,
-  Grid,
-  Input,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Grid, Input, Stack, Text } from "@chakra-ui/react";
 import { FormField } from "../ui/FormField";
 import { profileEditSchema } from "../../schemas/authSchemas";
 

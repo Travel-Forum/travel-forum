@@ -55,7 +55,10 @@ const SignUpForm = ({ onSubmit }) => {
                 <PasswordInput {...register("password")} />
               </FormField>
 
-              <FormField label="Confirm Password" error={errors.confirmPassword}>
+              <FormField
+                label="Confirm Password"
+                error={errors.confirmPassword}
+              >
                 <PasswordInput {...register("confirmPassword")} />
               </FormField>
             </Stack>

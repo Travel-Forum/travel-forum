@@ -30,7 +30,9 @@ describe("SignInForm", () => {
     await user.type(screen.getByLabelText("Password"), "Secret123!");
     await user.click(screen.getByRole("button", { name: "Sign In" }));
 
-    expect(await screen.findByText("Please enter a valid email")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Please enter a valid email"),
+    ).toBeInTheDocument();
   });
 
   it("submits the email and password", async () => {
@@ -38,7 +40,10 @@ describe("SignInForm", () => {
     const onSubmit = vi.fn();
     renderWithProviders(<SignInForm onSubmit={onSubmit} />);
 
-    await user.type(screen.getByLabelText("Email address"), "grigor@example.com");
+    await user.type(
+      screen.getByLabelText("Email address"),
+      "grigor@example.com",
+    );
     await user.type(screen.getByLabelText("Password"), "Secret123!");
     await user.click(screen.getByRole("button", { name: "Sign In" }));
 
@@ -51,6 +56,9 @@ describe("SignInForm", () => {
   it("links to the sign up page", () => {
     renderWithProviders(<SignInForm onSubmit={vi.fn()} />);
 
-    expect(screen.getByRole("link", { name: "Sign up" })).toHaveAttribute("href", "/signup");
+    expect(screen.getByRole("link", { name: "Sign up" })).toHaveAttribute(
+      "href",
+      "/signup",
+    );
   });
 });

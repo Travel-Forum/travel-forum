@@ -1,6 +1,12 @@
 import { Field, HStack, Text } from "@chakra-ui/react";
 
-export const FormField = ({ label, error, helperText, labelAction, children }) => (
+export const FormField = ({
+  label,
+  error,
+  helperText,
+  labelAction,
+  children,
+}) => (
   <Field.Root invalid={!!error}>
     {labelAction ? (
       <HStack justify="space-between" w="full">

@@ -24,6 +24,6 @@ const FeatureCard = ({ icon, title, description }) => {
       </Text>
     </VStack>
   );
-}
+};
 
 export default FeatureCard;

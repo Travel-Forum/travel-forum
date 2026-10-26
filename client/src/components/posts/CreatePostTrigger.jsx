@@ -1,10 +1,10 @@
-import { Card, HStack, Input, Button } from "@chakra-ui/react"
-import { LuVideo, LuImage } from "react-icons/lu"
-import { useProfile } from "../../hooks/useProfile"
-import UserAvatar from "../profile/UserAvatar"
+import { Card, HStack, Input, Button } from "@chakra-ui/react";
+import { LuVideo, LuImage } from "react-icons/lu";
+import { useProfile } from "../../hooks/useProfile";
+import UserAvatar from "../profile/UserAvatar";
 
 const CreatePostTrigger = ({ onOpenModal, disabled = false }) => {
-  const { profile } = useProfile()
+  const { profile } = useProfile();
 
   return (
     <Card.Root p={4}>
@@ -30,7 +30,7 @@ const CreatePostTrigger = ({ onOpenModal, disabled = false }) => {
         </Button>
       </HStack>
     </Card.Root>
-  )
-}
+  );
+};
 
-export default CreatePostTrigger
+export default CreatePostTrigger;

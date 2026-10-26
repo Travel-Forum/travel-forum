@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, HStack, Stack, Text, Textarea } from "@chakra-ui/react";
-import { commentSchema, COMMENT_MAX_LENGTH } from "../../schemas/commentSchemas";
+import {
+  commentSchema,
+  COMMENT_MAX_LENGTH,
+} from "../../schemas/commentSchemas";
 
 const CommentForm = ({
   onSubmit,
@@ -51,7 +54,12 @@ const CommentForm = ({
             Cancel
           </Button>
         )}
-        <Button type="submit" size="sm" loading={isSubmitting} disabled={disabled}>
+        <Button
+          type="submit"
+          size="sm"
+          loading={isSubmitting}
+          disabled={disabled}
+        >
           {submitLabel}
         </Button>
       </HStack>

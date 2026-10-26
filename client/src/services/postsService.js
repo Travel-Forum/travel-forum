@@ -119,7 +119,7 @@ export const getFeedPosts = async ({ authorId } = {}) => {
   if (authorId) {
     query = query.eq("author_id", authorId);
   }
-  
+
   const { data, error } = await query;
 
   if (error) {

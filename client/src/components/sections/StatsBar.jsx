@@ -19,7 +19,7 @@ const StatItem = ({ icon, value, label }) => {
       </Box>
     </HStack>
   );
-}
+};
 
 const StatsBar = () => {
   const [posts, setPosts] = useState(null);

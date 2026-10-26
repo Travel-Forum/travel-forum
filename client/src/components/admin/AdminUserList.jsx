@@ -1,7 +1,20 @@
-import { Avatar, Badge, Button, Card, HStack, Stack, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  HStack,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { getFullName } from "../../utils/profile";
 
-const AdminUserList = ({ users, currentUserId, onToggleBlock, onToggleAdmin }) => {
+const AdminUserList = ({
+  users,
+  currentUserId,
+  onToggleBlock,
+  onToggleAdmin,
+}) => {
   if (users.length === 0) {
     return (
       <Text color="fg.muted" textAlign="center" py={6}>
@@ -34,8 +47,12 @@ const AdminUserList = ({ users, currentUserId, onToggleBlock, onToggleAdmin }) =
                   <Stack gap={0} minW={0}>
                     <HStack gap={2} wrap="wrap">
                       <Text fontWeight="semibold">{name}</Text>
-                      {user.is_admin && <Badge colorPalette="ocean">Admin</Badge>}
-                      {user.is_blocked && <Badge colorPalette="red">Blocked</Badge>}
+                      {user.is_admin && (
+                        <Badge colorPalette="ocean">Admin</Badge>
+                      )}
+                      {user.is_blocked && (
+                        <Badge colorPalette="red">Blocked</Badge>
+                      )}
                       {isSelf && <Badge variant="outline">You</Badge>}
                     </HStack>
                     <Text fontSize="sm" color="fg.muted" truncate>

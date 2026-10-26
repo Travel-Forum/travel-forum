@@ -1,7 +1,13 @@
 import { HStack, IconButton, Text } from "@chakra-ui/react";
 import { LuThumbsUp } from "react-icons/lu";
 
-const LikeButton = ({ liked, count, onToggle, size = "md", disabled = false }) => (
+const LikeButton = ({
+  liked,
+  count,
+  onToggle,
+  size = "md",
+  disabled = false,
+}) => (
   <HStack gap={1}>
     <IconButton
       variant="ghost"

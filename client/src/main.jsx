@@ -6,7 +6,7 @@ import "@fontsource-variable/dm-sans";
 import "./index.css";
 import App from "./App";
 import { Provider } from "./components/ui/Provider";
-import AuthProvider from "./context/AuthProvider"
+import AuthProvider from "./context/AuthProvider";
 import ProfileProvider from "./context/ProfileProvider";
 import NotificationsProvider from "./context/NotificationsProvider";
 import { Toaster } from "./components/ui/Toaster";

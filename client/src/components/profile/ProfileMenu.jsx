@@ -6,14 +6,14 @@ import { INFO_PAGES } from "../../content/infoPages";
 import UserAvatar from "./UserAvatar";
 
 const ProfileMenu = () => {
-  const { signOut } = useAuth()
-  const { profile } = useProfile()
-  const navigate = useNavigate()
+  const { signOut } = useAuth();
+  const { profile } = useProfile();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    await signOut()
-    navigate('/')
-  }
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <Menu.Root>
@@ -25,7 +25,7 @@ const ProfileMenu = () => {
       <Portal>
         <Menu.Positioner>
           <Menu.Content>
-            <Menu.Item value="profile" onClick={() => navigate('/profile')}>
+            <Menu.Item value="profile" onClick={() => navigate("/profile")}>
               My Profile
             </Menu.Item>
 
@@ -51,7 +51,7 @@ const ProfileMenu = () => {
         </Menu.Positioner>
       </Portal>
     </Menu.Root>
-  )
-}
+  );
+};
 
-export default ProfileMenu
+export default ProfileMenu;

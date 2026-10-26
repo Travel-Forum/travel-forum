@@ -47,7 +47,6 @@ const Feed = () => {
     );
   };
 
-
   const refreshFeed = () => setRefreshKey((previous) => previous + 1);
 
   const {
@@ -86,7 +85,7 @@ const Feed = () => {
       if (error) {
         showError("Could not get posts", error);
       } else {
-        setPosts(data)
+        setPosts(data);
       }
 
       setLoading(false);
@@ -127,7 +126,7 @@ const Feed = () => {
   };
 
   return (
-     <Grid
+    <Grid
       templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
       templateRows={{ lg: "minmax(0, 1fr)" }}
       gap={{ base: 4, lg: 6 }}
@@ -146,7 +145,10 @@ const Feed = () => {
       </GridItem>
       <GridItem overflowY="auto" id="feed-scroll">
         <VStack gap={4} align="stretch">
-          <CreatePostTrigger onOpenModal={() => setIsCreateOpen(true)} disabled={isBlocked} />
+          <CreatePostTrigger
+            onOpenModal={() => setIsCreateOpen(true)}
+            disabled={isBlocked}
+          />
           <PostSortButtons value={sort} onChange={handleSortChange} />
 
           <CreatePostModal
@@ -164,7 +166,9 @@ const Feed = () => {
           <CreatePostModal {...editModalProps} />
           <ConfirmDialog {...deleteDialogProps} />
 
-          {loading && <Spinner alignSelf="center" color="colorPalette.solid" mt={4} />}
+          {loading && (
+            <Spinner alignSelf="center" color="colorPalette.solid" mt={4} />
+          )}
 
           {!loading && posts.length === 0 && (
             <Text color="fg.muted" textAlign="center" mt={4}>

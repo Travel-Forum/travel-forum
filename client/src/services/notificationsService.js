@@ -7,7 +7,8 @@ const NOTIFICATIONS_LIMIT = 50;
 export const getNotifications = async (userId) => {
   const { data, error } = await supabase
     .from("notifications")
-    .select(`
+    .select(
+      `
       id,
       type,
       post_id,
@@ -16,7 +17,8 @@ export const getNotifications = async (userId) => {
       created_at,
       actor:public_profiles!actor_id (${AUTHOR_FIELDS}),
       post:posts (id, title)
-    `)
+    `,
+    )
     .eq("recipient_id", userId)
     .order("created_at", { ascending: false })
     .limit(NOTIFICATIONS_LIMIT);

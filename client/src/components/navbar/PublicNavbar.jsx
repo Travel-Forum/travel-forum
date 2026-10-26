@@ -1,33 +1,33 @@
-import { Flex, HStack, Image, Button } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import forumLogo from '../../assets/icons/forum-logo.svg';
-import { ColorModeButton } from '../ui/ColorMode';
+import { Flex, HStack, Image, Button } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import forumLogo from "../../assets/icons/forum-logo.svg";
+import { ColorModeButton } from "../ui/ColorMode";
 
 const PublicNavbar = () => {
-    return (
-        <Flex
-          as="nav"
-          align="center"
-          justify="space-between"
-          px={{base: 4, md: 6}}
-          py={3}
-          borderBottomWidth="1px"
-        >
-            <Link to ="/">
-            <Image src={forumLogo} alt="TravelForum logo" h="40px" />
-            </Link>
+  return (
+    <Flex
+      as="nav"
+      align="center"
+      justify="space-between"
+      px={{ base: 4, md: 6 }}
+      py={3}
+      borderBottomWidth="1px"
+    >
+      <Link to="/">
+        <Image src={forumLogo} alt="TravelForum logo" h="40px" />
+      </Link>
 
-            <HStack gap={2}>
-                <ColorModeButton />
-                <Link to="/signin">
-                <Button variant="ghost">Sign in</Button>
-                </Link>
-                <Link to="/signup">
-                <Button colorPalette="coral">Sign up</Button>
-                </Link>
-            </HStack>
-        </Flex>
-    );
+      <HStack gap={2}>
+        <ColorModeButton />
+        <Link to="/signin">
+          <Button variant="ghost">Sign in</Button>
+        </Link>
+        <Link to="/signup">
+          <Button colorPalette="coral">Sign up</Button>
+        </Link>
+      </HStack>
+    </Flex>
+  );
 };
 
 export default PublicNavbar;

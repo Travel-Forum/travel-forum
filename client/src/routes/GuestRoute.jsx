@@ -1,7 +1,6 @@
-import { Navigate, Outlet } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
-import Loading from '../components/ui/Loading'
-
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import Loading from "../components/ui/Loading";
 
 const GuestRoute = () => {
   const { user, loading } = useAuth();
@@ -11,10 +10,10 @@ const GuestRoute = () => {
   }
 
   if (user) {
-    return <Navigate to="/feed" replace />
+    return <Navigate to="/feed" replace />;
   }
 
-  return <Outlet />
-}
+  return <Outlet />;
+};
 
-export default GuestRoute
+export default GuestRoute;

@@ -18,7 +18,12 @@ const Footer = () => {
   return (
     <Box as="footer" mt={{ base: 8, md: 12 }}>
       <Box color="colorPalette.subtle" lineHeight={0} aria-hidden="true">
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" width="100%" height="60">
+        <svg
+          viewBox="0 0 1440 80"
+          preserveAspectRatio="none"
+          width="100%"
+          height="60"
+        >
           <path fill="currentColor" d={WAVE_PATH} />
         </svg>
       </Box>

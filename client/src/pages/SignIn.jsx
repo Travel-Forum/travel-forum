@@ -17,9 +17,7 @@ const SignIn = () => {
     navigate("/feed");
   };
 
-  return (
-    <SignInForm onSubmit={handleFormSubmit} />
-  );
+  return <SignInForm onSubmit={handleFormSubmit} />;
 };
 
 export default SignIn;

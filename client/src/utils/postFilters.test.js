@@ -40,7 +40,11 @@ const makePost = (id, likes, comments) => ({
 });
 
 // Feed order from the database: newest first.
-const posts = [makePost("new", 1, 5), makePost("middle", 9, 0), makePost("old", 4, 2)];
+const posts = [
+  makePost("new", 1, 5),
+  makePost("middle", 9, 0),
+  makePost("old", 4, 2),
+];
 const ids = (list) => list.map((item) => item.id);
 
 describe("sortPosts", () => {
