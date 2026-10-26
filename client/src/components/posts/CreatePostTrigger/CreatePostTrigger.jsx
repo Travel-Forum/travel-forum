@@ -1,4 +1,4 @@
-import { Card, HStack, Input, Button } from "@chakra-ui/react";
+import { Card, HStack, Icon, Input, Button } from "@chakra-ui/react";
 import { LuVideo, LuImage } from "react-icons/lu";
 import { useProfile } from "../../../hooks/useProfile";
 import UserAvatar from "../../profile/UserAvatar/UserAvatar";
@@ -23,10 +23,16 @@ const CreatePostTrigger = ({ onOpenModal, disabled = false }) => {
 
       <HStack justify="space-around" mt={4}>
         <Button variant="ghost" onClick={onOpenModal} disabled={disabled}>
-          <LuVideo color="var(--chakra-colors-green-fg)" /> Video
+          <Icon color="green.fg">
+            <LuVideo />
+          </Icon>{" "}
+          Video
         </Button>
         <Button variant="ghost" onClick={onOpenModal} disabled={disabled}>
-          <LuImage color="var(--chakra-colors-color-palette-fg)" /> Photo
+          <Icon color="colorPalette.fg">
+            <LuImage />
+          </Icon>{" "}
+          Photo
         </Button>
       </HStack>
     </Card.Root>

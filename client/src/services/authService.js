@@ -1,6 +1,10 @@
 import { supabase } from "../config/supabaseClient";
 import { appUrl } from "../config/environments";
 
+// Unlike database errors, Supabase Auth errors already have messages meant
+// for users ("Invalid login credentials"), so they are returned as they are
+// instead of going through toFriendlyError.
+
 export const signIn = async ({ email, password }) => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -8,7 +12,7 @@ export const signIn = async ({ email, password }) => {
   });
 
   if (error) {
-    console.log("Login error:", error.message);
+    console.error("Sign in error:", error.message);
     return { error };
   }
 
@@ -25,6 +29,7 @@ export const signUp = async ({ email, password }) => {
   });
 
   if (error) {
+    console.error("Sign up error:", error.message);
     return { error };
   }
 
@@ -49,7 +54,7 @@ export const signInWithGoogle = async () => {
   });
 
   if (error) {
-    console.log("Continue with google error:", error.message);
+    console.error("Continue with Google error:", error.message);
     return { error };
   }
 

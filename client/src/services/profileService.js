@@ -1,8 +1,19 @@
 import { supabase } from "../config/supabaseClient";
 import { failWith, toFriendlyError } from "../utils/errors";
 
-export const getProfile = (userId) =>
-  supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+export const getProfile = async (userId) => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error) {
+    return failWith("Get profile error", error);
+  }
+
+  return { data };
+};
 
 export const createProfile = async ({
   id,
@@ -116,7 +127,9 @@ export const uploadAvatar = async (userId, file) => {
 };
 
 export const searchProfiles = async (query) => {
-  const search = (query ?? "").trim();
+  // The text goes inside a PostgREST filter string, where , ( ) " \ split
+  // or break the filter and % * act as wildcards, so they are dropped.
+  const search = (query ?? "").replace(/[,()"\\%*]/g, "").trim();
 
   const { data, error } = await supabase
     .from("profiles")

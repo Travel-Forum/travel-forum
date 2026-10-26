@@ -1,5 +1,5 @@
 import { Badge, Button, Card, HStack, Stack, Text } from "@chakra-ui/react";
-import { LuHeart, LuMessageCircle } from "react-icons/lu";
+import { LuThumbsUp, LuMessageCircle } from "react-icons/lu";
 import { formatDate } from "../../../utils/date";
 import { getPostCommentCount, getPostLikeCount } from "../../../utils/post";
 
@@ -36,7 +36,7 @@ const AdminPostList = ({ posts, onDelete }) => {
                   <Text>@{post.author?.username ?? "unknown"}</Text>
                   <Text>{formatDate(post.created_at)}</Text>
                   <HStack gap={1}>
-                    <LuHeart />
+                    <LuThumbsUp />
                     <Text>{getPostLikeCount(post)}</Text>
                   </HStack>
                   <HStack gap={1}>

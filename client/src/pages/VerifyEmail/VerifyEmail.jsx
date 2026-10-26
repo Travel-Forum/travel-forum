@@ -1,5 +1,5 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Button, Stack, Text } from "@chakra-ui/react";
+import { Button, Icon, Stack, Text } from "@chakra-ui/react";
 import { LuMailCheck } from "react-icons/lu";
 import AuthCard from "../../components/ui/AuthCard/AuthCard";
 
@@ -10,10 +10,9 @@ const VerifyEmail = () => {
   return (
     <AuthCard title="Travel Forum" maxW="md">
       <Stack gap="4" align="center" py="6" textAlign="center">
-        <LuMailCheck
-          size={40}
-          color="var(--chakra-colors-color-palette-solid)"
-        />
+        <Icon boxSize="10" color="colorPalette.solid">
+          <LuMailCheck />
+        </Icon>
         <Text fontWeight="medium" fontSize="lg">
           Check your email
         </Text>
