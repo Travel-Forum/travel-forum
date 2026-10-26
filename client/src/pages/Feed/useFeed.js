@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useEffectEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useProfile } from "../../hooks/useProfile";
@@ -17,6 +17,7 @@ export const useFeed = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
   const sort = searchParams.get("sort") ?? "newest";
+  const sharedPostId = searchParams.get("post");
 
   const { posts, loading, reload: refreshFeed } = usePosts();
   const visiblePosts = filterAndSortPosts(posts, query, sort);
@@ -36,6 +37,8 @@ export const useFeed = () => {
     onCommentsChange: refreshFeed,
   });
 
+  const openSharedPost = useEffectEvent((id) => postModal.openPost(id));
+
   const isOpenInDetails = (postId) => postModal.modalProps.post?.id === postId;
 
   const postActions = usePostActions({
@@ -45,7 +48,7 @@ export const useFeed = () => {
     },
     onDeleted: (postId) => {
       refreshFeed();
-      if (isOpenInDetails(postId)) postModal.closePost();
+      if (isOpenInDetails(postId)) closePost();
     },
   });
 
@@ -78,6 +81,22 @@ export const useFeed = () => {
     refreshFeed();
   };
 
+  useEffect(() => {
+    if (sharedPostId) openSharedPost(sharedPostId);
+  }, [sharedPostId]);
+
+  const closePost = () => {
+    postModal.closePost();
+    setSearchParams(
+      (params) => {
+        params.delete("post");
+        return params;
+      },
+      { replace: true },
+    );
+  };
+
+
   return {
     userId: user?.id,
     profile,
@@ -95,7 +114,7 @@ export const useFeed = () => {
     },
     openCreate: () => setIsCreateOpen(true),
     openPost: postModal.openPost,
-    modalProps: postModal.modalProps,
+    modalProps: { ...postModal.modalProps, onClose: closePost },
     isLiked: postModal.isLiked,
     getLikeCount: postModal.getLikeCount,
     toggleLike: postModal.toggleLike,
