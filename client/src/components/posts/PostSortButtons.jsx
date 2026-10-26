@@ -14,7 +14,7 @@ const PostSortButtons = ({ value, onChange }) => {
           key={option.value}
           size="sm"
           borderRadius="full"
-          variant={option.value === value ? "solid": "ghost"}
+          variant={option.value === value ? "solid" : "ghost"}
           onClick={() => onChange(option.value)}
         >
           {option.label}

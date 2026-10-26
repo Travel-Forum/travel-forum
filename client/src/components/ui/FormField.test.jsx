@@ -33,7 +33,10 @@ describe("FormField", () => {
     );
 
     expect(screen.getByText("Give your post a title")).toBeInTheDocument();
-    expect(screen.getByLabelText("Title")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText("Title")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
   });
 
   it("does not show an error when there is none", () => {
@@ -43,6 +46,9 @@ describe("FormField", () => {
       </FormField>,
     );
 
-    expect(screen.getByLabelText("Title")).not.toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText("Title")).not.toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
   });
 });

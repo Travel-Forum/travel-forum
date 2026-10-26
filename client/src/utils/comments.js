@@ -8,7 +8,9 @@ const groupByParent = (comments) =>
 
 const attachReplies = (comment, groups) => ({
   ...comment,
-  replies: (groups[comment.id] ?? []).map((reply) => attachReplies(reply, groups)),
+  replies: (groups[comment.id] ?? []).map((reply) =>
+    attachReplies(reply, groups),
+  ),
 });
 
 export const buildCommentTree = (comments) => {

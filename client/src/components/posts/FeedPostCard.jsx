@@ -1,10 +1,17 @@
-import { Card, HStack, Heading, Text, IconButton, Separator } from "@chakra-ui/react"
-import { LuMessageCircle, LuShare2 } from "react-icons/lu"
-import PostMediaGallery from "./PostMediaGallery"
-import PostAuthor from "./PostAuthor"
-import LikeButton from "./LikeButton"
-import PostActionsMenu from "./PostActionsMenu"
-import { cardHoverStyles } from "../../config/theme"
+import {
+  Card,
+  HStack,
+  Heading,
+  Text,
+  IconButton,
+  Separator,
+} from "@chakra-ui/react";
+import { LuMessageCircle, LuShare2 } from "react-icons/lu";
+import PostMediaGallery from "./PostMediaGallery";
+import PostAuthor from "./PostAuthor";
+import LikeButton from "./LikeButton";
+import PostActionsMenu from "./PostActionsMenu";
+import { cardHoverStyles } from "../../config/theme";
 
 const FeedPostCard = ({
   post,
@@ -17,12 +24,12 @@ const FeedPostCard = ({
   onDelete,
   disabled = false,
 }) => {
-  const commentCount = post.comments?.[0]?.count ?? 0
-  const isOwn = post.author?.id === currentUserId
-  const openPost = () => onOpen(post.id)
+  const commentCount = post.comments?.[0]?.count ?? 0;
+  const isOwn = post.author?.id === currentUserId;
+  const openPost = () => onOpen(post.id);
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") openPost()
-  }
+    if (event.key === "Enter") openPost();
+  };
 
   return (
     <Card.Root {...cardHoverStyles}>
@@ -39,15 +46,28 @@ const FeedPostCard = ({
         </HStack>
       </Card.Header>
 
-      <Card.Body cursor="pointer" role="button" tabIndex={0} onClick={openPost} onKeyDown={handleKeyDown}>
-        <Heading as="h3" size="lg" mb={2}>{post.title}</Heading>
+      <Card.Body
+        cursor="pointer"
+        role="button"
+        tabIndex={0}
+        onClick={openPost}
+        onKeyDown={handleKeyDown}
+      >
+        <Heading as="h3" size="lg" mb={2}>
+          {post.title}
+        </Heading>
         <Text whiteSpace="pre-wrap">{post.content}</Text>
         <PostMediaGallery media={post.media} title={post.title} />
       </Card.Body>
       <Separator />
 
       <Card.Footer justify="space-between" py={2}>
-        <LikeButton liked={liked} count={likeCount} onToggle={onToggleLike} disabled={disabled} />
+        <LikeButton
+          liked={liked}
+          count={likeCount}
+          onToggle={onToggleLike}
+          disabled={disabled}
+        />
 
         <HStack gap={1}>
           <IconButton variant="ghost" aria-label="Comment" onClick={openPost}>
@@ -62,7 +82,7 @@ const FeedPostCard = ({
         </IconButton>
       </Card.Footer>
     </Card.Root>
-  )
-}
+  );
+};
 
-export default FeedPostCard
+export default FeedPostCard;

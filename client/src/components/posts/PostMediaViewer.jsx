@@ -33,7 +33,12 @@ const PostMediaViewer = ({ media, title }) => {
       justifyContent="center"
     >
       {current.type === "video" ? (
-        <chakra.video key={current.id} src={current.url} controls {...mediaProps} />
+        <chakra.video
+          key={current.id}
+          src={current.url}
+          controls
+          {...mediaProps}
+        />
       ) : (
         <Image
           key={current.id}
@@ -45,10 +50,20 @@ const PostMediaViewer = ({ media, title }) => {
 
       {hasMany && (
         <>
-          <IconButton aria-label="Previous" onClick={showPrevious} left={2} {...arrowProps}>
+          <IconButton
+            aria-label="Previous"
+            onClick={showPrevious}
+            left={2}
+            {...arrowProps}
+          >
             <LuChevronLeft />
           </IconButton>
-          <IconButton aria-label="Next" onClick={showNext} right={2} {...arrowProps}>
+          <IconButton
+            aria-label="Next"
+            onClick={showNext}
+            right={2}
+            {...arrowProps}
+          >
             <LuChevronRight />
           </IconButton>
           <Text

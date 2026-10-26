@@ -1,4 +1,11 @@
-import { Center, CloseButton, Dialog, Grid, Portal, Spinner } from "@chakra-ui/react";
+import {
+  Center,
+  CloseButton,
+  Dialog,
+  Grid,
+  Portal,
+  Spinner,
+} from "@chakra-ui/react";
 import PostMediaViewer from "./PostMediaViewer";
 import PostDetailsPanel from "./PostDetailsPanel";
 
@@ -40,11 +47,16 @@ const PostDetailsModal = ({
                 </Center>
               ) : (
                 <Grid
-                  templateColumns={{ base: "1fr", lg: hasMedia ? "3fr 2fr" : "1fr" }}
+                  templateColumns={{
+                    base: "1fr",
+                    lg: hasMedia ? "3fr 2fr" : "1fr",
+                  }}
                   gap={4}
                   alignItems="start"
                 >
-                  {hasMedia && <PostMediaViewer media={post.media} title={post.title} />}
+                  {hasMedia && (
+                    <PostMediaViewer media={post.media} title={post.title} />
+                  )}
                   <PostDetailsPanel
                     post={post}
                     liked={liked}

@@ -6,9 +6,31 @@ import mountainsPhoto from "../../assets/images/hero-mountains.jpg";
 import cityPhoto from "../../assets/images/hero-city.jpg";
 
 const PHOTOS = [
-  { src: seaPhoto, alt: "Beach with palm trees", caption: "Sea", rotate: -6, top: 0, left: 0 },
-  { src: mountainsPhoto, alt: "Mountain lake", caption: "Mountains", rotate: 4, top: "18%", right: 0, zIndex: 1 },
-  { src: cityPhoto, alt: "City street", caption: "City", rotate: -2, bottom: 0, left: "30%" },
+  {
+    src: seaPhoto,
+    alt: "Beach with palm trees",
+    caption: "Sea",
+    rotate: -6,
+    top: 0,
+    left: 0,
+  },
+  {
+    src: mountainsPhoto,
+    alt: "Mountain lake",
+    caption: "Mountains",
+    rotate: 4,
+    top: "18%",
+    right: 0,
+    zIndex: 1,
+  },
+  {
+    src: cityPhoto,
+    alt: "City street",
+    caption: "City",
+    rotate: -2,
+    bottom: 0,
+    left: "30%",
+  },
 ];
 
 const Hero = () => {
@@ -35,9 +57,14 @@ const Hero = () => {
           </Box>
         </Heading>
 
-        <Text color="fg.muted" fontSize={{ base: "md", md: "lg" }} maxW="lg" mb={6}>
-          A friendly community for travelers to ask questions, share experiences,
-          and discover amazing places around the world.
+        <Text
+          color="fg.muted"
+          fontSize={{ base: "md", md: "lg" }}
+          maxW="lg"
+          mb={6}
+        >
+          A friendly community for travelers to ask questions, share
+          experiences, and discover amazing places around the world.
         </Text>
 
         <Text color="colorPalette.fg" fontWeight="semibold" fontSize="lg">

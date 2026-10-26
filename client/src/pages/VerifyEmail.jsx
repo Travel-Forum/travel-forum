@@ -10,14 +10,23 @@ const VerifyEmail = () => {
   return (
     <AuthCard title="Travel Forum" maxW="md">
       <Stack gap="4" align="center" py="6" textAlign="center">
-        <LuMailCheck size={40} color="var(--chakra-colors-color-palette-solid)" />
+        <LuMailCheck
+          size={40}
+          color="var(--chakra-colors-color-palette-solid)"
+        />
         <Text fontWeight="medium" fontSize="lg">
           Check your email
         </Text>
         <Text color="fg.muted" fontSize="sm">
           We sent a confirmation link to{" "}
-          {email ? <Text as="span" fontWeight="semibold">{email}</Text> : "your email"}.
-          Open it to finish signing up.
+          {email ? (
+            <Text as="span" fontWeight="semibold">
+              {email}
+            </Text>
+          ) : (
+            "your email"
+          )}
+          . Open it to finish signing up.
         </Text>
         <Text color="fg.muted" fontSize="xs">
           Can&apos;t find it? Check your spam folder.

@@ -21,9 +21,16 @@ const AppLayout = () => {
           flexShrink={0}
         >
           <Alert.Indicator />
-          <Alert.Content flex="0 1 auto" flexDirection="row" flexWrap="wrap" columnGap={1}>
+          <Alert.Content
+            flex="0 1 auto"
+            flexDirection="row"
+            flexWrap="wrap"
+            columnGap={1}
+          >
             <Alert.Title>You are blocked.</Alert.Title>
-            <Alert.Description>You can only read and mark notifications as read.</Alert.Description>
+            <Alert.Description>
+              You can only read and mark notifications as read.
+            </Alert.Description>
           </Alert.Content>
         </Alert.Root>
       )}

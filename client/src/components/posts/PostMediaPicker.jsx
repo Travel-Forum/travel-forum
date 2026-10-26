@@ -3,13 +3,17 @@ import { useRef } from "react";
 import { LuImage } from "react-icons/lu";
 import { IconButton } from "@chakra-ui/react";
 
-const PostMediaPicker = ( { onFilesSelected } ) => {
-
-    const inputRef = useRef(null);
+const PostMediaPicker = ({ onFilesSelected }) => {
+  const inputRef = useRef(null);
 
   return (
     <>
-      <IconButton type="button" variant="ghost" aria-label="Add media" onClick={() => inputRef.current.click()} >
+      <IconButton
+        type="button"
+        variant="ghost"
+        aria-label="Add media"
+        onClick={() => inputRef.current.click()}
+      >
         <LuImage />
       </IconButton>
 

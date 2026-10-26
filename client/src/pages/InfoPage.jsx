@@ -7,7 +7,6 @@ import { useProfile } from "../hooks/useProfile";
 import AppNavbar from "../components/navbar/AppNavbar";
 
 const InfoPage = ({ page }) => {
-
   const { profile } = useProfile();
 
   useEffect(() => {
@@ -16,7 +15,6 @@ const InfoPage = ({ page }) => {
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column">
-
       {profile ? <AppNavbar /> : <PublicNavbar />}
 
       <Container maxW="3xl" py={{ base: 10, md: 16 }} flex="1">

@@ -3,7 +3,9 @@ import { getFullName } from "./profile.js";
 
 describe("getFullName", () => {
   it("joins first and last name with a space", () => {
-    expect(getFullName({ first_name: "Grigor", last_name: "Dimitrov" })).toBe("Grigor Dimitrov");
+    expect(getFullName({ first_name: "Grigor", last_name: "Dimitrov" })).toBe(
+      "Grigor Dimitrov",
+    );
   });
 
   it("returns only the first name when the last name is missing", () => {

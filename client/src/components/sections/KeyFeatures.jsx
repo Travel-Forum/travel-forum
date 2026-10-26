@@ -31,7 +31,8 @@ const features = [
   {
     icon: <LuSearch />,
     title: "Find exactly what you need",
-    description: "Search posts and sort them by newest, most liked or most commented.",
+    description:
+      "Search posts and sort them by newest, most liked or most commented.",
   },
   {
     icon: <LuBell />,
@@ -61,6 +62,6 @@ const KeyFeatures = () => {
       </SimpleGrid>
     </Box>
   );
-}
+};
 
 export default KeyFeatures;

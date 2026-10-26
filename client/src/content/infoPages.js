@@ -59,7 +59,8 @@ export const INFO_PAGES = [
     path: "/privacy",
     label: "Privacy",
     title: "Privacy Policy",
-    intro: "This page explains what information TravelForum collects and how it is used.",
+    intro:
+      "This page explains what information TravelForum collects and how it is used.",
     note: SAMPLE_NOTE,
     sections: [
       {

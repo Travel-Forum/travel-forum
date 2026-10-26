@@ -1,4 +1,12 @@
-import { Box, Grid, Heading, Text, Button, HStack, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  Heading,
+  Text,
+  Button,
+  HStack,
+  VStack,
+} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { LuPlane } from "react-icons/lu";
 import Eyebrow from "../ui/Eyebrow";
@@ -11,7 +19,12 @@ const TICKET_FIELDS = [
 
 const TicketField = ({ label, value }) => (
   <Box>
-    <Text fontSize="xs" color="fg.muted" textTransform="uppercase" letterSpacing="wider">
+    <Text
+      fontSize="xs"
+      color="fg.muted"
+      textTransform="uppercase"
+      letterSpacing="wider"
+    >
       {label}
     </Text>
     <Text fontWeight="semibold">{value}</Text>

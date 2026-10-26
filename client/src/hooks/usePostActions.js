@@ -47,7 +47,8 @@ export const usePostActions = ({ onUpdated, onDeleted }) => {
     deleteDialogProps: {
       open: deletingPost !== null,
       title: "Delete this post?",
-      description: "The post, its comments and media will be deleted. This can't be undone.",
+      description:
+        "The post, its comments and media will be deleted. This can't be undone.",
       confirmLabel: "Delete",
       onConfirm: confirmDelete,
       onCancel: () => setDeletingPost(null),

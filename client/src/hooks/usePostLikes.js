@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { getLikedPostIds, likePost, unlikePost } from "../services/likesService";
+import {
+  getLikedPostIds,
+  likePost,
+  unlikePost,
+} from "../services/likesService";
 import { showError } from "../utils/toast";
 
 const toggleId = (ids, id) =>

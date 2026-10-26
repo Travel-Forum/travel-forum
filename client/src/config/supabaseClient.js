@@ -1,12 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-import { supabaseUrl, supabasePublishableKey } from './environments';
+import { supabaseUrl, supabasePublishableKey } from "./environments";
 
 // export const supabase = createClient(supabaseUrl, supabasePublishableKey);
 
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: {
-    flowType: 'pkce',
+    flowType: "pkce",
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,

@@ -42,7 +42,10 @@ export const uploadPostMedia = async ({ userId, postId, files }) => {
     });
 
     if (insertError) {
-      console.error(`Insert media record for ${file.name} error:`, insertError.message);
+      console.error(
+        `Insert media record for ${file.name} error:`,
+        insertError.message,
+      );
       await removeUploadedFiles(uploadedPaths);
       return { error: new Error(`"${file.name}" could not be saved.`) };
     }
@@ -73,9 +76,7 @@ export const getSignedMediaUrls = async (paths) => {
   return { data: urlsByPath };
 };
 
-
 export const deletePostMedia = async (postId) => {
-
   const { data, error } = await supabase
     .from("post_media")
     .select("storage_path")
@@ -84,12 +85,11 @@ export const deletePostMedia = async (postId) => {
   if (error) {
     console.error("Cannot delete a post", error.message);
     return { error: toFriendlyError(error) };
-  };
+  }
 
   const paths = data.map((media) => media.storage_path);
 
   await removeUploadedFiles(paths);
 
   return {};
-
 };

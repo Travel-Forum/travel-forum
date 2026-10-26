@@ -15,16 +15,23 @@ beforeEach(() => {
 
 describe("PostMediaPreview", () => {
   it("renders nothing when no files are selected", () => {
-    renderWithProviders(<PostMediaPreview mediaFiles={[]} onRemove={vi.fn()} />);
+    renderWithProviders(
+      <PostMediaPreview mediaFiles={[]} onRemove={vi.fn()} />,
+    );
 
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("shows an image preview for an image file", () => {
-    renderWithProviders(<PostMediaPreview mediaFiles={[image]} onRemove={vi.fn()} />);
+    renderWithProviders(
+      <PostMediaPreview mediaFiles={[image]} onRemove={vi.fn()} />,
+    );
 
-    expect(screen.getByRole("img", { name: "sea.jpg" })).toHaveAttribute("src", "blob:sea.jpg");
+    expect(screen.getByRole("img", { name: "sea.jpg" })).toHaveAttribute(
+      "src",
+      "blob:sea.jpg",
+    );
   });
 
   it("shows a video preview for a video file", () => {
@@ -32,14 +39,19 @@ describe("PostMediaPreview", () => {
       <PostMediaPreview mediaFiles={[video]} onRemove={vi.fn()} />,
     );
 
-    expect(container.querySelector("video")).toHaveAttribute("src", "blob:trip.mp4");
+    expect(container.querySelector("video")).toHaveAttribute(
+      "src",
+      "blob:trip.mp4",
+    );
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
 
   it("calls onRemove with the clicked file", async () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();
-    renderWithProviders(<PostMediaPreview mediaFiles={[image, video]} onRemove={onRemove} />);
+    renderWithProviders(
+      <PostMediaPreview mediaFiles={[image, video]} onRemove={onRemove} />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Remove trip.mp4" }));
 

@@ -27,7 +27,11 @@ const App = () => {
       <Route path="/verify-email" element={<VerifyEmail />} />
 
       {INFO_PAGES.map((page) => (
-        <Route key={page.key} path={page.path} element={<InfoPage page={page} />} />
+        <Route
+          key={page.key}
+          path={page.path}
+          element={<InfoPage page={page} />}
+        />
       ))}
 
       <Route element={<GuestRoute />}>
@@ -42,19 +46,16 @@ const App = () => {
         </Route>
 
         <Route element={<RequireProfile />}>
-
           <Route element={<AppLayout />}>
             <Route path="/feed" element={<Feed />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/users/:username" element={<UserProfile />} />
-            
+
             <Route element={<RequireAdmin />}>
               <Route path="/admin" element={<AdminPanel />} />
             </Route>
-
           </Route>
-          
         </Route>
       </Route>
     </Routes>

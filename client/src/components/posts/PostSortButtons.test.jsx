@@ -9,8 +9,12 @@ describe("PostSortButtons", () => {
     renderWithProviders(<PostSortButtons value="newest" onChange={vi.fn()} />);
 
     expect(screen.getByRole("button", { name: "Newest" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Most liked" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Most commented" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Most liked" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Most commented" }),
+    ).toBeInTheDocument();
   });
 
   it("calls onChange with the chosen sort", async () => {
