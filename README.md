@@ -2,7 +2,7 @@
 
 ## 🌍 Live demo: [travel-forum-seven.vercel.app](https://travel-forum-seven.vercel.app)
 
-> 🚧 **Status: in development.** All core features are live: posts with media, comments, likes, real-time notifications, search with sort and filter, profile editing and the admin panel. Next up: public user profiles, voting and reputation. See [Roadmap](#roadmap).
+> 🚧 **Status: in development.** All core features are live: posts with media, comments, likes, real-time notifications, search and sort, public user profiles, profile editing and the admin panel. Next up: password reset and a weather widget for popular destinations. See [Roadmap](#roadmap).
 
 A community forum for travellers: people share trips, tips and questions, comment on each other's posts and like the most useful ones.
 
@@ -39,6 +39,8 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Comments with nested replies on any post; edit and delete own comments (deleting a comment also removes its replies)
 - Notifications for likes, comments and replies, delivered in real time: unread count on the bell, mark one or all as read, open the post from a notification
 - Profile page: edit first name, last name and phone (username and email stay read-only), upload a profile photo, role badge (Admin or Member)
+- Public profile of any user at `/users/<username>` with their posts, opened by clicking an author's name or photo; your own username leads to your profile page
+- Responsive layout: on phones and tablets the feed shows only the posts, and the About / Guidelines / Privacy / Terms links move into the profile menu
 
 **Admin panel** (`/admin`, admins only)
 - **Users:** search by username, email or name; block / unblock; give or remove admin rights (an admin can't change their own account)
@@ -56,25 +58,22 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Row Level Security on every table: private posts, together with their comments and likes, are visible only to their author; users can change only their own data
 - Blocked users can still read everything but cannot create, edit, delete, like or upload anything (enforced in the database); they see a banner and disabled actions, updated in real time when an admin blocks or unblocks them
 - Users cannot change their username, email, admin or blocked status, and a new profile must use the email of the signed-in account
+- Other users' email and phone are private: everyone else is read through the `public_profiles` view, which has only the public columns
 - Admin rights are checked in the database too (`is_admin()`), not only by hiding buttons in the UI
 - Private Storage bucket for media, served through short-lived signed URLs
 
 ### Roadmap
 
 **Planned**
-- [ ] Public profile of any user with their posts and comments
-- [ ] Upvote / downvote posts and comments
-- [ ] Reputation score from votes on a user's posts and comments
-- [ ] Badges for milestones (posts, comments, reputation, membership time)
-- [ ] Post tags with tag search (optional)
-- [ ] Password reset
-- [ ] Sharing posts
-- [ ] Collapsible comments
-- [ ] Locations page with posts grouped by destination
-- [ ] AI travel assistant
-- [ ] Adding or removing media when editing a post
+- [ ] Password reset: "Forgot password?" sends a reset link by email, then a page to choose a new password
+- [ ] Weather widget in the feed's right column: current weather in popular destinations, rotating every few seconds; loaded through a Supabase Edge Function that keeps the weather API key secret and caches the answer
+- [ ] Sharing posts: copy a link that opens the post
+- [ ] JSDoc documentation for services, hooks and shared utils
 
 **Done**
+- [x] Public user profiles with their posts
+- [x] Responsive feed and navbar for phones and tablets
+- [x] Refactor: a folder per component, logic moved into hooks, shared layout and post list, consistent error handling
 - [x] Edit and delete own posts (from the post details and from the feed)
 - [x] Search, sort and filter posts
 - [x] Edit profile information and upload a profile photo
@@ -84,11 +83,12 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - [x] Likes and real-time notifications
 - [x] Redesign: custom theme, dark mode and home page animations
 - [x] About, Community Guidelines, Privacy and Terms pages
-- [x] Security fixes: hide comments and likes of private posts, block every write for blocked users, lock the profile email
+- [x] Security fixes: hide comments and likes of private posts, block every write for blocked users, lock the profile email, keep other users' email and phone private
 
 **Quality**
-- [x] Unit tests for React components (Vitest + React Testing Library)
-- [x] CI pipeline (lint, tests, build) on every pull request
+- [x] 171 unit tests (Vitest + React Testing Library) for components, hooks, route guards, schemas and services
+- [x] Prettier formatting, checked in CI
+- [x] CI pipeline (lint, formatting, tests, build) on every pull request
 - [x] Automatic deployment to Vercel
 
 ---
@@ -101,37 +101,72 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 | Forms | React Hook Form, Zod |
 | Backend | Supabase: Postgres, Auth, Storage, Realtime |
 | Testing | Vitest, React Testing Library |
-| Tooling | Vite, ESLint |
+| Tooling | Vite, ESLint, Prettier |
 | CI/CD | GitHub Actions, Vercel |
+
+## Architecture
+
+```
+pages/        smart: read the URL and context, call hooks, pass data down
+  ↓
+hooks/        state and requests (usePosts, usePostLikes, usePostModal, ...)
+  ↓
+services/     the only place that talks to Supabase; returns { data } or { error }
+  ↓
+Supabase      Postgres + Row Level Security, Auth, Storage, Realtime
+```
+
+- **Logic and view are split.** A component that has state, effects or requests keeps that logic in a hook next to it (`Feed.jsx` + `useFeed.js`, `CreatePostModal.jsx` + `useCreatePostForm.js`). The `.jsx` file only renders what the hook gives it. Components without logic (`LikeButton`, `RoleBadge`, `PostAuthor`, ...) are plain views that get everything through props.
+- **The database is the real guard.** Route guards and disabled buttons are for a good user experience; every rule (who can read a private post, who can write, who is an admin) is also enforced by RLS, because the publishable key is public and anyone can call the API directly.
+- **One shape for every service call.** Services return `{ data }` or `{ error }`, and database errors go through `failWith`, which logs the raw error and returns a message that is safe to show (`You don't have permission to do this.`). Supabase Auth errors are returned as they are, because their messages are already written for users.
+
+### Key decisions
+
+| Decision | Why |
+|---|---|
+| Supabase instead of a custom backend | Auth, Storage and Realtime are ready to use, so the work goes into the product and the database rules |
+| Restrictive policies for blocked users | They add "and you are not blocked" to every write without rewriting the existing policies, and apply to admins too |
+| `public_profiles` view for other users | `profiles` returns only your own row; everyone else is read through a view without email and phone |
+| Security definer helpers (`is_admin()`, `is_blocked()`) | Policies on `profiles` that read `profiles` would otherwise recurse |
+| Optimistic likes | The count changes instantly; it is rolled back with a message if saving fails, and a second click is ignored while the first one is saving |
+| Search and sort in the URL | They survive a refresh and the link can be shared |
+| Profile created by the client, not a trigger | Email and Google sign-ups both land on Complete Profile; if creating it fails, there is simply no row and the user is asked again |
+| Delete media files before the post | The Storage policy checks the `post_media` row, which the post's cascade delete removes |
 
 ## Project structure
 
 ```
 client/src/
-├── pages/        route-level screens (Feed, Home, Profile, InfoPage, ...)
-├── layouts/      shared page layouts (app navbar + content area)
-├── components/   UI components, grouped by feature (posts, admin, auth, profile, ui, ...)
-├── services/     all Supabase calls; return { data } or { error }
-├── hooks/        reusable state logic (useAuth, useProfile, usePostDetails, usePostLikes, usePostComments, usePostModal, usePostActions, useNotifications)
-├── context/      auth, profile and notifications providers
-├── routes/       route guards (signed in, profile completed, guest only, admin only)
-├── schemas/      Zod validation schemas
-├── utils/        small pure helpers (dates, names, text, errors, toasts, post counts, search and sort)
-├── config/       Supabase client, environment variables and the Chakra UI theme
-├── content/      static texts for the info pages (About, Guidelines, Privacy, Terms)
-├── assets/       logo and home page photos
-└── test/         test setup and the renderWithProviders helper
+├── pages/            route-level screens, each in its own folder
+│   └── Feed/
+│       ├── Feed.jsx          view
+│       └── useFeed.js        logic
+├── components/       UI components grouped by feature (posts, admin, auth, profile, sections, ui, ...)
+│   └── posts/CreatePostModal/
+│       ├── CreatePostModal.jsx
+│       ├── useCreatePostForm.js
+│       └── useCreatePostForm.test.js
+├── layouts/          app navbar + content area, blocked-user banner
+├── routes/           route guards (signed in, profile completed, guest only, admin only)
+├── hooks/            hooks shared by several components (useAuth, useProfile, usePosts, usePostLikes, usePostModal, usePostActions, useFilePicker, ...)
+├── services/         all Supabase calls
+├── context/          auth, profile and notifications providers
+├── schemas/          Zod validation schemas (they mirror the database CHECK constraints)
+├── utils/            small pure helpers (dates, names, text, errors, toasts, post counts, search and sort)
+├── config/           Supabase client, environment variables and the Chakra UI theme
+├── content/          static texts for the info pages (About, Guidelines, Privacy, Terms)
+├── assets/           logo and home page photos
+└── test/             test setup and the renderWithProviders helper
 supabase/
-└── migrations/   SQL scripts for the database
+└── migrations/       SQL scripts for the database
 .github/
-└── workflows/    CI pipeline
+└── workflows/        CI pipeline
 ```
 
-Tests live next to the file they test (`text.js` → `text.test.js`).
-
-Pages never talk to Supabase directly: they call `services/`, which return `{ data }` or `{ error }` with a user-friendly message.
-
-Colors always come from the theme (`colorPalette.*`, `coral.*`, `bg.*`, `fg.*`), never hard-coded, so every component works in both light and dark mode.
+- Every component lives in a folder with its own name, together with its logic hook and tests. Components are imported by their full path (`components/posts/FeedPostCard/FeedPostCard`).
+- Tests live next to the file they test (`useCommentItem.js` → `useCommentItem.test.js`).
+- Shared building blocks: `PageGrid` (the three-column page layout) and `PostList` (the list of post cards) are used by both the feed and user profiles.
+- Colors always come from the theme (`colorPalette.*`, `coral.*`, `bg.*`, `fg.*`), never hard-coded, so every component works in both light and dark mode.
 
 ---
 
@@ -168,6 +203,8 @@ npm run dev        # development server on http://localhost:5173
 npm test           # unit tests in watch mode
 npm run test:run   # unit tests once
 npm run lint       # ESLint
+npm run format     # format every file with Prettier
+npm run format:check  # check the formatting (what CI runs)
 npm run build      # production build
 ```
 
@@ -176,7 +213,7 @@ npm run build      # production build
 ## CI/CD
 
 ```
-pull request ──► GitHub Actions: install → lint → tests → build
+pull request ──► GitHub Actions: install → lint → formatting → tests → build
              ──► Vercel: preview deployment with its own URL
 merge to main ──► Vercel: production deployment (live demo)
 ```
@@ -202,7 +239,7 @@ Relationships:
 
 Deleting a profile or a post deletes everything that belongs to it (`ON DELETE CASCADE`).
 
-**profiles** — one per registered user
+**profiles** — one per registered user; each user can read only their own row (admins can read all), everyone else is read through `public_profiles`
 | Column | Type | Rules |
 |---|---|---|
 | `id` | uuid | PK, references `auth.users` |
@@ -266,6 +303,7 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 
 **Also:**
 - `posts_with_comment_count` — view used by the home page lists; respects RLS
+- `public_profiles` — read-only view with the public columns of every profile (`id`, `username`, `first_name`, `last_name`, `avatar_url`, `is_admin`, `created_at`); used for post and comment authors, notification actors and user profile pages
 - `get_public_stats()` — returns the total number of posts and users for the home page
 - `is_admin()` — tells whether the signed-in user is an admin; used by the admin policies, which let admins see every post and delete any post together with its media
 - `is_blocked()` — tells whether the signed-in user is blocked; used by restrictive policies that deny every write for blocked users
@@ -290,5 +328,7 @@ Deleting a profile or a post deletes everything that belongs to it (`ON DELETE C
 | `010_block_all_writes.sql` | `is_blocked()` function and restrictive policies that deny every write for blocked users |
 | `011_profiles_realtime.sql` | publishes `profiles` to Realtime |
 | `012_profile_email_lock.sql` | the profile email must match the signed-in account and cannot be changed |
+| `013_public_profiles.sql` | `public_profiles` view; `profiles` is readable only by its owner and admins |
+| `014_profiles_select_without_recursion.sql` | rewrites the `profiles` select policy without subqueries, which avoids "infinite recursion detected in policy" in the update policies |
 
-Run the files in order on an empty Supabase project. `007_avatars_storage.sql` is also safe to run again on an existing project, because it creates or updates the bucket and adds its policies only when they don't exist yet. Every later change goes into a new numbered file (`013_...sql`, etc.) in the same pull request as the code that needs it.
+Run the files in order on an empty Supabase project. `007_avatars_storage.sql` is also safe to run again on an existing project, because it creates or updates the bucket and adds its policies only when they don't exist yet. Every later change goes into a new numbered file (`015_...sql`, etc.) in the same pull request as the code that needs it.
