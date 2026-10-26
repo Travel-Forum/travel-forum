@@ -17,7 +17,7 @@ import PostDetailsModal from "../../components/posts/PostDetailsModal/PostDetail
 
 const Notifications = () => {
   const { user } = useAuth();
-  const { profile } = useProfile();
+  const { isBlocked } = useProfile();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
     useNotifications();
   const { openPost, modalProps } = usePostModal({ userId: user?.id });
@@ -65,7 +65,7 @@ const Notifications = () => {
         </Card.Body>
       </Card.Root>
 
-      <PostDetailsModal {...modalProps} disabled={profile?.is_blocked} />
+      <PostDetailsModal {...modalProps} disabled={isBlocked} />
     </Box>
   );
 };

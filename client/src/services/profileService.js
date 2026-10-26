@@ -1,5 +1,5 @@
 import { supabase } from "../config/supabaseClient";
-import { toFriendlyError } from "../utils/errors";
+import { failWith, toFriendlyError } from "../utils/errors";
 
 export const getProfile = (userId) =>
   supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
@@ -47,8 +47,7 @@ export const updateProfile = async (userId, { firstName, lastName, phone }) => {
     .single();
 
   if (error) {
-    console.error("Failed to update profile:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Failed to update profile", error);
   }
 
   return { data };
@@ -131,8 +130,7 @@ export const searchProfiles = async (query) => {
     .limit(20);
 
   if (error) {
-    console.error("Cannot find profiles:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Cannot find profiles", error);
   }
 
   return { data };
@@ -148,8 +146,7 @@ export const setUserBlocked = async (userId, isBlocked) => {
     .select("id");
 
   if (error) {
-    console.error("Update blocked status error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Update blocked status error", error);
   }
 
   if (data.length === 0) {
@@ -169,8 +166,7 @@ export const setUserAdmin = async (userId, isAdmin) => {
     .select("id");
 
   if (error) {
-    console.error("Update admin status error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Update admin status error", error);
   }
 
   if (data.length === 0) {
@@ -206,8 +202,7 @@ export const getProfileByUsername = async (username) => {
     .maybeSingle();
 
   if (error) {
-    console.error("Failed to get user by username:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Failed to get user by username", error);
   }
 
   return { data };

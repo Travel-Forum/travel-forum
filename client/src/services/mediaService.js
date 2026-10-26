@@ -1,5 +1,5 @@
 import { supabase } from "../config/supabaseClient";
-import { toFriendlyError } from "../utils/errors";
+import { failWith } from "../utils/errors";
 
 const BUCKET = "post-media";
 const SIGNED_URL_TTL_SECONDS = 60 * 60;
@@ -83,8 +83,7 @@ export const deletePostMedia = async (postId) => {
     .eq("post_id", postId);
 
   if (error) {
-    console.error("Cannot delete a post", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Cannot delete a post", error);
   }
 
   const paths = data.map((media) => media.storage_path);

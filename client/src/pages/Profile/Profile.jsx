@@ -20,8 +20,7 @@ import { updateProfile, uploadAvatar } from "../../services/profileService";
 import { showSuccess, showError } from "../../utils/toast.js";
 
 const Profile = () => {
-  const { profile, refreshProfile } = useProfile();
-  const isBlocked = profile.is_blocked;
+  const { profile, isBlocked, refreshProfile } = useProfile();
 
   const fields = [
     { label: "First Name", value: profile.first_name },

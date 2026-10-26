@@ -11,3 +11,10 @@ export const toFriendlyError = (error) => ({
   ...error,
   message: DB_ERROR_MESSAGES[error?.code] ?? DEFAULT_ERROR_MESSAGE,
 });
+
+// Logs the raw error for debugging and returns the { error } result
+// every service function uses, with a message that is safe to show.
+export const failWith = (label, error) => {
+  console.error(`${label}:`, error.message);
+  return { error: toFriendlyError(error) };
+};

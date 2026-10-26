@@ -12,6 +12,7 @@ import PostAuthor from "../PostAuthor/PostAuthor";
 import LikeButton from "../LikeButton/LikeButton";
 import PostActionsMenu from "../PostActionsMenu/PostActionsMenu";
 import { cardHoverStyles } from "../../../config/theme";
+import { getPostCommentCount } from "../../../utils/post";
 
 const FeedPostCard = ({
   post,
@@ -24,7 +25,7 @@ const FeedPostCard = ({
   onDelete,
   disabled = false,
 }) => {
-  const commentCount = post.comments?.[0]?.count ?? 0;
+  const commentCount = getPostCommentCount(post);
   const isOwn = post.author?.id === currentUserId;
   const openPost = () => onOpen(post.id);
   const handleKeyDown = (event) => {

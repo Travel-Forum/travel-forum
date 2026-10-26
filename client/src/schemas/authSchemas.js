@@ -45,40 +45,21 @@ export const signInSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export const completeProfileSchema = z.object({
-  firstName: z
+// First name, last name and username share the same 4–32 rule
+// (mirrors the CHECK constraints on the profiles table).
+const nameSchema = (label) =>
+  z
     .string()
-    .min(1, "First name is required")
+    .min(1, `${label} is required`)
     .min(4, "At least 4 symbols")
-    .max(32, "Maximum of 32 characters"),
+    .max(32, "Maximum of 32 characters");
 
-  lastName: z
-    .string()
-    .min(1, "Last name is required")
-    .min(4, "At least 4 symbols")
-    .max(32, "Maximum of 32 characters"),
-
-  username: z
-    .string()
-    .min(1, "Username is required")
-    .min(4, "At least 4 symbols")
-    .max(32, "Maximum of 32 characters"),
-
+export const profileEditSchema = z.object({
+  firstName: nameSchema("First name"),
+  lastName: nameSchema("Last name"),
   phone: phoneSchema,
 });
 
-export const profileEditSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, "First name is required")
-    .min(4, "At least 4 symbols")
-    .max(32, "Maximum of 32 characters"),
-
-  lastName: z
-    .string()
-    .min(1, "Last name is required")
-    .min(4, "At least 4 symbols")
-    .max(32, "Maximum of 32 characters"),
-
-  phone: phoneSchema,
+export const completeProfileSchema = profileEditSchema.extend({
+  username: nameSchema("Username"),
 });

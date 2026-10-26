@@ -1,6 +1,7 @@
-import { Avatar, Circle, HStack, Text, VStack } from "@chakra-ui/react";
+import { Circle, HStack, Text, VStack } from "@chakra-ui/react";
 import { getFullName } from "../../../utils/profile";
 import { formatDate } from "../../../utils/date";
+import UserAvatar from "../../profile/UserAvatar/UserAvatar";
 
 const NOTIFICATION_TEXT = {
   post_like: "liked your post",
@@ -35,10 +36,7 @@ const NotificationItem = ({ notification, onOpen }) => {
       onClick={() => onOpen(notification)}
       onKeyDown={handleKeyDown}
     >
-      <Avatar.Root size="sm">
-        <Avatar.Fallback name={actorName} />
-        <Avatar.Image src={actor?.avatar_url} />
-      </Avatar.Root>
+      <UserAvatar profile={actor} size="sm" />
 
       <VStack align="start" gap={0} flex="1">
         <Text fontSize="sm">

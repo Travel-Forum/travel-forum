@@ -4,13 +4,13 @@ import { useProfile } from "../../hooks/useProfile";
 import { Alert, Flex } from "@chakra-ui/react";
 
 const AppLayout = () => {
-  const { profile } = useProfile();
+  const { isBlocked } = useProfile();
 
   return (
     <Flex direction="column" h="100dvh">
       <AppNavbar />
 
-      {profile?.is_blocked && (
+      {isBlocked && (
         <Alert.Root
           status="error"
           variant="subtle"

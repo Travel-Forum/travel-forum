@@ -1,13 +1,6 @@
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  HStack,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Badge, Button, Card, HStack, Stack, Text } from "@chakra-ui/react";
 import { getFullName } from "../../../utils/profile";
+import UserAvatar from "../../profile/UserAvatar/UserAvatar";
 
 const AdminUserList = ({
   users,
@@ -39,10 +32,7 @@ const AdminUserList = ({
                 gap={3}
               >
                 <HStack gap={3} minW={0}>
-                  <Avatar.Root size="md">
-                    <Avatar.Fallback name={name} />
-                    <Avatar.Image src={user.avatar_url} />
-                  </Avatar.Root>
+                  <UserAvatar profile={user} size="md" />
 
                   <Stack gap={0} minW={0}>
                     <HStack gap={2} wrap="wrap">

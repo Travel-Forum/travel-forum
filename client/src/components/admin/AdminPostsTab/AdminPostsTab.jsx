@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input, Stack } from "@chakra-ui/react";
 import PostSortButtons from "../../posts/PostSortButtons/PostSortButtons";
 import AdminPostList from "../AdminPostList/AdminPostList";
 import ConfirmDialog from "../../ui/ConfirmDialog/ConfirmDialog";
-import { getFeedPosts } from "../../../services/postsService";
+import { usePosts } from "../../../hooks/usePosts";
 import { usePostActions } from "../../../hooks/usePostActions";
-import { matchesSearch, sortPosts } from "../../../utils/postFilters";
-import { showError } from "../../../utils/toast";
+import { filterAndSortPosts } from "../../../utils/postFilters";
 
 const AdminPostsTab = () => {
-  const [posts, setPosts] = useState([]);
+  const { posts, setPosts } = usePosts();
   const [searchText, setSearchText] = useState("");
   const [sort, setSort] = useState("newest");
 
@@ -18,28 +17,7 @@ const AdminPostsTab = () => {
       setPosts((previous) => previous.filter((post) => post.id !== postId)),
   });
 
-  useEffect(() => {
-    let ignore = false;
-
-    getFeedPosts().then(({ data, error }) => {
-      if (ignore) return;
-
-      if (error) {
-        showError("Could not load posts", error);
-      } else {
-        setPosts(data);
-      }
-    });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
-  const visiblePosts = sortPosts(
-    posts.filter((post) => matchesSearch(post, searchText)),
-    sort,
-  );
+  const visiblePosts = filterAndSortPosts(posts, searchText, sort);
 
   return (
     <Stack gap={4}>

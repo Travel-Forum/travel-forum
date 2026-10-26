@@ -1,7 +1,8 @@
 import { Link as RouterLink } from "react-router-dom";
-import { Avatar, HStack, Text, VStack, Link } from "@chakra-ui/react";
+import { HStack, Text, VStack, Link } from "@chakra-ui/react";
 import { getFullName } from "../../../utils/profile";
 import { formatDate } from "../../../utils/date";
+import UserAvatar from "../../profile/UserAvatar/UserAvatar";
 const ProfileLink = ({ to, children }) => {
   if (!to) return children;
 
@@ -19,10 +20,7 @@ const PostAuthor = ({ author, date, size = "md" }) => {
   return (
     <HStack gap={3}>
       <ProfileLink to={userProfileUrl}>
-        <Avatar.Root size={size}>
-          <Avatar.Fallback name={authorName} />
-          <Avatar.Image src={author?.avatar_url} />
-        </Avatar.Root>
+        <UserAvatar profile={author} size={size} />
       </ProfileLink>
 
       <VStack align="start" gap={0}>

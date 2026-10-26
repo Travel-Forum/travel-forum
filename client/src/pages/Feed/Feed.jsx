@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Grid, GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
+import { GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useProfile } from "../../hooks/useProfile";
+import { usePosts } from "../../hooks/usePosts";
 import { usePostModal } from "../../hooks/usePostModal";
 import { usePostActions } from "../../hooks/usePostActions";
-import {
-  createPost,
-  deletePost,
-  getFeedPosts,
-} from "../../services/postsService";
+import { createPost, deletePost } from "../../services/postsService";
 import { uploadPostMedia } from "../../services/mediaService";
 import { showError, showSuccess } from "../../utils/toast";
-import { getPostLikeCount } from "../../utils/post";
-import { matchesSearch, sortPosts } from "../../utils/postFilters";
+import { filterAndSortPosts } from "../../utils/postFilters";
 
+import PageGrid from "../../components/ui/PageGrid/PageGrid";
 import ProfileCard from "../../components/profile/ProfileCard/ProfileCard";
 import CreatePostTrigger from "../../components/posts/CreatePostTrigger/CreatePostTrigger";
 import CreatePostModal from "../../components/posts/CreatePostModal/CreatePostModal";
-import FeedPostCard from "../../components/posts/FeedPostCard/FeedPostCard";
+import PostList from "../../components/posts/PostList/PostList";
 import PostDetailsModal from "../../components/posts/PostDetailsModal/PostDetailsModal";
 import ConfirmDialog from "../../components/ui/ConfirmDialog/ConfirmDialog";
 import PostSortButtons from "../../components/posts/PostSortButtons/PostSortButtons";
@@ -27,19 +24,14 @@ import Footer from "../../components/sections/Footer/Footer";
 
 const Feed = () => {
   const { user } = useAuth();
-  const { profile } = useProfile();
+  const { profile, isBlocked } = useProfile();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
   const sort = searchParams.get("sort") ?? "newest";
-  const visiblePosts = sortPosts(
-    posts.filter((post) => matchesSearch(post, query)),
-    sort,
-  );
-  const isBlocked = profile?.is_blocked;
+
+  const { posts, loading, reload: refreshFeed } = usePosts();
+  const visiblePosts = filterAndSortPosts(posts, query, sort);
 
   const handleSortChange = (nextSort) => {
     setSearchParams(
@@ -50,8 +42,6 @@ const Feed = () => {
       { replace: true },
     );
   };
-
-  const refreshFeed = () => setRefreshKey((previous) => previous + 1);
 
   const {
     openPost,
@@ -79,26 +69,6 @@ const Feed = () => {
         if (isOpenInDetails(postId)) closePost();
       },
     });
-
-  useEffect(() => {
-    let ignore = false;
-
-    getFeedPosts().then(({ data, error }) => {
-      if (ignore) return;
-
-      if (error) {
-        showError("Could not get posts", error);
-      } else {
-        setPosts(data);
-      }
-
-      setLoading(false);
-    });
-
-    return () => {
-      ignore = true;
-    };
-  }, [refreshKey]);
 
   const handleCreatePost = async (formData) => {
     const { data: post, error } = await createPost({
@@ -130,18 +100,7 @@ const Feed = () => {
   };
 
   return (
-    <Grid
-      templateColumns={{ base: "1fr", lg: "1fr 2fr 1fr" }}
-      templateRows={{ lg: "minmax(0, 1fr)" }}
-      gap={{ base: 4, lg: 6 }}
-      maxW="1200px"
-      w="full"
-      mx="auto"
-      p={{ base: 2, md: 4 }}
-      pt={{ base: 3, md: 6 }}
-      flex="1"
-      minH="0"
-    >
+    <PageGrid>
       {/* On smaller screens only the posts are shown; the info links move to the profile menu */}
       <GridItem overflowY="auto" hideBelow="lg">
         <ProfileCard profile={profile} to="/profile" />
@@ -186,27 +145,20 @@ const Feed = () => {
             </Text>
           )}
 
-          {visiblePosts.map((post) => {
-            const likeCount = getLikeCount(post.id, getPostLikeCount(post));
-
-            return (
-              <FeedPostCard
-                key={post.id}
-                post={post}
-                onOpen={openPost}
-                liked={isLiked(post.id)}
-                likeCount={likeCount}
-                onToggleLike={() => toggleLike(post.id, likeCount)}
-                currentUserId={user?.id}
-                onEdit={startEdit}
-                onDelete={startDelete}
-                disabled={isBlocked}
-              />
-            );
-          })}
+          <PostList
+            posts={visiblePosts}
+            isLiked={isLiked}
+            getLikeCount={getLikeCount}
+            onToggleLike={toggleLike}
+            onOpen={openPost}
+            currentUserId={user?.id}
+            onEdit={startEdit}
+            onDelete={startDelete}
+            disabled={isBlocked}
+          />
         </VStack>
       </GridItem>
-    </Grid>
+    </PageGrid>
   );
 };
 
