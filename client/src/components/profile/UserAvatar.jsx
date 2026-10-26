@@ -1,15 +1,10 @@
 import { Avatar } from "@chakra-ui/react";
-import { useAuth } from "../../hooks/useAuth";
-import { useProfile } from "../../hooks/useProfile";
 import { getFullName } from "../../utils/profile";
 
-const UserAvatar = ({ size = "md" }) => {
-  const { user } = useAuth();
-  const { profile } = useProfile();
-
+const UserAvatar = ({ profile, size = "md" }) => {
   return (
     <Avatar.Root size={size}>
-      <Avatar.Fallback name={getFullName(profile) || user?.email} />
+      <Avatar.Fallback name={getFullName(profile) || profile?.username} />
       <Avatar.Image src={profile?.avatar_url} />
     </Avatar.Root>
   );

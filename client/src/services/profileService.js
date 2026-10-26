@@ -4,7 +4,14 @@ import { toFriendlyError } from "../utils/errors";
 export const getProfile = (userId) =>
   supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
 
-export const createProfile = async ({ id, email, firstName, lastName, username, phone }) => {
+export const createProfile = async ({
+  id,
+  email,
+  firstName,
+  lastName,
+  username,
+  phone,
+}) => {
   const { error } = await supabase.from("profiles").insert({
     id,
     email,
@@ -28,7 +35,6 @@ export const createProfile = async ({ id, email, firstName, lastName, username, 
 };
 
 export const updateProfile = async (userId, { firstName, lastName, phone }) => {
-
   const { data, error } = await supabase
     .from("profiles")
     .update({
@@ -37,7 +43,8 @@ export const updateProfile = async (userId, { firstName, lastName, phone }) => {
       phone,
     })
     .eq("id", userId)
-    .select().single();
+    .select()
+    .single();
 
   if (error) {
     console.error("Failed to update profile:", error.message);
@@ -46,7 +53,7 @@ export const updateProfile = async (userId, { firstName, lastName, phone }) => {
 
   return { data };
 };
-  
+
 const AVATARS_BUCKET = "avatars";
 const MAX_AVATAR_SIZE = 10 * 1024 * 1024;
 const AVATAR_EXTENSIONS = {
@@ -56,7 +63,6 @@ const AVATAR_EXTENSIONS = {
 };
 
 export const uploadAvatar = async (userId, file) => {
-
   if (!file || !AVATAR_EXTENSIONS[file.type]) {
     return {
       error: new Error("Please choose a JPEG, PNG, or WebP image."),
@@ -70,7 +76,7 @@ export const uploadAvatar = async (userId, file) => {
   }
 
   const path = `${userId}/${crypto.randomUUID()}.${AVATAR_EXTENSIONS[file.type]}`;
-  
+
   const { error: uploadError } = await supabase.storage
     .from(AVATARS_BUCKET)
     .upload(path, file, {
@@ -115,7 +121,9 @@ export const searchProfiles = async (query) => {
 
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, username, first_name, last_name, email, avatar_url, is_admin, is_blocked")
+    .select(
+      "id, username, first_name, last_name, email, avatar_url, is_admin, is_blocked",
+    )
     .or(
       `username.ilike.%${search}%,email.ilike.%${search}%,first_name.ilike.%${search}%,last_name.ilike.%${search}%`,
     )
@@ -127,11 +135,10 @@ export const searchProfiles = async (query) => {
     return { error: toFriendlyError(error) };
   }
 
-  return { data};
+  return { data };
 };
 
 export const setUserBlocked = async (userId, isBlocked) => {
-
   const { data, error } = await supabase
     .from("profiles")
     .update({
@@ -153,7 +160,6 @@ export const setUserBlocked = async (userId, isBlocked) => {
 };
 
 export const setUserAdmin = async (userId, isAdmin) => {
-
   const { data, error } = await supabase
     .from("profiles")
     .update({
@@ -190,4 +196,19 @@ export const subscribeToProfile = (userId, onChange) => {
     .subscribe();
 
   return () => supabase.removeChannel(channel);
+};
+
+export const getProfileByUsername = async (username) => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, username, first_name, last_name, is_admin, avatar_url")
+    .eq("username", username)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to get user by username:", error.message);
+    return { error: toFriendlyError(error) };
+  }
+
+  return { data };
 };

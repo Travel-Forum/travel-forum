@@ -1,11 +1,13 @@
 import { Menu, Portal, chakra } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useProfile } from "../../hooks/useProfile";
 import { INFO_PAGES } from "../../content/infoPages";
 import UserAvatar from "./UserAvatar";
 
 const ProfileMenu = () => {
   const { signOut } = useAuth()
+  const { profile } = useProfile()
   const navigate = useNavigate()
 
   const handleSignOut = async () => {
@@ -17,7 +19,7 @@ const ProfileMenu = () => {
     <Menu.Root>
       <Menu.Trigger asChild>
         <chakra.button rounded="full" cursor="pointer">
-          <UserAvatar size={{ base: "sm", md: "md" }} />
+          <UserAvatar profile={profile} size={{ base: "sm", md: "md" }} />
         </chakra.button>
       </Menu.Trigger>
       <Portal>
