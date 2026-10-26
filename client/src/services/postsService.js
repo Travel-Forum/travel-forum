@@ -47,13 +47,11 @@ export const createPost = async ({ authorId, title, content, visibility }) => {
 };
 
 export const deletePost = async (postId) => {
-
   const { error: deleteError } = await deletePostMedia(postId);
-  
+
   if (deleteError) {
     return { error: deleteError };
   }
-  
 
   const { data, error } = await supabase
     .from("posts")
@@ -74,13 +72,12 @@ export const deletePost = async (postId) => {
 };
 
 export const updatePost = async (postId, { title, content, visibility }) => {
-
   const { data, error } = await supabase
     .from("posts")
     .update({ title, content, visibility })
     .eq("id", postId)
-    .select("id")
-  
+    .select("id");
+
   if (error) {
     console.error("Update post error:", error.message);
     return { error: toFriendlyError(error) };
@@ -90,10 +87,11 @@ export const updatePost = async (postId, { title, content, visibility }) => {
 
   return {};
 };
-export const getFeedPosts = async () => {
-  const { data, error } = await supabase
+export const getFeedPosts = async ({ authorId } = {}) => {
+  let query = supabase
     .from("posts")
-    .select(`
+    .select(
+      `
       id,
       title,
       content,
@@ -113,9 +111,16 @@ export const getFeedPosts = async () => {
         storage_path,
         media_type
       )
-    `)
+    `,
+    )
     .order("created_at", { ascending: false })
     .order("created_at", { referencedTable: "post_media", ascending: true });
+
+  if (authorId) {
+    query = query.eq("author_id", authorId);
+  }
+  
+  const { data, error } = await query;
 
   if (error) {
     console.error("Get feed posts error:", error.message);
@@ -145,7 +150,8 @@ const withMediaUrls = async (posts) => {
 export const getPostById = async (postId) => {
   const { data, error } = await supabase
     .from("posts")
-    .select(`
+    .select(
+      `
       id,
       title,
       content,
@@ -165,7 +171,8 @@ export const getPostById = async (postId) => {
         storage_path,
         media_type
       )
-    `)
+    `,
+    )
     .eq("id", postId)
     .order("created_at", { referencedTable: "comments", ascending: true })
     .order("created_at", { referencedTable: "post_media", ascending: true })
