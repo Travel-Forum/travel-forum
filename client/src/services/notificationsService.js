@@ -1,5 +1,5 @@
 import { supabase } from "../config/supabaseClient";
-import { toFriendlyError } from "../utils/errors";
+import { failWith } from "../utils/errors";
 import { AUTHOR_FIELDS } from "./postsService";
 
 const NOTIFICATIONS_LIMIT = 50;
@@ -24,8 +24,7 @@ export const getNotifications = async (userId) => {
     .limit(NOTIFICATIONS_LIMIT);
 
   if (error) {
-    console.error("Get notifications error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Get notifications error", error);
   }
   return { data };
 };
@@ -37,8 +36,7 @@ export const markNotificationAsRead = async (notificationId) => {
     .eq("id", notificationId);
 
   if (error) {
-    console.error("Mark notification as read error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Mark notification as read error", error);
   }
   return {};
 };
@@ -51,8 +49,7 @@ export const markAllNotificationsAsRead = async (userId) => {
     .eq("is_read", false);
 
   if (error) {
-    console.error("Mark all notifications as read error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Mark all notifications as read error", error);
   }
   return {};
 };

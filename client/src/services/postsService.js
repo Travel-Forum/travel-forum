@@ -1,5 +1,5 @@
 import { supabase } from "../config/supabaseClient";
-import { toFriendlyError } from "../utils/errors";
+import { failWith } from "../utils/errors";
 import { getSignedMediaUrls, deletePostMedia } from "./mediaService";
 
 export const AUTHOR_FIELDS = "id, username, first_name, last_name, avatar_url";
@@ -12,8 +12,7 @@ export const getLatestPosts = async (limit = 10) => {
     .limit(limit);
 
   if (error) {
-    console.error("Get latest posts error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Get latest posts error", error);
   }
   return { data };
 };
@@ -26,8 +25,7 @@ export const getMostCommentedPosts = async (limit = 10) => {
     .limit(limit);
 
   if (error) {
-    console.error("Get most commented posts error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Get most commented posts error", error);
   }
   return { data };
 };
@@ -40,8 +38,7 @@ export const createPost = async ({ authorId, title, content, visibility }) => {
     .single();
 
   if (error) {
-    console.error("Create post error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Create post error", error);
   }
   return { data };
 };
@@ -60,8 +57,7 @@ export const deletePost = async (postId) => {
     .select("id");
 
   if (error) {
-    console.error("Delete post error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Delete post error", error);
   }
 
   if (data.length === 0) {
@@ -79,8 +75,7 @@ export const updatePost = async (postId, { title, content, visibility }) => {
     .select("id");
 
   if (error) {
-    console.error("Update post error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Update post error", error);
   }
 
   if (data.length === 0) return { error: NOT_OWNER_ERROR };
@@ -123,8 +118,7 @@ export const getFeedPosts = async ({ authorId } = {}) => {
   const { data, error } = await query;
 
   if (error) {
-    console.error("Get feed posts error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Get feed posts error", error);
   }
 
   return { data: await withMediaUrls(data) };
@@ -179,8 +173,7 @@ export const getPostById = async (postId) => {
     .maybeSingle();
 
   if (error) {
-    console.error("Get post by id error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Get post by id error", error);
   }
 
   if (!data) return { data: null };

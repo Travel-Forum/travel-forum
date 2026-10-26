@@ -1,0 +1,43 @@
+import { Box, Flex, Heading, Text, HStack } from "@chakra-ui/react";
+import { LuFileText, LuUsers } from "react-icons/lu";
+import { usePublicStats } from "./usePublicStats";
+import IconBox from "../../ui/IconBox/IconBox";
+import CountUp from "../../ui/CountUp/CountUp";
+
+const StatItem = ({ icon, value, label }) => {
+  return (
+    <HStack gap={4} flex="1" justify="center" py={4}>
+      <IconBox>{icon}</IconBox>
+      <Box>
+        <Heading size="lg">
+          {value === null ? "—" : <CountUp value={value} />}
+        </Heading>
+        <Text color="fg.muted" fontSize="sm">
+          {label}
+        </Text>
+      </Box>
+    </HStack>
+  );
+};
+
+const StatsBar = () => {
+  const { posts, users } = usePublicStats();
+
+  return (
+    <Box as="section" py={6}>
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        bg="bg.subtle"
+        borderWidth="1px"
+        borderColor="border"
+        borderRadius="xl"
+        px={4}
+      >
+        <StatItem icon={<LuFileText />} value={posts} label="Total posts" />
+        <StatItem icon={<LuUsers />} value={users} label="Active users" />
+      </Flex>
+    </Box>
+  );
+};
+
+export default StatsBar;

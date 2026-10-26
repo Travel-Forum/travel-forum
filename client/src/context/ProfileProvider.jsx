@@ -61,7 +61,9 @@ const ProfileProvider = ({ children }) => {
     if (!error) setProfile(data);
   };
 
-  const value = { profile, loading, error, refreshProfile };
+  const isBlocked = profile?.is_blocked ?? false;
+
+  const value = { profile, isBlocked, loading, error, refreshProfile };
 
   return (
     <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>

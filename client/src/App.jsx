@@ -1,24 +1,24 @@
 import { Routes, Route } from "react-router-dom";
 
-import Home from "./pages/Home";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
-import AuthCallback from "./pages/AuthCallback";
-import VerifyEmail from "./pages/VerifyEmail";
-import CompleteProfile from "./pages/CompleteProfile";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import GuestRoute from "./routes/GuestRoute";
-import RequireProfile from "./routes/RequireProfile";
-import RequireNoProfile from "./routes/RequireNoProfile";
-import AppLayout from "./layouts/AppLayout";
-import Feed from "./pages/Feed";
-import Notifications from "./pages/Notifications";
-import Profile from "./pages/Profile";
-import InfoPage from "./pages/InfoPage";
+import Home from "./pages/Home/Home";
+import SignUp from "./pages/SignUp/SignUp";
+import SignIn from "./pages/SignIn/SignIn";
+import AuthCallback from "./pages/AuthCallback/AuthCallback";
+import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
+import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
+import ProtectedRoute from "./routes/ProtectedRoute/ProtectedRoute";
+import GuestRoute from "./routes/GuestRoute/GuestRoute";
+import RequireProfile from "./routes/RequireProfile/RequireProfile";
+import RequireNoProfile from "./routes/RequireNoProfile/RequireNoProfile";
+import AppLayout from "./layouts/AppLayout/AppLayout";
+import Feed from "./pages/Feed/Feed";
+import Notifications from "./pages/Notifications/Notifications";
+import Profile from "./pages/Profile/Profile";
+import InfoPage from "./pages/InfoPage/InfoPage";
 import { INFO_PAGES } from "./content/infoPages";
-import RequireAdmin from "./routes/RequireAdmin";
-import AdminPanel from "./pages/AdminPanel";
-import UserProfile from "./pages/UserProfile";
+import RequireAdmin from "./routes/RequireAdmin/RequireAdmin";
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
+import UserProfile from "./pages/UserProfile/UserProfile";
 
 const App = () => {
   return (

@@ -1,5 +1,5 @@
 import { supabase } from "../config/supabaseClient";
-import { toFriendlyError } from "../utils/errors";
+import { failWith } from "../utils/errors";
 
 export const createComment = async ({
   postId,
@@ -15,8 +15,7 @@ export const createComment = async ({
   });
 
   if (error) {
-    console.error("Create comment error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Create comment error", error);
   }
   return {};
 };
@@ -31,8 +30,7 @@ export const updateComment = async ({ commentId, content }) => {
     .select("id");
 
   if (error) {
-    console.error("Update comment error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Update comment error", error);
   }
   if (data.length === 0) return { error: NOT_OWNER_ERROR };
   return {};
@@ -46,8 +44,7 @@ export const deleteComment = async (commentId) => {
     .select("id");
 
   if (error) {
-    console.error("Delete comment error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Delete comment error", error);
   }
   if (data.length === 0) return { error: NOT_OWNER_ERROR };
   return {};

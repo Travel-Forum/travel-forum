@@ -5,11 +5,11 @@ import "@fontsource-variable/fraunces";
 import "@fontsource-variable/dm-sans";
 import "./index.css";
 import App from "./App";
-import { Provider } from "./components/ui/Provider";
+import { Provider } from "./components/ui/Provider/Provider";
 import AuthProvider from "./context/AuthProvider";
 import ProfileProvider from "./context/ProfileProvider";
 import NotificationsProvider from "./context/NotificationsProvider";
-import { Toaster } from "./components/ui/Toaster";
+import { Toaster } from "./components/ui/Toaster/Toaster";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

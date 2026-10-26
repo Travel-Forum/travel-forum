@@ -1,5 +1,28 @@
-import { describe, it, expect } from "vitest";
-import { toFriendlyError } from "./errors.js";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { failWith, toFriendlyError } from "./errors.js";
+
+describe("failWith", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("returns the error with a message that is safe to show", () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const result = failWith("Load posts error", {
+      code: "42501",
+      message: "new row violates row-level security policy",
+    });
+
+    expect(result.error.message).toBe("You don't have permission to do this.");
+  });
+
+  it("logs the raw message for debugging", () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    failWith("Load posts error", { code: "XX000", message: "internal error" });
+
+    expect(log).toHaveBeenCalledWith("Load posts error:", "internal error");
+  });
+});
 
 describe("toFriendlyError", () => {
   it("explains a row level security error", () => {

@@ -1,5 +1,5 @@
 import { supabase } from "../config/supabaseClient";
-import { toFriendlyError } from "../utils/errors";
+import { failWith } from "../utils/errors";
 
 export const likePost = async ({ postId, userId }) => {
   const { error } = await supabase
@@ -7,8 +7,7 @@ export const likePost = async ({ postId, userId }) => {
     .insert({ post_id: postId, user_id: userId });
 
   if (error) {
-    console.error("Like post error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Like post error", error);
   }
   return {};
 };
@@ -21,8 +20,7 @@ export const unlikePost = async ({ postId, userId }) => {
     .eq("user_id", userId);
 
   if (error) {
-    console.error("Unlike post error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Unlike post error", error);
   }
   return {};
 };
@@ -34,8 +32,7 @@ export const getLikedPostIds = async (userId) => {
     .eq("user_id", userId);
 
   if (error) {
-    console.error("Get liked posts error:", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Get liked posts error", error);
   }
   return { data: data.map((like) => like.post_id) };
 };

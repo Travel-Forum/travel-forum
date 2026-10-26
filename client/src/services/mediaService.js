@@ -1,5 +1,5 @@
 import { supabase } from "../config/supabaseClient";
-import { toFriendlyError } from "../utils/errors";
+import { failWith } from "../utils/errors";
 
 const BUCKET = "post-media";
 const SIGNED_URL_TTL_SECONDS = 60 * 60;
@@ -13,10 +13,12 @@ const getMediaType = (file) =>
   file.type.startsWith("video/") ? "video" : "image";
 
 const removeUploadedFiles = async (paths) => {
-  if (paths.length === 0) return;
+  if (paths.length === 0) return {};
 
   const { error } = await supabase.storage.from(BUCKET).remove(paths);
-  if (error) console.error("Remove uploaded media error:", error.message);
+  if (error) return failWith("Remove media files error", error);
+
+  return {};
 };
 
 export const uploadPostMedia = async ({ userId, postId, files }) => {
@@ -83,13 +85,10 @@ export const deletePostMedia = async (postId) => {
     .eq("post_id", postId);
 
   if (error) {
-    console.error("Cannot delete a post", error.message);
-    return { error: toFriendlyError(error) };
+    return failWith("Get post media error", error);
   }
 
-  const paths = data.map((media) => media.storage_path);
-
-  await removeUploadedFiles(paths);
-
-  return {};
+  // If the files can't be removed, stop here so the post isn't deleted
+  // and its files aren't left behind in Storage; the user can try again.
+  return removeUploadedFiles(data.map((media) => media.storage_path));
 };

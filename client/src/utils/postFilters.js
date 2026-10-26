@@ -24,3 +24,9 @@ export const sortPosts = (posts, sort) => {
 
   return [...posts];
 };
+
+export const filterAndSortPosts = (posts, query, sort) =>
+  sortPosts(
+    posts.filter((post) => matchesSearch(post, query)),
+    sort,
+  );
