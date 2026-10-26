@@ -200,7 +200,7 @@ export const subscribeToProfile = (userId, onChange) => {
 
 export const getProfileByUsername = async (username) => {
   const { data, error } = await supabase
-    .from("profiles")
+    .from("public_profiles")
     .select("id, username, first_name, last_name, is_admin, avatar_url")
     .eq("username", username)
     .maybeSingle();
