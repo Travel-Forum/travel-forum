@@ -97,7 +97,7 @@ export const getFeedPosts = async ({ authorId } = {}) => {
       content,
       visibility,
       created_at,
-      author:profiles!author_id (
+      author:public_profiles!author_id (
         id,
         username,
         first_name,
@@ -157,14 +157,14 @@ export const getPostById = async (postId) => {
       content,
       visibility,
       created_at,
-      author:profiles!author_id (${AUTHOR_FIELDS}),
+      author:public_profiles!author_id (${AUTHOR_FIELDS}),
       post_likes(count),
       comments (
         id,
         parent_comment_id,
         content,
         created_at,
-        author:profiles!author_id (${AUTHOR_FIELDS})
+        author:public_profiles!author_id (${AUTHOR_FIELDS})
       ),
       post_media (
         id,

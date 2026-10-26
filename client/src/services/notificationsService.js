@@ -14,7 +14,7 @@ export const getNotifications = async (userId) => {
       comment_id,
       is_read,
       created_at,
-      actor:profiles!actor_id (${AUTHOR_FIELDS}),
+      actor:public_profiles!actor_id (${AUTHOR_FIELDS}),
       post:posts (id, title)
     `)
     .eq("recipient_id", userId)
