@@ -1,16 +1,5 @@
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
-
-import { useAuth } from "../../hooks/useAuth";
-import { useProfile } from "../../hooks/useProfile";
-import { usePosts } from "../../hooks/usePosts";
-import { usePostModal } from "../../hooks/usePostModal";
-import { usePostActions } from "../../hooks/usePostActions";
-import { createPost, deletePost } from "../../services/postsService";
-import { uploadPostMedia } from "../../services/mediaService";
-import { showError, showSuccess } from "../../utils/toast";
-import { filterAndSortPosts } from "../../utils/postFilters";
+import { useFeed } from "./useFeed";
 
 import PageGrid from "../../components/ui/PageGrid/PageGrid";
 import ProfileCard from "../../components/profile/ProfileCard/ProfileCard";
@@ -23,81 +12,28 @@ import PostSortButtons from "../../components/posts/PostSortButtons/PostSortButt
 import Footer from "../../components/sections/Footer/Footer";
 
 const Feed = () => {
-  const { user } = useAuth();
-  const { profile, isBlocked } = useProfile();
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("q");
-  const sort = searchParams.get("sort") ?? "newest";
-
-  const { posts, loading, reload: refreshFeed } = usePosts();
-  const visiblePosts = filterAndSortPosts(posts, query, sort);
-
-  const handleSortChange = (nextSort) => {
-    setSearchParams(
-      (params) => {
-        params.set("sort", nextSort);
-        return params;
-      },
-      { replace: true },
-    );
-  };
-
   const {
+    userId,
+    profile,
+    isBlocked,
+    query,
+    sort,
+    changeSort,
+    posts,
+    visiblePosts,
+    loading,
+    createModalProps,
+    openCreate,
     openPost,
-    closePost,
-    reloadPost,
     modalProps,
     isLiked,
     getLikeCount,
     toggleLike,
-  } = usePostModal({
-    userId: user?.id,
-    onCommentsChange: refreshFeed,
-  });
-
-  const isOpenInDetails = (postId) => modalProps.post?.id === postId;
-
-  const { startEdit, startDelete, editModalProps, deleteDialogProps } =
-    usePostActions({
-      onUpdated: (postId) => {
-        refreshFeed();
-        if (isOpenInDetails(postId)) reloadPost();
-      },
-      onDeleted: (postId) => {
-        refreshFeed();
-        if (isOpenInDetails(postId)) closePost();
-      },
-    });
-
-  const handleCreatePost = async (formData) => {
-    const { data: post, error } = await createPost({
-      authorId: user.id,
-      ...formData,
-    });
-
-    if (error) {
-      showError("Could not create post", error);
-      return;
-    }
-
-    const { error: mediaError } = await uploadPostMedia({
-      userId: user.id,
-      postId: post.id,
-      files: formData.media,
-    });
-
-    if (mediaError) {
-      // Roll back so a retry doesn't create a duplicate post
-      await deletePost(post.id);
-      showError("Could not upload media", mediaError);
-      return;
-    }
-
-    showSuccess("Post created", "Your post is now live.");
-    setIsCreateOpen(false);
-    refreshFeed();
-  };
+    startEdit,
+    startDelete,
+    editModalProps,
+    deleteDialogProps,
+  } = useFeed();
 
   return (
     <PageGrid>
@@ -109,16 +45,13 @@ const Feed = () => {
       <GridItem overflowY="auto" id="feed-scroll">
         <VStack gap={4} align="stretch">
           <CreatePostTrigger
-            onOpenModal={() => setIsCreateOpen(true)}
+            profile={profile}
+            onOpenModal={openCreate}
             disabled={isBlocked}
           />
-          <PostSortButtons value={sort} onChange={handleSortChange} />
+          <PostSortButtons value={sort} onChange={changeSort} />
 
-          <CreatePostModal
-            open={isCreateOpen}
-            onClose={() => setIsCreateOpen(false)}
-            onSubmit={handleCreatePost}
-          />
+          <CreatePostModal {...createModalProps} />
 
           <PostDetailsModal
             {...modalProps}
@@ -151,7 +84,7 @@ const Feed = () => {
             getLikeCount={getLikeCount}
             onToggleLike={toggleLike}
             onOpen={openPost}
-            currentUserId={user?.id}
+            currentUserId={userId}
             onEdit={startEdit}
             onDelete={startDelete}
             disabled={isBlocked}

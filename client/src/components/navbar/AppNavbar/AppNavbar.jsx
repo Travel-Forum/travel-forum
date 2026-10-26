@@ -1,37 +1,30 @@
-import { useState } from "react";
-import { NavLink, Link, useNavigate, useSearchParams } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { Flex, Box, Input, HStack, IconButton, Image } from "@chakra-ui/react";
 import { LuBell, LuShield } from "react-icons/lu";
 import logo from "../../../assets/icons/forum-logo.svg";
 import ProfileMenu from "../../profile/ProfileMenu/ProfileMenu";
 import NotificationBadge from "../NotificationBadge/NotificationBadge";
 import { ColorModeButton } from "../../ui/ColorMode/ColorMode";
-import { useNotifications } from "../../../hooks/useNotifications";
-import { useProfile } from "../../../hooks/useProfile";
+import { useAppNavbar } from "./useAppNavbar";
 
-const NAV_ITEMS = [
-  { to: "/notifications", label: "Notifications", icon: LuBell },
-];
+const navButtonProps = {
+  asChild: true,
+  variant: "ghost",
+  size: { base: "sm", md: "md" },
+  padding: { base: 2, md: 4 },
+  _currentPage: { bg: "bg.muted" },
+};
+
 const AppNavbar = () => {
-  const { unreadCount } = useNotifications();
-  const { profile } = useProfile();
-  const [searchParams] = useSearchParams();
-  const query = searchParams.get("q");
-  const [searchText, setSearchText] = useState(query ?? "");
-  const navigate = useNavigate();
-
-  const handleSearchChange = (event) => {
-    const text = event.target.value;
-
-    setSearchText(text);
-    navigate(`/feed?q=${encodeURIComponent(text)}`, { replace: true });
-  };
-
-  const scrollToTop = () => {
-    ["feed-scroll", "app-scroll"].forEach((id) => {
-      document.getElementById(id)?.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  };
+  const {
+    profile,
+    isAdmin,
+    unreadCount,
+    searchText,
+    changeSearch,
+    scrollToTop,
+    signOut,
+  } = useAppNavbar();
 
   return (
     <Flex
@@ -62,38 +55,20 @@ const AppNavbar = () => {
           placeholder="Search"
           size={{ base: "sm", md: "md" }}
           value={searchText}
-          onChange={handleSearchChange}
+          onChange={(event) => changeSearch(event.target.value)}
         />
       </Box>
 
       <HStack gap={{ base: 0, md: 2 }} flexShrink={0}>
-        {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-          <IconButton
-            key={to}
-            asChild
-            variant="ghost"
-            size={{ base: "sm", md: "md" }}
-            padding={{ base: 2, md: 4 }}
-            position="relative"
-            _currentPage={{ bg: "bg.muted" }}
-          >
-            <NavLink to={to} aria-label={label}>
-              <Icon />
-              {to === "/notifications" && (
-                <NotificationBadge count={unreadCount} />
-              )}
-            </NavLink>
-          </IconButton>
-        ))}
+        <IconButton {...navButtonProps} position="relative">
+          <NavLink to="/notifications" aria-label="Notifications">
+            <LuBell />
+            <NotificationBadge count={unreadCount} />
+          </NavLink>
+        </IconButton>
 
-        {profile?.is_admin && (
-          <IconButton
-            asChild
-            variant="ghost"
-            size={{ base: "sm", md: "md" }}
-            padding={{ base: 2, md: 4 }}
-            _currentPage={{ bg: "bg.muted" }}
-          >
+        {isAdmin && (
+          <IconButton {...navButtonProps}>
             <NavLink to="/admin" aria-label="Admin">
               <LuShield />
             </NavLink>
@@ -101,7 +76,7 @@ const AppNavbar = () => {
         )}
 
         <ColorModeButton />
-        <ProfileMenu />
+        <ProfileMenu profile={profile} onSignOut={signOut} />
       </HStack>
     </Flex>
   );

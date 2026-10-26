@@ -1,10 +1,9 @@
-import { useRef } from "react";
-
 import { LuImage } from "react-icons/lu";
 import { IconButton } from "@chakra-ui/react";
+import { useFilePicker } from "../../../hooks/useFilePicker";
 
 const PostMediaPicker = ({ onFilesSelected }) => {
-  const inputRef = useRef(null);
+  const { openPicker, inputProps } = useFilePicker(onFilesSelected);
 
   return (
     <>
@@ -12,7 +11,7 @@ const PostMediaPicker = ({ onFilesSelected }) => {
         type="button"
         variant="ghost"
         aria-label="Add media"
-        onClick={() => inputRef.current.click()}
+        onClick={openPicker}
       >
         <LuImage />
       </IconButton>
@@ -21,14 +20,7 @@ const PostMediaPicker = ({ onFilesSelected }) => {
         type="file"
         accept="image/jpeg, image/png, image/webp, image/gif, video/mp4, video/webm"
         multiple
-        ref={inputRef}
-        hidden
-        onChange={(e) => {
-          const files = Array.from(e.target.files);
-          onFilesSelected(files);
-          // Clear the input so picking the same file again still fires onChange
-          e.target.value = "";
-        }}
+        {...inputProps}
       />
     </>
   );

@@ -1,19 +1,10 @@
 import { Menu, Portal, chakra } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth";
-import { useProfile } from "../../../hooks/useProfile";
 import { INFO_PAGES } from "../../../content/infoPages";
 import UserAvatar from "../UserAvatar/UserAvatar";
 
-const ProfileMenu = () => {
-  const { signOut } = useAuth();
-  const { profile } = useProfile();
+const ProfileMenu = ({ profile, onSignOut }) => {
   const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/");
-  };
 
   return (
     <Menu.Root>
@@ -44,7 +35,7 @@ const ProfileMenu = () => {
             </Menu.ItemGroup>
             <Menu.Separator hideFrom="lg" />
 
-            <Menu.Item value="signout" onClick={handleSignOut}>
+            <Menu.Item value="signout" onClick={onSignOut}>
               Sign Out
             </Menu.Item>
           </Menu.Content>

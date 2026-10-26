@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { GridItem, Text, VStack } from "@chakra-ui/react";
 
 import { useProfile } from "../../hooks/useProfile";
-import { usePosts } from "../../hooks/usePosts";
-import { usePostModal } from "../../hooks/usePostModal";
-import { getProfileByUsername } from "../../services/profileService";
-import { showError } from "../../utils/toast";
+import { useUserProfile } from "./useUserProfile";
 
 import PageGrid from "../../components/ui/PageGrid/PageGrid";
 import Loading from "../../components/ui/Loading/Loading";
@@ -16,43 +12,20 @@ import PostList from "../../components/posts/PostList/PostList";
 import PostDetailsModal from "../../components/posts/PostDetailsModal/PostDetailsModal";
 
 const UserProfileContent = ({ username }) => {
-  const { profile: currentProfile, isBlocked } = useProfile();
-  const [profile, setProfile] = useState(null);
-  const [profileLoading, setProfileLoading] = useState(true);
-
   const {
+    profile,
+    loading,
     posts,
-    loading: postsLoading,
-    reload: reloadPosts,
-  } = usePosts({ authorId: profile?.id, enabled: profile !== null });
+    currentUserId,
+    isBlocked,
+    openPost,
+    modalProps,
+    isLiked,
+    getLikeCount,
+    toggleLike,
+  } = useUserProfile(username);
 
-  const { openPost, modalProps, isLiked, getLikeCount, toggleLike } =
-    usePostModal({
-      userId: currentProfile.id,
-      onCommentsChange: reloadPosts,
-    });
-
-  useEffect(() => {
-    let ignore = false;
-
-    getProfileByUsername(username).then(({ data, error }) => {
-      if (ignore) return;
-
-      if (error) {
-        showError("Failed to load user by username", error);
-      } else {
-        setProfile(data);
-      }
-
-      setProfileLoading(false);
-    });
-
-    return () => {
-      ignore = true;
-    };
-  }, [username]);
-
-  if (profileLoading || postsLoading) return <Loading />;
+  if (loading) return <Loading />;
 
   if (profile === null) return <ErrorState message="User not found" />;
 
@@ -79,7 +52,7 @@ const UserProfileContent = ({ username }) => {
             getLikeCount={getLikeCount}
             onToggleLike={toggleLike}
             onOpen={openPost}
-            currentUserId={currentProfile.id}
+            currentUserId={currentUserId}
             disabled={isBlocked}
           />
         </VStack>
@@ -88,6 +61,8 @@ const UserProfileContent = ({ username }) => {
   );
 };
 
+// Your own username goes to /profile; `key` resets the page state
+// when moving from one user to another.
 const UserProfile = () => {
   const { username } = useParams();
   const { profile } = useProfile();

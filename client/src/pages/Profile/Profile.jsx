@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Card,
@@ -11,66 +10,23 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
-import { useProfile } from "../../hooks/useProfile";
 import { getFullName } from "../../utils/profile";
+import { useProfilePage } from "./useProfilePage";
 import ProfileEditForm from "../../components/profile/ProfileEditForm/ProfileEditForm";
 import AvatarUpload from "../../components/profile/AvatarUpload/AvatarUpload";
 import RoleBadge from "../../components/profile/RoleBadge/RoleBadge";
-import { updateProfile, uploadAvatar } from "../../services/profileService";
-import { showSuccess, showError } from "../../utils/toast.js";
 
 const Profile = () => {
-  const { profile, isBlocked, refreshProfile } = useProfile();
-
-  const fields = [
-    { label: "First Name", value: profile.first_name },
-    { label: "Last Name", value: profile.last_name },
-    { label: "Username", value: profile.username },
-    { label: "Email", value: profile.email },
-    { label: "Phone", value: profile.phone },
-  ];
-
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
-
-  const handleFileSelected = async (file) => {
-    const { error } = await uploadAvatar(profile.id, file);
-
-    if (error) {
-      showError("Cannot update your avatar", error);
-      return;
-    }
-
-    await refreshProfile();
-    showSuccess("Your avatar was updated successfully.");
-  };
-
-  const handleSubmit = async ({ firstName, lastName, phone }) => {
-    const { error } = await updateProfile(profile.id, {
-      firstName,
-      lastName,
-      phone,
-    });
-
-    if (error) {
-      showError("Cannot update profile information", error);
-      return;
-    }
-
-    await refreshProfile();
-    showSuccess(
-      "Profile updated",
-      "Your profile information was updated successfully.",
-    );
-    setIsEditing(false);
-  };
+  const {
+    profile,
+    isBlocked,
+    fields,
+    isEditing,
+    startEditing,
+    cancelEditing,
+    changeAvatar,
+    saveProfile,
+  } = useProfilePage();
 
   return (
     <Box maxW="700px" mx="auto" mt={10} mb={10} px={4}>
@@ -78,7 +34,8 @@ const Profile = () => {
         <VStack gap={6} align="stretch">
           <VStack gap={3}>
             <AvatarUpload
-              onFileSelected={handleFileSelected}
+              profile={profile}
+              onFileSelected={changeAvatar}
               disabled={isBlocked}
             />
 
@@ -104,7 +61,7 @@ const Profile = () => {
               <IconButton
                 aria-label="Edit profile information"
                 size="xs"
-                onClick={handleEdit}
+                onClick={startEditing}
                 disabled={isBlocked}
               >
                 <LuPencil size={12} />
@@ -114,8 +71,8 @@ const Profile = () => {
             {isEditing ? (
               <ProfileEditForm
                 profile={profile}
-                onCancel={handleCancel}
-                onSubmit={handleSubmit}
+                onCancel={cancelEditing}
+                onSubmit={saveProfile}
               />
             ) : (
               <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={5}>

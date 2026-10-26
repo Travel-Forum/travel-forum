@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller } from "react-hook-form";
 import {
   Button,
   CloseButton,
@@ -21,13 +19,13 @@ import PostMediaPicker from "../PostMediaPicker/PostMediaPicker";
 import PostMediaPreview from "../PostMediaPreview/PostMediaPreview";
 
 import {
-  createPostSchema,
   TITLE_MIN_LENGTH,
   TITLE_MAX_LENGTH,
   CONTENT_MIN_LENGTH,
   CONTENT_MAX_LENGTH,
 } from "../../../schemas/postSchemas";
 import { getLengthHint } from "../../../utils/text";
+import { useCreatePostForm } from "./useCreatePostForm";
 
 import FormField from "../../ui/FormField/FormField";
 import ConfirmDialog from "../../ui/ConfirmDialog/ConfirmDialog";
@@ -40,84 +38,29 @@ const visibilityOptions = createListCollection({
   ],
 });
 
-const toFormValues = (post) => ({
-  title: post?.title ?? "",
-  content: post?.content ?? "",
-  visibility: post?.visibility ?? "public",
-  media: [],
-});
-
 // Creates a new post, or edits `post` when one is passed.
-// Editing changes title, content and visibility; attached media stays as it is.
 const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
-  const isEditing = post !== null;
-
   const {
+    isEditing,
     register,
-    handleSubmit,
-    reset,
     control,
-    formState: { errors, isSubmitting, isDirty },
-    setValue,
-  } = useForm({
-    resolver: zodResolver(createPostSchema),
-    defaultValues: toFormValues(post),
-  });
-
-  const [isDiscardOpen, setIsDiscardOpen] = useState(false);
-
-  const title = useWatch({ control, name: "title" });
-  const content = useWatch({ control, name: "content" });
-  const media = useWatch({ control, name: "media" });
+    errors,
+    isSubmitting,
+    title,
+    content,
+    media,
+    contentProps,
+    submit,
+    requestClose,
+    isDiscardOpen,
+    discard,
+    keepEditing,
+    addFiles,
+    removeFile,
+    insertEmoji,
+  } = useCreatePostForm({ open, post, onClose, onSubmit });
 
   const emojiTheme = useColorModeValue(Theme.LIGHT, Theme.DARK);
-
-  const contentRef = useRef(null);
-  const { ref: registerContentRef, ...contentField } = register("content");
-
-  // Start from the post being edited when opening, and from an empty form after closing.
-  useEffect(() => {
-    reset(toFormValues(open ? post : null));
-  }, [open, post, reset]);
-
-  const requestClose = () => {
-    if (isDirty) {
-      setIsDiscardOpen(true);
-    } else {
-      onClose();
-    }
-  };
-
-  const handleDiscard = () => {
-    setIsDiscardOpen(false);
-    onClose();
-  };
-
-  const handleFilesSelected = (files) => {
-    setValue("media", [...media, ...files], { shouldDirty: true });
-  };
-
-  const handleRemoveFile = (fileToRemove) => {
-    setValue(
-      "media",
-      media.filter((file) => file !== fileToRemove),
-      { shouldDirty: true },
-    );
-  };
-
-  const handleEmojiClick = ({ emoji }) => {
-    const textarea = contentRef.current;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-
-    const nextContent = content.slice(0, start) + emoji + content.slice(end);
-    if (nextContent.length > CONTENT_MAX_LENGTH) return;
-
-    setValue("content", nextContent, { shouldDirty: true });
-
-    const cursor = start + emoji.length;
-    textarea.setSelectionRange(cursor, cursor);
-  };
 
   return (
     <>
@@ -131,7 +74,7 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
           <Dialog.Backdrop />
           <Dialog.Positioner>
             <Dialog.Content>
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={submit}>
                 <Dialog.Header>
                   <Dialog.Title>
                     {isEditing ? "Edit post" : "Create a post"}
@@ -166,11 +109,7 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
                       )}
                     >
                       <Textarea
-                        {...contentField}
-                        ref={(element) => {
-                          registerContentRef(element);
-                          contentRef.current = element;
-                        }}
+                        {...contentProps}
                         placeholder="Share your experience or ask a question..."
                         rows={8}
                         maxLength={CONTENT_MAX_LENGTH}
@@ -180,7 +119,7 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
                     {!isEditing && (
                       <PostMediaPreview
                         mediaFiles={media}
-                        onRemove={handleRemoveFile}
+                        onRemove={removeFile}
                       />
                     )}
 
@@ -227,7 +166,7 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
                 <Dialog.Footer justifyContent="space-between">
                   <HStack gap="1">
                     {!isEditing && (
-                      <PostMediaPicker onFilesSelected={handleFilesSelected} />
+                      <PostMediaPicker onFilesSelected={addFiles} />
                     )}
 
                     <Popover.Root
@@ -247,7 +186,7 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
                       <Popover.Positioner>
                         <Popover.Content width="auto">
                           <EmojiPicker
-                            onEmojiClick={handleEmojiClick}
+                            onEmojiClick={insertEmoji}
                             theme={emojiTheme}
                             height={380}
                             previewConfig={{ showPreview: false }}
@@ -291,8 +230,8 @@ const CreatePostModal = ({ open, onClose, onSubmit, post = null }) => {
         }
         confirmLabel="Discard"
         cancelLabel="Keep editing"
-        onConfirm={handleDiscard}
-        onCancel={() => setIsDiscardOpen(false)}
+        onConfirm={discard}
+        onCancel={keepEditing}
       />
     </>
   );

@@ -1,52 +1,11 @@
-import { useEffect, useState, useRef } from "react";
-import {
-  useNavigate,
-  useSearchParams,
-  Link as RouterLink,
-} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { Stack, Text, Spinner, Button, Icon } from "@chakra-ui/react";
 import { LuCircleCheck, LuCircleX } from "react-icons/lu";
-import { exchangeCodeForSession } from "../../services/authService";
+import { useAuthCallback } from "./useAuthCallback";
 import AuthCard from "../../components/ui/AuthCard/AuthCard";
 
-const REDIRECT_DELAY_MS = 1000;
-
 const AuthCallback = () => {
-  const [status, setStatus] = useState("loading");
-  const [error, setError] = useState(null);
-  const hasRun = useRef(false);
-  const redirectTimer = useRef(null);
-  const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
-  const code = searchParams.get("code");
-
-  useEffect(() => {
-    if (hasRun.current) return;
-    hasRun.current = true;
-
-    exchangeCodeForSession(code)
-      .then((result) => {
-        if (result.error) {
-          setError(result.error);
-          setStatus("error");
-          return;
-        }
-
-        setStatus("success");
-
-        redirectTimer.current = setTimeout(() => {
-          navigate("/feed");
-        }, REDIRECT_DELAY_MS);
-      })
-      .catch((err) => {
-        setError(err);
-        setStatus("error");
-      });
-  }, [code, navigate]);
-
-  // Don't navigate after the user has already left this page.
-  useEffect(() => () => clearTimeout(redirectTimer.current), []);
+  const { status, error } = useAuthCallback();
 
   return (
     <AuthCard title="Travel Forum" maxW="md">

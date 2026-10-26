@@ -8,24 +8,20 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useAuth } from "../../hooks/useAuth";
-import { useProfile } from "../../hooks/useProfile";
-import { useNotifications } from "../../hooks/useNotifications";
-import { usePostModal } from "../../hooks/usePostModal";
+import { useNotificationsPage } from "./useNotificationsPage";
 import NotificationItem from "../../components/notifications/NotificationItem/NotificationItem";
 import PostDetailsModal from "../../components/posts/PostDetailsModal/PostDetailsModal";
 
 const Notifications = () => {
-  const { user } = useAuth();
-  const { isBlocked } = useProfile();
-  const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
-    useNotifications();
-  const { openPost, modalProps } = usePostModal({ userId: user?.id });
-
-  const handleOpen = (notification) => {
-    if (!notification.is_read) markAsRead(notification.id);
-    openPost(notification.post_id);
-  };
+  const {
+    notifications,
+    unreadCount,
+    loading,
+    isBlocked,
+    markAllAsRead,
+    openNotification,
+    modalProps,
+  } = useNotificationsPage();
 
   return (
     <Box maxW="640px" w="full" mx="auto" p={4} pt={6}>
@@ -58,7 +54,7 @@ const Notifications = () => {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
-                onOpen={handleOpen}
+                onOpen={openNotification}
               />
             ))}
           </VStack>

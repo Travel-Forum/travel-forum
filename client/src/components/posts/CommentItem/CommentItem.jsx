@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
 import PostAuthor from "../PostAuthor/PostAuthor";
 import CommentForm from "../CommentForm/CommentForm";
 import ConfirmDialog from "../../ui/ConfirmDialog/ConfirmDialog";
+import { useCommentItem } from "./useCommentItem";
 
 const MAX_INDENT_DEPTH = 3;
 
@@ -22,28 +22,22 @@ const CommentItem = ({
   onDelete,
   disabled = false,
 }) => {
-  const [isReplying, setIsReplying] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const {
+    isReplying,
+    toggleReply,
+    cancelReply,
+    submitReply,
+    isEditing,
+    startEdit,
+    cancelEdit,
+    submitEdit,
+    isConfirmingDelete,
+    askDelete,
+    cancelDelete,
+    confirmDelete,
+  } = useCommentItem({ comment, onReply, onEdit, onDelete });
 
   const isOwn = comment.author?.id === currentUserId;
-
-  const handleReply = async (content) => {
-    const isSaved = await onReply(comment.id, content);
-    if (isSaved) setIsReplying(false);
-    return isSaved;
-  };
-
-  const handleEdit = async (content) => {
-    const isSaved = await onEdit(comment.id, content);
-    if (isSaved) setIsEditing(false);
-    return isSaved;
-  };
-
-  const handleDelete = async () => {
-    setIsConfirmingDelete(false);
-    await onDelete(comment.id);
-  };
 
   return (
     <Box>
@@ -53,9 +47,9 @@ const CommentItem = ({
         <Box ml={12} mt={2}>
           <CommentForm
             initialContent={comment.content}
-            onSubmit={handleEdit}
+            onSubmit={submitEdit}
             submitLabel="Save"
-            onCancel={() => setIsEditing(false)}
+            onCancel={cancelEdit}
             autoFocus
           />
         </Box>
@@ -70,7 +64,7 @@ const CommentItem = ({
           <HStack ml={12} gap={0}>
             <Button
               {...actionButtonProps}
-              onClick={() => setIsReplying((prev) => !prev)}
+              onClick={toggleReply}
               disabled={disabled}
             >
               Reply
@@ -79,7 +73,7 @@ const CommentItem = ({
               <>
                 <Button
                   {...actionButtonProps}
-                  onClick={() => setIsEditing(true)}
+                  onClick={startEdit}
                   disabled={disabled}
                 >
                   Edit
@@ -87,7 +81,7 @@ const CommentItem = ({
                 <Button
                   {...actionButtonProps}
                   color="fg.error"
-                  onClick={() => setIsConfirmingDelete(true)}
+                  onClick={askDelete}
                   disabled={disabled}
                 >
                   Delete
@@ -101,10 +95,10 @@ const CommentItem = ({
       {isReplying && (
         <Box ml={12} mt={1}>
           <CommentForm
-            onSubmit={handleReply}
+            onSubmit={submitReply}
             submitLabel="Reply"
             placeholder="Write a reply..."
-            onCancel={() => setIsReplying(false)}
+            onCancel={cancelReply}
             autoFocus
           />
         </Box>
@@ -140,8 +134,8 @@ const CommentItem = ({
         title="Delete comment?"
         description="Replies to this comment will be deleted too. This can't be undone."
         confirmLabel="Delete"
-        onConfirm={handleDelete}
-        onCancel={() => setIsConfirmingDelete(false)}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
       />
     </Box>
   );

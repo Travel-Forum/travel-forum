@@ -1,22 +1,12 @@
-import { useRef } from "react";
 import { Box, IconButton } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
-import { useProfile } from "../../../hooks/useProfile";
+import { useFilePicker } from "../../../hooks/useFilePicker";
 import UserAvatar from "../UserAvatar/UserAvatar";
 
-const AvatarUpload = ({ onFileSelected, disabled = false }) => {
-  const { profile } = useProfile();
-  const inputRef = useRef(null);
-
-  const handleFileChange = (event) => {
-    const [file] = event.target.files;
-
-    if (file) {
-      onFileSelected(file);
-    }
-
-    event.target.value = "";
-  };
+const AvatarUpload = ({ profile, onFileSelected, disabled = false }) => {
+  const { openPicker, inputProps } = useFilePicker(([file]) =>
+    onFileSelected(file),
+  );
 
   return (
     <Box position="relative">
@@ -28,17 +18,15 @@ const AvatarUpload = ({ onFileSelected, disabled = false }) => {
         position="absolute"
         bottom="0"
         right="0"
-        onClick={() => inputRef.current?.click()}
+        onClick={openPicker}
         disabled={disabled}
       >
         <LuPencil size={12} />
       </IconButton>
       <input
         type="file"
-        ref={inputRef}
         accept="image/jpeg,image/png,image/webp"
-        onChange={handleFileChange}
-        hidden
+        {...inputProps}
       />
     </Box>
   );

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text, HStack } from "@chakra-ui/react";
 import { LuFileText, LuUsers } from "react-icons/lu";
-import { getPublicStats } from "../../../services/statsService";
+import { usePublicStats } from "./usePublicStats";
 import IconBox from "../../ui/IconBox/IconBox";
 import CountUp from "../../ui/CountUp/CountUp";
 
@@ -22,19 +21,8 @@ const StatItem = ({ icon, value, label }) => {
 };
 
 const StatsBar = () => {
-  const [posts, setPosts] = useState(null);
-  const [users, setUsers] = useState(null);
+  const { posts, users } = usePublicStats();
 
-  useEffect(() => {
-    const load = async () => {
-      const res = await getPublicStats();
-      if (!res.error) {
-        setPosts(res.data.post_count);
-        setUsers(res.data.user_count);
-      }
-    };
-    load();
-  }, []);
   return (
     <Box as="section" py={6}>
       <Flex
