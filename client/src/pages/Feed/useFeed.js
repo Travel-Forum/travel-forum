@@ -96,7 +96,6 @@ export const useFeed = () => {
     );
   };
 
-
   return {
     userId: user?.id,
     profile,
