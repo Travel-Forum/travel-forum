@@ -32,7 +32,9 @@ export const useAuthCallback = () => {
         setStatus("success");
 
         redirectTimer.current = setTimeout(() => {
-          navigate("/feed");
+          const path = sessionStorage.getItem("redirectAfterAuth") ?? "/feed";
+          sessionStorage.removeItem("redirectAfterAuth");
+          navigate(path, { replace: true });
         }, REDIRECT_DELAY_MS);
       })
       .catch((err) => {
