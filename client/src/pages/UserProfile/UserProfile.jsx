@@ -3,6 +3,7 @@ import { GridItem, Text, VStack } from "@chakra-ui/react";
 
 import { useProfile } from "../../hooks/useProfile";
 import { useUserProfile } from "./useUserProfile";
+import { sharePost } from "../../utils/share";
 
 import PageGrid from "../../components/ui/PageGrid/PageGrid";
 import Loading from "../../components/ui/Loading/Loading";
@@ -53,6 +54,7 @@ const UserProfileContent = ({ username }) => {
             onToggleLike={toggleLike}
             onOpen={openPost}
             currentUserId={currentUserId}
+            onShare={sharePost}
             disabled={isBlocked}
           />
         </VStack>

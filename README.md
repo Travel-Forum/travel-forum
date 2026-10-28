@@ -67,7 +67,6 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 **Planned**
 - [ ] Password reset: "Forgot password?" sends a reset link by email, then a page to choose a new password
 - [ ] Weather widget in the feed's right column: current weather in popular destinations, rotating every few seconds; loaded through a Supabase Edge Function that keeps the weather API key secret and caches the answer
-- [ ] Sharing posts: copy a link that opens the post
 - [ ] JSDoc documentation for services, hooks and shared utils
 
 **Done**
@@ -84,6 +83,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - [x] Redesign: custom theme, dark mode and home page animations
 - [x] About, Community Guidelines, Privacy and Terms pages
 - [x] Security fixes: hide comments and likes of private posts, block every write for blocked users, lock the profile email, keep other users' email and phone private
+- [x] Sharing posts: copy a link that opens the post
 
 **Quality**
 - [x] 171 unit tests (Vitest + React Testing Library) for components, hooks, route guards, schemas and services

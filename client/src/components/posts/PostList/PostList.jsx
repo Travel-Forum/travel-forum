@@ -11,6 +11,7 @@ const PostList = ({
   currentUserId,
   onEdit,
   onDelete,
+  onShare,
   disabled = false,
 }) =>
   posts.map((post) => {
@@ -27,6 +28,7 @@ const PostList = ({
         currentUserId={currentUserId}
         onEdit={onEdit}
         onDelete={onDelete}
+        onShare={onShare}
         disabled={disabled}
       />
     );

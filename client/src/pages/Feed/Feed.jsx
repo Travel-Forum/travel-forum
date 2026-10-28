@@ -1,5 +1,6 @@
 import { GridItem, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useFeed } from "./useFeed";
+import { sharePost } from "../../utils/share";
 
 import PageGrid from "../../components/ui/PageGrid/PageGrid";
 import ProfileCard from "../../components/profile/ProfileCard/ProfileCard";
@@ -87,6 +88,7 @@ const Feed = () => {
             currentUserId={userId}
             onEdit={startEdit}
             onDelete={startDelete}
+            onShare={sharePost}
             disabled={isBlocked}
           />
         </VStack>
