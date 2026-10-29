@@ -60,3 +60,16 @@ export const signInWithGoogle = async () => {
 
   return { data };
 };
+
+export const sendPasswordReset = async ({ email }) => {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${appUrl}/auth/callback`,
+  });
+
+  if (error) {
+    console.error("Send password reset error:", error.message);
+    return { error };
+  }
+
+  return { data };
+};
