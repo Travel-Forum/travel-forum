@@ -18,32 +18,50 @@ const phoneSchema = z
       ),
   );
 
+const passwordSchema = z
+  .string()
+  .min(1, "Password is required")
+  .min(8, "Password need to be minimum 8 symbols")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(
+    /[^A-Za-z0-9]/,
+    "Password must contain at least one special character",
+  );
+
+const confirmPasswordSchema = z.string().min(1, "Please confirm your password");
+
+const passwordsMatch = (data) => data.password === data.confirmPassword;
+
+const passwordsMismatchError = {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+};
+
 export const signUpSchema = z
   .object({
     email: emailSchema,
-
-    password: z
-      .string()
-      .min(1, "Password is required")
-      .min(8, "Password need to be minimum 8 symbols")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-      .regex(/[0-9]/, "Password must contain at least one number")
-      .regex(
-        /[^A-Za-z0-9]/,
-        "Password must contain at least one special character",
-      ),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
+    password: passwordSchema,
+    confirmPassword: confirmPasswordSchema,
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+  .refine(passwordsMatch, passwordsMismatchError);
 
 export const signInSchema = z.object({
   email: emailSchema,
   password: z.string().min(1, "Password is required"),
 });
+
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+});
+
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: confirmPasswordSchema,
+  })
+  .refine(passwordsMatch, passwordsMismatchError);
 
 // First name, last name and username share the same 4–32 rule
 // (mirrors the CHECK constraints on the profiles table).
