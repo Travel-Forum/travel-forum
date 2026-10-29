@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import {
   completeProfileSchema,
+  forgotPasswordSchema,
   profileEditSchema,
+  resetPasswordSchema,
   signInSchema,
   signUpSchema,
 } from "./authSchemas.js";
@@ -150,5 +152,44 @@ describe("profileEditSchema", () => {
     expect(
       profileEditSchema.safeParse({ firstName, lastName, phone }).success,
     ).toBe(true);
+  });
+});
+
+describe("forgotPasswordSchema", () => {
+  it("needs only a valid email", () => {
+    expect(
+      forgotPasswordSchema.safeParse({ email: "george@example.com" }).success,
+    ).toBe(true);
+    expect(errorFor(forgotPasswordSchema, { email: "" }, "email")).toBe(
+      "Email is required",
+    );
+  });
+});
+
+describe("resetPasswordSchema", () => {
+  const valid = { password: "Travel#2026", confirmPassword: "Travel#2026" };
+
+  it("accepts a strong password typed twice", () => {
+    expect(resetPasswordSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it("uses the same password rules as sign up", () => {
+    expect(
+      errorFor(
+        resetPasswordSchema,
+        { password: "travel#2026", confirmPassword: "travel#2026" },
+        "password",
+      ),
+    ).toBe("Password must contain at least one uppercase letter");
+  });
+
+  it("rejects passwords that do not match", () => {
+    expect(
+      errorFor(
+        resetPasswordSchema,
+        { ...valid, confirmPassword: "Travel#2027" },
+        "confirmPassword",
+      ),
+    ).toBe("Passwords do not match");
   });
 });

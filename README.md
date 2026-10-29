@@ -2,7 +2,7 @@
 
 ## 🌍 Live demo: [travel-forum-seven.vercel.app](https://travel-forum-seven.vercel.app)
 
-> 🚧 **Status: in development.** All core features are live: posts with media, comments, likes, real-time notifications, search and sort, public user profiles, profile editing and the admin panel. Next up: password reset and a weather widget for popular destinations. See [Roadmap](#roadmap).
+> 🚧 **Status: in development.** All core features are live: posts with media, comments, likes, real-time notifications, search and sort, public user profiles, profile editing and the admin panel. Next up: a weather widget for popular destinations. See [Roadmap](#roadmap).
 
 A community forum for travellers: people share trips, tips and questions, comment on each other's posts and like the most useful ones.
 
@@ -19,6 +19,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Lists of the 10 most recent and the 10 most commented posts
 - Sign up with email and password or with Google; after an email sign-up a "Check your email" page replaces the form, so it can't be submitted again by accident
 - Sign in / sign out
+- Forgot password: a reset link is sent by email and opens a page to choose a new password; the same message is shown whether the account exists or not
 - About, Community Guidelines, Privacy and Terms pages, linked from the footer
 
 **Private part (signed-in users)**
@@ -65,11 +66,11 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 ### Roadmap
 
 **Planned**
-- [ ] Password reset: "Forgot password?" sends a reset link by email, then a page to choose a new password
 - [ ] Weather widget in the feed's right column: current weather in popular destinations, rotating every few seconds; loaded through a Supabase Edge Function that keeps the weather API key secret and caches the answer
 - [ ] JSDoc documentation for services, hooks and shared utils
 
 **Done**
+- [x] Password reset by email
 - [x] Public user profiles with their posts
 - [x] Responsive feed and navbar for phones and tablets
 - [x] Refactor: a folder per component, logic moved into hooks, shared layout and post list, consistent error handling

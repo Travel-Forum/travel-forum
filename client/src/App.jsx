@@ -19,11 +19,14 @@ import { INFO_PAGES } from "./content/infoPages";
 import RequireAdmin from "./routes/RequireAdmin/RequireAdmin";
 import AdminPanel from "./pages/AdminPanel/AdminPanel";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
 
       {INFO_PAGES.map((page) => (
@@ -37,6 +40,7 @@ const App = () => {
       <Route element={<GuestRoute />}>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/" element={<Home />} />
       </Route>
 
