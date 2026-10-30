@@ -1,7 +1,11 @@
 import { useRef } from "react";
 
-// Opens a hidden <input type="file"> from any button and passes the chosen
-// files on. Spread `inputProps` on the input and call `openPicker` on click.
+/**
+ * Opens a hidden <input type="file"> from any button and passes the chosen
+ * files on. Spread `inputProps` on the input and call `openPicker` on click.
+ * @param {(files: File[]) => void} onFilesSelected
+ * @returns {{ openPicker: () => void, inputProps: object }}
+ */
 export const useFilePicker = (onFilesSelected) => {
   const inputRef = useRef(null);
 

@@ -2,8 +2,15 @@ import { supabase } from "../config/supabaseClient";
 import { failWith } from "../utils/errors";
 import { getSignedMediaUrls, deletePostMedia } from "./mediaService";
 
+/** The public author columns selected together with posts, comments and notifications. */
 export const AUTHOR_FIELDS = "id, username, first_name, last_name, avatar_url";
 const NOT_OWNER_ERROR = { message: "You can only change your own posts." };
+
+/**
+ * Loads the newest posts for the home page (RLS shows guests only public ones).
+ * @param {number} [limit=10]
+ * @returns {Promise<{ data?: object[], error?: Error }>}
+ */
 export const getLatestPosts = async (limit = 10) => {
   const { data, error } = await supabase
     .from("posts_with_comment_count")
@@ -17,6 +24,11 @@ export const getLatestPosts = async (limit = 10) => {
   return { data };
 };
 
+/**
+ * Loads the most commented posts for the home page.
+ * @param {number} [limit=10]
+ * @returns {Promise<{ data?: object[], error?: Error }>}
+ */
 export const getMostCommentedPosts = async (limit = 10) => {
   const { data, error } = await supabase
     .from("posts_with_comment_count")
@@ -30,6 +42,11 @@ export const getMostCommentedPosts = async (limit = 10) => {
   return { data };
 };
 
+/**
+ * Creates a post. Its media is uploaded afterwards with uploadPostMedia.
+ * @param {{ authorId: string, title: string, content: string, visibility: "public" | "private" }} post
+ * @returns {Promise<{ data?: object, error?: Error }>} The new post row.
+ */
 export const createPost = async ({ authorId, title, content, visibility }) => {
   const { data, error } = await supabase
     .from("posts")
@@ -43,6 +60,13 @@ export const createPost = async ({ authorId, title, content, visibility }) => {
   return { data };
 };
 
+/**
+ * Deletes a post's files from Storage and then the post itself (its comments,
+ * likes and media rows are removed by the database).
+ * @param {string} postId
+ * @returns {Promise<{ error?: Error }>} An error also when RLS matched no row,
+ *   which means the user is neither the author nor an admin.
+ */
 export const deletePost = async (postId) => {
   const { error: deleteError } = await deletePostMedia(postId);
 
@@ -67,6 +91,12 @@ export const deletePost = async (postId) => {
   return {};
 };
 
+/**
+ * Changes a post's title, text or visibility.
+ * @param {string} postId
+ * @param {{ title: string, content: string, visibility: "public" | "private" }} changes
+ * @returns {Promise<{ error?: Error }>} An error also when RLS matched no row.
+ */
 export const updatePost = async (postId, { title, content, visibility }) => {
   const { data, error } = await supabase
     .from("posts")
@@ -82,6 +112,13 @@ export const updatePost = async (postId, { title, content, visibility }) => {
 
   return {};
 };
+
+/**
+ * Loads the feed, newest first, with authors, like and comment counts and
+ * signed media URLs. RLS leaves out other users' private posts.
+ * @param {{ authorId?: string }} [options] Only this author's posts when given.
+ * @returns {Promise<{ data?: object[], error?: Error }>}
+ */
 export const getFeedPosts = async ({ authorId } = {}) => {
   let query = supabase
     .from("posts")
@@ -123,6 +160,9 @@ export const getFeedPosts = async ({ authorId } = {}) => {
 
   return { data: await withMediaUrls(data) };
 };
+
+// Replaces each post's post_media rows with { id, type, url } items,
+// signing all paths in one request.
 const withMediaUrls = async (posts) => {
   const paths = posts.flatMap((post) =>
     post.post_media.map((media) => media.storage_path),
@@ -141,6 +181,12 @@ const withMediaUrls = async (posts) => {
   }));
 };
 
+/**
+ * Loads one post with its comments (oldest first), likes and media.
+ * @param {string} postId
+ * @returns {Promise<{ data?: object | null, error?: Error }>} `null` when the
+ *   post doesn't exist or the user can't see it.
+ */
 export const getPostById = async (postId) => {
   const { data, error } = await supabase
     .from("posts")

@@ -9,6 +9,13 @@ import { showError } from "../utils/toast";
 const toggleId = (ids, id) =>
   ids.includes(id) ? ids.filter((item) => item !== id) : [...ids, id];
 
+/**
+ * Likes with optimistic UI: the heart and the count change at once and are
+ * rolled back if the request fails. A second click on the same post is
+ * ignored until the first request finishes.
+ * @param {string} userId
+ * @returns {{ isLiked: (postId: string) => boolean, getLikeCount: (postId: string, initialCount: number) => number, toggleLike: (postId: string, currentCount: number) => Promise<void> }}
+ */
 export const usePostLikes = (userId) => {
   const [likedPostIds, setLikedPostIds] = useState([]);
   const [likeCounts, setLikeCounts] = useState({});

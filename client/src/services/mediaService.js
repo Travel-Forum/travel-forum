@@ -21,6 +21,12 @@ const removeUploadedFiles = async (paths) => {
   return {};
 };
 
+/**
+ * Uploads a post's files to Storage and saves a post_media row for each.
+ * If one file fails, the files already uploaded are removed again.
+ * @param {{ userId: string, postId: string, files: File[] }} upload
+ * @returns {Promise<{ data?: string[], error?: Error }>} The Storage paths.
+ */
 export const uploadPostMedia = async ({ userId, postId, files }) => {
   const uploadedPaths = [];
 
@@ -58,6 +64,12 @@ export const uploadPostMedia = async ({ userId, postId, files }) => {
   return { data: uploadedPaths };
 };
 
+/**
+ * Creates short-lived URLs for files in the private media bucket.
+ * @param {string[]} paths
+ * @returns {Promise<{ data?: Record<string, string>, error?: Error }>} URLs by
+ *   Storage path; paths that couldn't be signed are left out.
+ */
 export const getSignedMediaUrls = async (paths) => {
   if (paths.length === 0) return { data: {} };
 
@@ -78,6 +90,11 @@ export const getSignedMediaUrls = async (paths) => {
   return { data: urlsByPath };
 };
 
+/**
+ * Removes all of a post's files from Storage before the post is deleted.
+ * @param {string} postId
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const deletePostMedia = async (postId) => {
   const { data, error } = await supabase
     .from("post_media")

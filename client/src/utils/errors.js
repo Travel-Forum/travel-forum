@@ -7,13 +7,24 @@ const DB_ERROR_MESSAGES = {
 
 const DEFAULT_ERROR_MESSAGE = "Something went wrong. Please try again.";
 
+/**
+ * Replaces a database error's technical message with one that is safe to
+ * show to users, chosen by the Postgres or PostgREST error code.
+ * @param {{ code?: string, message?: string }} error
+ * @returns {{ code?: string, message: string }}
+ */
 export const toFriendlyError = (error) => ({
   ...error,
   message: DB_ERROR_MESSAGES[error?.code] ?? DEFAULT_ERROR_MESSAGE,
 });
 
-// Logs the raw error for debugging and returns the { error } result
-// every service function uses, with a message that is safe to show.
+/**
+ * Logs the raw error for debugging and returns the { error } result
+ * every service function uses, with a message that is safe to show.
+ * @param {string} label What failed, for the console.
+ * @param {{ code?: string, message: string }} error
+ * @returns {{ error: { message: string } }}
+ */
 export const failWith = (label, error) => {
   console.error(`${label}:`, error.message);
   return { error: toFriendlyError(error) };

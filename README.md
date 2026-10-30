@@ -2,7 +2,7 @@
 
 ## 🌍 Live demo: [travel-forum-seven.vercel.app](https://travel-forum-seven.vercel.app)
 
-> 🚧 **Status: in development.** All core features are live: posts with media, comments, likes, real-time notifications, search and sort, public user profiles, profile editing and the admin panel. Next up: a weather widget for popular destinations. See [Roadmap](#roadmap).
+> ✅ **Status: complete.** Posts with media, comments, likes, real-time notifications, search and sort, sharing, public user profiles, profile editing, password reset and the admin panel are all live. Ideas for later are listed under [Roadmap](#roadmap).
 
 A community forum for travellers: people share trips, tips and questions, comment on each other's posts and like the most useful ones.
 
@@ -25,7 +25,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 **Private part (signed-in users)**
 - Profile completion after sign-up: first name, last name, username, phone
 - Feed with posts from all users
-- Fixed feed layout on desktop: only the posts scroll, the profile card and the footer links on the left stay in place
+- Fixed feed layout on desktop: only the posts scroll, the profile card on the left and the footer links on the right stay in place
 - Search posts by a word in the title or content, right from the navbar as you type
 - Sort posts by newest, most liked or most commented; search and sort are kept in the URL (`/feed?q=rila&sort=likes`), so they survive a refresh and can be shared
 - Create a post:
@@ -37,6 +37,7 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - Edit and delete own posts from the feed and from the post details; deleting a post also removes its media from Storage
 - Post details view with media viewer (images and videos), like count and comments
 - Like and unlike posts from the feed and from the post details (updates instantly)
+- Share a post: the phone's share sheet or a copied link (`/feed?post=<id>`) that opens the post; a guest who opens it signs in (with email or Google) and lands back on the post
 - Comments with nested replies on any post; edit and delete own comments (deleting a comment also removes its replies)
 - Notifications for likes, comments and replies, delivered in real time: unread count on the bell, mark one or all as read, open the post from a notification
 - Profile page: edit first name, last name and phone (username and email stay read-only), upload a profile photo, role badge (Admin or Member)
@@ -65,11 +66,8 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 
 ### Roadmap
 
-**Planned**
-- [ ] Weather widget in the feed's right column: current weather in popular destinations, rotating every few seconds; loaded through a Supabase Edge Function that keeps the weather API key secret and caches the answer
-- [ ] JSDoc documentation for services, hooks and shared utils
-
 **Done**
+- [x] JSDoc documentation for services, shared hooks and utils
 - [x] Password reset by email
 - [x] Public user profiles with their posts
 - [x] Responsive feed and navbar for phones and tablets
@@ -87,10 +85,16 @@ Built with React, Chakra UI and Supabase (Postgres, Auth, Storage, Realtime). Ev
 - [x] Sharing posts: copy a link that opens the post
 
 **Quality**
-- [x] 171 unit tests (Vitest + React Testing Library) for components, hooks, route guards, schemas and services
+- [x] 184 unit tests (Vitest + React Testing Library) for components, hooks, route guards, schemas and services
+- [x] JSDoc on every service, shared hook and util, so editors show what a function takes and returns
 - [x] Prettier formatting, checked in CI
 - [x] CI pipeline (lint, formatting, tests, build) on every pull request
 - [x] Automatic deployment to Vercel
+
+**Possible improvements**
+- Weather widget in the feed's right column: current weather in popular destinations, loaded through a Supabase Edge Function that keeps the API key secret and caches the answer
+- Pagination or infinite scroll for the feed once there are many posts
+- Change password from the profile page (with the current password)
 
 ---
 
@@ -180,7 +184,7 @@ supabase/
 ### 1. Set up the database
 In the Supabase SQL Editor, run the files in [`supabase/migrations/`](supabase/migrations/) **in order** (see [Database](#database)).
 
-In **Authentication → URL Configuration**, add `http://localhost:5173/auth/callback` to the redirect URLs. To use Google sign-in, enable the Google provider in **Authentication → Providers**.
+In **Authentication → URL Configuration**, add `http://localhost:5173/auth/callback` and `http://localhost:5173/reset-password` to the redirect URLs. To use Google sign-in, enable the Google provider in **Authentication → Providers**.
 
 ### 2. Configure the client
 ```bash
@@ -223,7 +227,7 @@ merge to main ──► Vercel: production deployment (live demo)
 - **Protected `main`** — changes reach `main` only through a pull request, and only when the CI check passes.
 - **CD** — Vercel builds `client/` and deploys `main` to production and every pull request to a preview URL. [`client/vercel.json`](client/vercel.json) sends every path to `index.html` so routes like `/feed` work on refresh.
 
-To deploy your own copy: import the repository in Vercel with **Root Directory** `client`, add the three `VITE_` environment variables (with `VITE_APP_URL` set to the deployed URL), and add `<deployed-url>/auth/callback` to the Supabase redirect URLs.
+To deploy your own copy: import the repository in Vercel with **Root Directory** `client`, add the three `VITE_` environment variables (with `VITE_APP_URL` set to the deployed URL), and add `<deployed-url>/auth/callback` and `<deployed-url>/reset-password` to the Supabase redirect URLs.
 
 ---
 

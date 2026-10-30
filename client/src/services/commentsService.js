@@ -1,6 +1,11 @@
 import { supabase } from "../config/supabaseClient";
 import { failWith } from "../utils/errors";
 
+/**
+ * Adds a comment to a post, or a reply when `parentCommentId` is given.
+ * @param {{ postId: string, authorId: string, content: string, parentCommentId?: string | null }} comment
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const createComment = async ({
   postId,
   authorId,
@@ -22,6 +27,12 @@ export const createComment = async ({
 
 const NOT_OWNER_ERROR = { message: "You can only change your own comments." };
 
+/**
+ * Changes the text of a comment.
+ * @param {{ commentId: string, content: string }} comment
+ * @returns {Promise<{ error?: Error }>} An error also when RLS matched no row,
+ *   which means the comment isn't the user's.
+ */
 export const updateComment = async ({ commentId, content }) => {
   const { data, error } = await supabase
     .from("comments")
@@ -36,6 +47,11 @@ export const updateComment = async ({ commentId, content }) => {
   return {};
 };
 
+/**
+ * Deletes a comment (its replies are removed by the database).
+ * @param {string} commentId
+ * @returns {Promise<{ error?: Error }>} An error also when RLS matched no row.
+ */
 export const deleteComment = async (commentId) => {
   const { data, error } = await supabase
     .from("comments")
