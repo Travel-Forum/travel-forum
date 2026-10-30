@@ -38,10 +38,10 @@ const Feed = () => {
 
   return (
     <PageGrid>
-      {/* On smaller screens only the posts are shown; the info links move to the profile menu */}
+      {/* On smaller screens only the posts are shown; the info links move to the profile menu.
+          On large screens the profile is on the left and the footer on the right. */}
       <GridItem overflowY="auto" hideBelow="lg">
         <ProfileCard profile={profile} to="/profile" />
-        <Footer />
       </GridItem>
       <GridItem overflowY="auto" id="feed-scroll">
         <VStack gap={4} align="stretch">
@@ -92,6 +92,9 @@ const Feed = () => {
             disabled={isBlocked}
           />
         </VStack>
+      </GridItem>
+      <GridItem overflowY="auto" hideBelow="lg">
+        <Footer />
       </GridItem>
     </PageGrid>
   );
