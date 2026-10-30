@@ -1,6 +1,12 @@
 import { supabase } from "../config/supabaseClient";
 import { failWith, toFriendlyError } from "../utils/errors";
 
+/**
+ * Loads the signed-in user's own profile, with private columns.
+ * @param {string} userId
+ * @returns {Promise<{ data?: object | null, error?: Error }>} `null` when the
+ *   profile isn't completed yet.
+ */
 export const getProfile = async (userId) => {
   const { data, error } = await supabase
     .from("profiles")
@@ -15,6 +21,12 @@ export const getProfile = async (userId) => {
   return { data };
 };
 
+/**
+ * Creates the profile after sign up. The database only accepts the email of
+ * the signed-in account.
+ * @param {{ id: string, email: string, firstName: string, lastName: string, username: string, phone: string }} profile
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const createProfile = async ({
   id,
   email,
@@ -45,6 +57,12 @@ export const createProfile = async ({
   return {};
 };
 
+/**
+ * Changes the user's name and phone (username and email can't be changed).
+ * @param {string} userId
+ * @param {{ firstName: string, lastName: string, phone: string }} changes
+ * @returns {Promise<{ data?: object, error?: Error }>} The updated profile.
+ */
 export const updateProfile = async (userId, { firstName, lastName, phone }) => {
   const { data, error } = await supabase
     .from("profiles")
@@ -72,6 +90,13 @@ const AVATAR_EXTENSIONS = {
   "image/webp": "webp",
 };
 
+/**
+ * Uploads a JPEG, PNG or WebP image (up to 10 MB) and saves it as the avatar.
+ * The upload is removed again if the profile can't be updated.
+ * @param {string} userId
+ * @param {File} file
+ * @returns {Promise<{ data?: object, error?: Error }>} The updated profile.
+ */
 export const uploadAvatar = async (userId, file) => {
   if (!file || !AVATAR_EXTENSIONS[file.type]) {
     return {
@@ -126,6 +151,11 @@ export const uploadAvatar = async (userId, file) => {
   return { data };
 };
 
+/**
+ * Admin search by username, email or name (up to 20 results).
+ * @param {string} query
+ * @returns {Promise<{ data?: object[], error?: Error }>}
+ */
 export const searchProfiles = async (query) => {
   // The text goes inside a PostgREST filter string, where , ( ) " \ split
   // or break the filter and % * act as wildcards, so they are dropped.
@@ -149,6 +179,12 @@ export const searchProfiles = async (query) => {
   return { data };
 };
 
+/**
+ * Blocks or unblocks a user (admins only).
+ * @param {string} userId
+ * @param {boolean} isBlocked
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const setUserBlocked = async (userId, isBlocked) => {
   const { data, error } = await supabase
     .from("profiles")
@@ -169,6 +205,12 @@ export const setUserBlocked = async (userId, isBlocked) => {
   return {};
 };
 
+/**
+ * Gives or removes admin rights (admins only).
+ * @param {string} userId
+ * @param {boolean} isAdmin
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const setUserAdmin = async (userId, isAdmin) => {
   const { data, error } = await supabase
     .from("profiles")
@@ -189,6 +231,12 @@ export const setUserAdmin = async (userId, isAdmin) => {
   return {};
 };
 
+/**
+ * Listens in real time for changes to the user's profile, e.g. being blocked.
+ * @param {string} userId
+ * @param {(payload: { new: object }) => void} onChange
+ * @returns {() => void} Stops listening; call it in the effect cleanup.
+ */
 export const subscribeToProfile = (userId, onChange) => {
   const channel = supabase
     .channel(`profiles:${userId}`)
@@ -207,6 +255,12 @@ export const subscribeToProfile = (userId, onChange) => {
   return () => supabase.removeChannel(channel);
 };
 
+/**
+ * Loads another user's public profile (no email or phone).
+ * @param {string} username
+ * @returns {Promise<{ data?: object | null, error?: Error }>} `null` when no
+ *   user has this username.
+ */
 export const getProfileByUsername = async (username) => {
   const { data, error } = await supabase
     .from("public_profiles")

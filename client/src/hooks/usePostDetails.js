@@ -2,6 +2,11 @@ import { useState } from "react";
 import { getPostById } from "../services/postsService";
 import { showError } from "../utils/toast";
 
+/**
+ * Loads the post shown in the details modal. `reloadPost` keeps the already
+ * signed media URLs, so images don't reload after a new comment.
+ * @returns {{ post: object | null, loading: boolean, isOpen: boolean, openPost: (postId: string) => Promise<void>, closePost: () => void, reloadPost: () => Promise<void> }}
+ */
 export const usePostDetails = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);

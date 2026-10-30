@@ -3,6 +3,13 @@ import { usePostLikes } from "./usePostLikes";
 import { usePostComments } from "./usePostComments";
 import { getPostLikeCount } from "../utils/post";
 
+/**
+ * Everything the post details modal needs in one place: the post, its likes
+ * and its comments. Spread `modalProps` on PostDetailsModal.
+ * @param {{ userId: string, onCommentsChange?: () => void }} options
+ *   `onCommentsChange` lets the page refresh its comment counts.
+ * @returns {{ openPost: (postId: string) => Promise<void>, closePost: () => void, reloadPost: () => Promise<void>, modalProps: object, isLiked: Function, getLikeCount: Function, toggleLike: Function }}
+ */
 export const usePostModal = ({ userId, onCommentsChange }) => {
   const { post, loading, isOpen, openPost, closePost, reloadPost } =
     usePostDetails();

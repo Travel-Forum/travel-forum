@@ -4,6 +4,12 @@ import { AUTHOR_FIELDS } from "./postsService";
 
 const NOTIFICATIONS_LIMIT = 50;
 
+/**
+ * Loads the user's latest notifications, newest first, with who triggered
+ * each one and the post it is about.
+ * @param {string} userId
+ * @returns {Promise<{ data?: object[], error?: Error }>}
+ */
 export const getNotifications = async (userId) => {
   const { data, error } = await supabase
     .from("notifications")
@@ -29,6 +35,11 @@ export const getNotifications = async (userId) => {
   return { data };
 };
 
+/**
+ * Marks one notification as read.
+ * @param {string} notificationId
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const markNotificationAsRead = async (notificationId) => {
   const { error } = await supabase
     .from("notifications")
@@ -41,6 +52,11 @@ export const markNotificationAsRead = async (notificationId) => {
   return {};
 };
 
+/**
+ * Marks all of the user's unread notifications as read.
+ * @param {string} userId
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const markAllNotificationsAsRead = async (userId) => {
   const { error } = await supabase
     .from("notifications")
@@ -54,6 +70,12 @@ export const markAllNotificationsAsRead = async (userId) => {
   return {};
 };
 
+/**
+ * Listens in real time for new notifications sent to the user.
+ * @param {string} userId
+ * @param {(payload: { new: object }) => void} onNewNotification
+ * @returns {() => void} Stops listening; call it in the effect cleanup.
+ */
 export const subscribeToNotifications = (userId, onNewNotification) => {
   const channel = supabase
     .channel(`notifications:${userId}`)

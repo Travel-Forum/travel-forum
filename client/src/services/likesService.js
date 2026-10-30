@@ -1,6 +1,11 @@
 import { supabase } from "../config/supabaseClient";
 import { failWith } from "../utils/errors";
 
+/**
+ * Likes a post for the user.
+ * @param {{ postId: string, userId: string }} like
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const likePost = async ({ postId, userId }) => {
   const { error } = await supabase
     .from("post_likes")
@@ -12,6 +17,11 @@ export const likePost = async ({ postId, userId }) => {
   return {};
 };
 
+/**
+ * Removes the user's like from a post.
+ * @param {{ postId: string, userId: string }} like
+ * @returns {Promise<{ error?: Error }>}
+ */
 export const unlikePost = async ({ postId, userId }) => {
   const { error } = await supabase
     .from("post_likes")
@@ -25,6 +35,11 @@ export const unlikePost = async ({ postId, userId }) => {
   return {};
 };
 
+/**
+ * Loads the ids of every post the user has liked.
+ * @param {string} userId
+ * @returns {Promise<{ data?: string[], error?: Error }>}
+ */
 export const getLikedPostIds = async (userId) => {
   const { data, error } = await supabase
     .from("post_likes")
